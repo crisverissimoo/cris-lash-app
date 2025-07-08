@@ -114,4 +114,4 @@ hora = st.time_input(txt["agenda"])
 
 if st.button(txt["salvar"]):
     st.success(txt["sucesso"])
-!streamlit run app.py &>/content/logs.txt &
+
