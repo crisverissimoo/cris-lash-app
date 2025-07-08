@@ -1,5 +1,4 @@
-# Sistema Cris Lash • Multilíngue (PT/ES/EN) • Streamlit
-
+# Sistema Cris Lash • Multilíngue • Organizado por Blocos
 import streamlit as st
 from PIL import Image, ImageEnhance
 import datetime
@@ -7,7 +6,7 @@ import datetime
 # Dicionário de idiomas
 textos = {
     "pt": {
-        "boas_vindas": "Bem-vinda ao seu atendimento digital! Preencha seus dados abaixo.",
+        "boas_vindas": "Bem-vinda ao seu atendimento digital!",
         "nome": "Nome completo",
         "idade": "Idade",
         "responsavel": "Nome do responsável (se menor)",
@@ -21,12 +20,13 @@ textos = {
         "filtro": "Envie uma foto para simular resultado",
         "foto": "Foto original",
         "foto_editada": "Foto com efeito",
-        "agenda": "Escolha a data e horário",
+        "agenda": "Escolha o horário do atendimento",
+        "horario": "Horário disponível",
         "salvar": "Salvar atendimento",
         "sucesso": "Ficha salva com sucesso!"
     },
     "es": {
-        "boas_vindas": "Bienvenida a tu atención digital. Completa tus datos abajo.",
+        "boas_vindas": "Bienvenida a tu atención digital.",
         "nome": "Nombre completo",
         "idade": "Edad",
         "responsavel": "Nombre del responsable (si es menor)",
@@ -40,12 +40,13 @@ textos = {
         "filtro": "Sube una foto para simular resultado",
         "foto": "Foto original",
         "foto_editada": "Foto con efecto",
-        "agenda": "Elige fecha y hora",
+        "agenda": "Elige el horario de atención",
+        "horario": "Horario disponible",
         "salvar": "Guardar atención",
         "sucesso": "¡Ficha guardada con éxito!"
     },
     "en": {
-        "boas_vindas": "Welcome to your digital lash service. Fill in your details below.",
+        "boas_vindas": "Welcome to your digital lash service!",
         "nome": "Full name",
         "idade": "Age",
         "responsavel": "Guardian’s name (if underage)",
@@ -59,59 +60,66 @@ textos = {
         "filtro": "Upload a photo to simulate result",
         "foto": "Original photo",
         "foto_editada": "Photo with effect",
-        "agenda": "Choose date and time",
+        "agenda": "Choose appointment time",
+        "horario": "Available time",
         "salvar": "Save intake",
         "sucesso": "Form saved successfully!"
     }
 }
 
 # Escolha de idioma
-idioma = st.selectbox("Escolha o idioma / Choose language / Elige idioma", ["pt", "es", "en"])
+idioma = st.selectbox("🌍 Idioma / Language / Idioma", ["pt", "es", "en"])
 txt = textos[idioma]
 
-st.title("Sistema Cris Lash")
+st.title("💻 Sistema Cris Lash")
 st.markdown(f"### {txt['boas_vindas']}")
 
-# Formulário da cliente
-nome = st.text_input(txt["nome"])
-idade = st.number_input(txt["idade"], min_value=0)
-if idade < 18:
-    responsavel = st.text_input(txt["responsavel"])
-    st.warning(txt["alerta_menor"])
-autorizacao = st.radio(txt["autorizacao"], ["Sim", "Não", "Pendente"])
-tipo_atendimento = st.selectbox(txt["atendimento"], ["Normal", "Domingo", "Feriado", "Noturno"])
-data_atendimento = st.date_input(txt["data"], value=datetime.date.today())
-obs = st.text_area(txt["observacoes"])
+# 🗂️ Bloco 1: Dados da cliente
+with st.expander("🗂️ " + txt["nome"]):
+    nome = st.text_input(txt["nome"])
+    idade = st.number_input(txt["idade"], min_value=0)
+    if idade < 18:
+        responsavel = st.text_input(txt["responsavel"])
+        st.warning(txt["alerta_menor"])
+    autorizacao = st.radio(txt["autorizacao"], ["Sim", "Não", "Pendente"])
+    tipo_atendimento = st.selectbox(txt["atendimento"], ["Normal", "Domingo", "Feriado", "Noturno"])
+    data_atendimento = st.date_input(txt["data"], value=datetime.date.today())
+    obs = st.text_area(txt["observacoes"])
 
-st.markdown("---")
-st.subheader(txt["tecnica"])
+# 💅 Bloco 2: Técnica e Simulação
+with st.expander("💅 " + txt["tecnica"]):
+    tecnicas = {
+        "Fio a Fio": 150,
+        "Volume Brasileiro": 180,
+        "Volume Russo": 250,
+        "Híbrido": 220,
+        "Mega Volume": 260,
+        "Efeito Delineado": 200
+    }
+    tecnica_escolhida = st.selectbox(txt["tecnica"], list(tecnicas.keys()))
+    st.write(f"{txt['valor']}: R${tecnicas[tecnica_escolhida]}")
 
-tecnicas = {
-    "Fio a Fio": 150,
-    "Volume Brasileiro": 180,
-    "Volume Russo": 250,
-    "Híbrido": 220,
-    "Mega Volume": 260,
-    "Efeito Delineado": 200
-}
+    st.subheader(txt["filtro"])
+    foto = st.file_uploader("📸 Upload", type=["jpg", "jpeg", "png"])
+    if foto:
+        imagem = Image.open(foto)
+        st.image(imagem, caption=txt["foto"])
+        realce = ImageEnhance.Contrast(imagem).enhance(1.5)
+        st.image(realce, caption=txt["foto_editada"])
 
-tecnica_escolhida = st.selectbox("Escolha a técnica", list(tecnicas.keys()))
-st.write(f"{txt['valor']}: R${tecnicas[tecnica_escolhida]}")
+# 📅 Bloco 3: Agendamento
+with st.expander("📅 " + txt["agenda"]):
+    horarios_disponiveis = [
+        "08:00", "08:30", "09:00", "09:30",
+        "10:00", "10:30", "11:00", "11:30",
+        "14:00", "14:30", "15:00", "15:30",
+        "16:00", "16:30", "17:00", "17:30",
+        "18:00", "18:30", "19:00"
+    ]
+    horario_escolhido = st.selectbox(txt["horario"], horarios_disponiveis)
 
-st.markdown("---")
-st.subheader(txt["filtro"])
-
-foto = st.file_uploader("Upload da imagem", type=["jpg", "jpeg", "png"])
-if foto:
-    imagem = Image.open(foto)
-    st.image(imagem, caption=txt["foto"])
-    realce = ImageEnhance.Contrast(imagem).enhance(1.3)
-    st.image(realce, caption=txt["foto_editada"])
-
-st.markdown("---")
-st.subheader(txt["agenda"])
-hora = st.time_input(txt["agenda"])
-
-if st.button(txt["salvar"]):
-    st.success(txt["sucesso"])
+# 📝 Bloco 4: Finalização
+with st.expander("📝 " + txt["salvar"]):
+    if st.button(txt["salvar"]):
+        st.success(txt["sucesso"])
 
