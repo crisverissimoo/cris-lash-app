@@ -1,4 +1,3 @@
-%%writefile app.py
 # Sistema Cris Lash • Multilíngue (PT/ES/EN) • Streamlit
 
 import streamlit as st
