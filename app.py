@@ -1,4 +1,3 @@
-!pip install streamlit
 %%writefile app.py
 # Sistema Cris Lash • Multilíngue (PT/ES/EN) • Streamlit
 
