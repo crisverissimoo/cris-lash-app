@@ -61,14 +61,20 @@ with st.form("ficha_anamnese"):
         else:
             st.success("✅ Ficha finalizada com sucesso!")
 
-            # Verifica se há contraindicações
-contraindicacoes = [
-    respostas["conjuntivite"] == "Sim",
-    respostas["infeccao"] == "Sim",
-    respostas["cirurgia"] == "Sim",
-    respostas["reacao"] == "Sim",
-    respostas["glaucoma"] == "Sim"
-]
+           if enviar_ficha:
+    contraindicoes = [
+        respostas["conjuntivite"] == "Sim",
+        respostas["infeccao"] == "Sim",
+        respostas["cirurgia"] == "Sim",
+        respostas["reacao"] == "Sim",
+        respostas["glaucoma"] == "Sim"
+    ]
+
+    if any(contraindicacoes):
+        st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir com o atendimento.")
+    else:
+        st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+
 
 if any(contraindicacoes):
     st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir com o atendimento.")
