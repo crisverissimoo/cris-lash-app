@@ -1,4 +1,4 @@
-import streamlit as st
+    import streamlit as st
 from PIL import Image, ImageEnhance
 import datetime
 
@@ -10,7 +10,7 @@ hoje = datetime.date.today()
 if "historico" not in st.session_state:
     st.session_state.historico = []
 
-# 🗂️ Cadastro da Cliente
+## 🗂️ Cadastro da Cliente
 with st.expander("🗂️ Cadastro da Cliente"):
     nome = st.text_input("Nome completo")
     telefone = st.text_input("Telefone")
@@ -18,16 +18,18 @@ with st.expander("🗂️ Cadastro da Cliente"):
     idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
     st.write(f"Idade: {idade} anos")
 
-    if nascimento.month == hoje.month and nome:
-        st.success(f"🎉 Parabéns, {nome}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝\n\n🎁 Você pode ganhar um mimo especial ou uma manutenção com desconto neste atendimento.")
-
     if idade < 18:
-        responsavel = st.text_input("Responsável (se menor)")
-        st.warning("⚠️ Cliente menor de idade — exige atenção especial.")
+        responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal")
+        autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None)
+        if autorizacao != "Sim":
+            st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
     else:
         responsavel = ""
+        autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
 
-    autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+    if nascimento.month == hoje.month and nome:
+        st.success(f"🎉 Parabéns, {nome}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
+
 
 # 🧾 Ficha de Anamnese
 with st.form("ficha_anamnese"):
@@ -73,16 +75,21 @@ with st.form("ficha_anamnese"):
             if respostas["glaucoma"] == "Sim":
                 restricoes.append("Glaucoma diagnosticado")
             if respostas["gravida"] == "Sim":
-                st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica antes do procedimento. Sensibilidade ocular e reações à cola podem ser mais comuns nesse período.")
+                st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica antes do procedimento.")
+            if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
+                st.warning("⚠️ Este caso exige liberação médica formal — não prosseguir sem autorização documentada.")
 
             if restricoes:
                 st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir:")
                 for item in restricoes:
                     st.markdown(f"• {item}")
+            elif idade < 18 and autorizacao != "Sim":
+                st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
             else:
                 st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
 
             st.session_state.ficha_respostas = respostas
+
 
 # 💅 Escolha da Técnica
 with st.expander("💅 Escolha da Técnica"):
@@ -132,16 +139,35 @@ with st.expander("📊 Histórico de Atendimento"):
     st.markdown("Visualize os registros salvos abaixo:")
 
     if enviar_ficha:
-       registro = {
-    "nome": nome,
-    "telefone": telefone,
-    "nascimento": nascimento.strftime("%d/%m/%Y"),
-    "idade": idade,
-    "responsavel": responsavel,
-    "autorizacao": autorizacao,
-    "anamnese": respostas,
-    "tecnica": tecnica_escolhida,
-    "agendamento": data_agendamento.strftime("%d/%m/%Y"),
-    "horario": horario_escolhido,
-    "observacoes": observacoes
-}
+        registro = {
+            "nome": nome,
+            "telefone": telefone,
+            "nascimento": nascimento.strftime("%d/%m/%Y"),
+            "idade": idade,
+            "responsavel": responsavel,
+            "autorizacao": autorizacao,
+            "anamnese": respostas,
+            "tecnica": tecnica_escolhida,
+            "agendamento": data_agendamento.strftime("%d/%m/%Y"),
+            "horario": horario_escolhido,
+            "observacoes": observacoes
+        }
+        st.session_state.historico.append(registro)
+
+    if st.session_state.historico:
+        for i, reg in enumerate(st.session_state.historico, start=1):
+            st.markdown(f"**{i}. {reg['nome']}** ({reg['idade']} anos) — {reg['agendamento']} às {reg['horario']}")
+            st.markdown(f"- Técnica: {reg['tecnica']}")
+            st.markdown(f"- Tel: {reg['telefone']}")
+            if reg['idade'] < 18:
+                st.markdown(f"🧒 Menor — Responsável: {reg['responsavel']} | Autorização: {reg['autorizacao']}")
+            else:
+                st.markdown(f"- Autorização: {reg['autorizacao']}")
+            st.markdown(f"- Observações: {reg['observacoes']}")
+            st.markdown("🧾 Anamnese:")
+            for pergunta, resposta in reg['anamnese'].items():
+                st.markdown(f"• {pergunta.capitalize()}: {resposta}")
+            st.markdown("---")
+    else:
+        st.info("Nenhum atendimento registrado ainda.")
+        }
