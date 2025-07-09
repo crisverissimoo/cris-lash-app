@@ -16,8 +16,7 @@ with st.expander("🗂️ Cadastro da Cliente"):
     telefone = st.text_input("Telefone")
     nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
     idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-    st.write(f"Valor mínimo permitido: 1920 — valor atual: {nascimento}")
-
+    
 
     if nascimento.month == hoje.month and nome:
         st.success(f"🎉 Parabéns, {nome}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝\n\n🎁 Você pode ganhar um mimo especial ou uma manutenção com desconto neste atendimento.")
