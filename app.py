@@ -65,4 +65,5 @@ with st.expander(txt["anamnese"]):
     infeccao = st.radio("Tem blefarite, terçol ou outras infecções oculares?", ["Sim", "Não"])
     cirurgia = st.radio("Fez cirurgia ocular recentemente?", ["Sim", "Não"])
     acido = st.radio("Está em tratamento dermatológico com ácido?", ["Sim", "Não"])
-    sensibilidade = st.radio("Tem sensibilidade a produtos químicos ou cosméticos?",
+    sensibilidade = st.radio("Tem sensibilidade a produtos químicos ou cosméticos?", ["Sim", "Não"])
+
