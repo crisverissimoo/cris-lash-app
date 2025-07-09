@@ -2,79 +2,67 @@ import streamlit as st
 from PIL import Image, ImageEnhance
 import datetime
 
-# Textos em português
+# Textos
 txt = {
-    "boas_vindas": "Bem-vinda ao seu atendimento digital!",
+    "cadastro": "🗂️ Cadastro da Cliente",
     "nome": "Nome completo",
     "telefone": "Telefone",
-    "idade": "Idade",
-    "responsavel": "Nome do responsável (se menor)",
-    "alerta_menor": "Cliente menor de idade — exige atenção especial.",
+    "nascimento": "Data de nascimento",
+    "idade": "Idade calculada",
+    "responsavel": "Responsável (se menor)",
     "autorizacao": "Autorização recebida?",
-    "atendimento": "Tipo de atendimento",
-    "data": "Data do atendimento",
-    "horario": "Horário disponível",
-    "tecnica": "Técnica desejada",
-    "valor": "Valor estimado",
-    "observacoes": "Observações extras",
-    "filtro": "Envie uma foto para simular resultado",
+    "alerta_menor": "Cliente menor de idade — exige atenção especial.",
+    "aniversario": "🎉 Cliente aniversariante do mês!",
+    "anamnese": "🧾 Ficha de Anamnese",
+    "tecnica": "💅 Escolha da Técnica",
+    "simulacao": "🎨 Simulação Visual",
     "foto": "Foto original",
     "foto_editada": "Foto com efeito",
+    "agendamento": "📅 Agendamento",
+    "data": "Data do atendimento",
+    "horario": "Horário disponível",
+    "observacoes": "📝 Observações Extras",
     "salvar": "Salvar atendimento",
-    "sucesso": "Ficha salva com sucesso!"
+    "sucesso": "Ficha salva com sucesso!",
+    "historico": "📊 Histórico de Atendimento"
 }
 
 st.title("💻 Sistema Cris Lash")
-st.markdown(f"### {txt['boas_vindas']}")
+st.markdown("### Atendimento digital completo com segurança e estilo")
 
-# 🧾 Ficha da cliente com formulário real
-with st.form("ficha_cliente"):
-    st.subheader("🧾 Ficha de Atendimento")
+# Sessão de histórico
+if "historico" not in st.session_state:
+    st.session_state.historico = []
 
+# 🗂️ Bloco 1: Cadastro
+with st.form("cadastro"):
+    st.subheader(txt["cadastro"])
     nome = st.text_input(txt["nome"])
     telefone = st.text_input(txt["telefone"])
-    idade = st.number_input(txt["idade"], min_value=0)
-
+    nascimento = st.date_input(txt["nascimento"])
+    hoje = datetime.date.today()
+    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+    st.write(f"{txt['idade']}: {idade} anos")
+    if nascimento.month == hoje.month:
+        st.success(txt["aniversario"])
     if idade < 18:
         responsavel = st.text_input(txt["responsavel"])
         st.warning(txt["alerta_menor"])
     else:
         responsavel = ""
-
     autorizacao = st.radio(txt["autorizacao"], ["Sim", "Não", "Pendente"])
-    tipo_atendimento = st.selectbox(txt["atendimento"], ["Normal", "Domingo", "Feriado", "Noturno"])
-    data_atendimento = st.date_input(txt["data"], value=datetime.date.today())
 
-    horarios_disponiveis = [
-        "08:00", "08:30", "09:00", "09:30",
-        "10:00", "10:30", "11:00", "11:30",
-        "14:00", "14:30", "15:00", "15:30",
-        "16:00", "16:30", "17:00", "17:30",
-        "18:00", "18:30", "19:00"
-    ]
-    horario_escolhido = st.selectbox(txt["horario"], horarios_disponiveis)
+    enviado_cadastro = st.form_submit_button(txt["salvar"])
 
-    tecnica_opcoes = {
-        "Fio a Fio": 150,
-        "Volume Brasileiro": 180,
-        "Volume Russo": 250,
-        "Híbrido": 220,
-        "Mega Volume": 260,
-        "Efeito Delineado": 200
-    }
-    tecnica_escolhida = st.selectbox(txt["tecnica"], list(tecnica_opcoes.keys()))
-    valor_formatado = f"€{tecnica_opcoes[tecnica_escolhida]:,.2f}".replace(",", "X").replace(".", ",").replace("X", ".")
-    st.write(f"{txt['valor']}: {valor_formatado}")
-
-    obs = st.text_area(txt["observacoes"])
-
-    foto = st.file_uploader(txt["filtro"], type=["jpg", "jpeg", "png"])
-    if foto:
-        imagem = Image.open(foto)
-        st.image(imagem, caption=txt["foto"])
-        realce = ImageEnhance.Contrast(imagem).enhance(1.5)
-        st.image(realce, caption=txt["foto_editada"])
-
-    enviado = st.form_submit_button(txt["salvar"])
-    if enviado:
-        st.success(txt["sucesso"])
+# 🧾 Bloco 2: Ficha de Anamnese
+with st.expander(txt["anamnese"]):
+    lentes = st.radio("Usa lentes de contato?", ["Sim", "Não"])
+    alergia = st.radio("Tem histórico de alergias nos olhos ou pálpebras?", ["Sim", "Não"])
+    conjuntivite = st.radio("Já teve conjuntivite nos últimos 30 dias?", ["Sim", "Não"])
+    irritacao = st.radio("Está com olhos irritados ou lacrimejando frequentemente?", ["Sim", "Não"])
+    gravida = st.radio("Está grávida ou amamentando?", ["Sim", "Não"])
+    colirio = st.radio("Faz uso de colírios com frequência?", ["Sim", "Não"])
+    infeccao = st.radio("Tem blefarite, terçol ou outras infecções oculares?", ["Sim", "Não"])
+    cirurgia = st.radio("Fez cirurgia ocular recentemente?", ["Sim", "Não"])
+    acido = st.radio("Está em tratamento dermatológico com ácido?", ["Sim", "Não"])
+    sensibilidade = st.radio("Tem sensibilidade a produtos químicos ou cosméticos?",
