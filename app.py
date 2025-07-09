@@ -2,17 +2,15 @@ import streamlit as st
 from PIL import Image, ImageEnhance
 import datetime
 
-# Inicialização
 st.set_page_config(page_title="Cris Lash Pro", layout="centered")
 st.title("💻 Sistema Cris Lash")
 st.markdown("### Atendimento digital completo com segurança, estilo e carinho 👑💅")
 
-# Configurações iniciais
 hoje = datetime.date.today()
 if "historico" not in st.session_state:
     st.session_state.historico = []
 
-# 🗂️ Bloco 1: Cadastro da Cliente
+# 🗂️ Bloco: Cadastro da Cliente
 with st.expander("🗂️ Cadastro da Cliente"):
     nome = st.text_input("Nome completo")
     telefone = st.text_input("Telefone")
@@ -31,9 +29,10 @@ with st.expander("🗂️ Cadastro da Cliente"):
 
     autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
 
-# 🧾 Bloco 2: Ficha de Anamnese
-with st.form("anamnese_form"):
+# 🧾 Bloco: Ficha de Anamnese
+with st.form("ficha_anamnese"):
     st.subheader("🧾 Ficha de Anamnese Clínica")
+
     perguntas = {
         "lentes": "Usa lentes de contato?",
         "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
@@ -49,44 +48,37 @@ with st.form("anamnese_form"):
         "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
         "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
     }
+
     respostas = {}
     for chave, pergunta in perguntas.items():
-        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None)
+        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=chave)
 
-    if None in respostas.values():
-        st.error("⚠️ Responda todas as perguntas antes de finalizar.")
-        enviar_ficha = False
-    else:
-        enviar_ficha = st.form_submit_button("Finalizar ficha")
+    enviar_ficha = st.form_submit_button("Finalizar ficha")
 
     if enviar_ficha:
-        # Alertas de contraindicação
-        if respostas["conjuntivite"] == "Sim":
-            st.error("❌ Conjuntivite recente impede aplicação segura.")
-        if respostas["infeccao"] == "Sim":
-            st.error("❌ Infecção ocular ativa — atendimento contraindicado.")
-        if respostas["cirurgia"] == "Sim":
-            st.error("❌ Cirurgia ocular recente exige tempo de recuperação.")
-        if respostas["reacao"] == "Sim":
-            st.warning("⚠️ Histórico de reação alérgica — exigir teste prévio.")
-        if respostas["glaucoma"] == "Sim":
-            st.warning("⚠️ Glaucoma diagnosticado — necessário autorização médica.")
+        if None in respostas.values():
+            st.error("⚠️ Por favor, responda todas as perguntas antes de finalizar.")
+        else:
+            st.success("✅ Ficha finalizada com sucesso!")
 
-        st.success("✅ Ficha finalizada com sucesso!")
+            # Alertas clínicos importantes
+            if respostas["conjuntivite"] == "Sim":
+                st.error("❌ Conjuntivite recente impede aplicação segura.")
+            if respostas["infeccao"] == "Sim":
+                st.error("❌ Infecção ocular ativa — contraindicado.")
+            if respostas["cirurgia"] == "Sim":
+                st.error("❌ Cirurgia ocular recente — exige tempo de recuperação.")
+            if respostas["reacao"] == "Sim":
+                st.warning("⚠️ Histórico de reação alérgica — considerar teste prévio.")
+            if respostas["glaucoma"] == "Sim":
+                st.warning("⚠️ Glaucoma diagnosticado — exige autorização médica.")
 
-        atendimento = {
-            "nome": nome,
-            "telefone": telefone,
-            "nascimento": nascimento,
-            "idade": idade,
-            "responsavel": responsavel,
-            "autorizacao": autorizacao,
-            "anamnese": respostas
-        }
-        st.session_state.historico.append(atendimento)
+            # Salvamento temporário
+            st.session_state.ficha_respostas = respostas
 
-# 💅 Bloco 3: Escolha da Técnica
+# 💅 Bloco: Escolha da Técnica
 with st.expander("💅 Escolha da Técnica"):
+    st.markdown("Selecione a técnica desejada para visualização e agendamento.")
     tecnicas = {
         "Fio a Fio": "imagens/fio_a_fio.png",
         "Volume Brasileiro": "imagens/volume_brasileiro.png",
@@ -95,47 +87,73 @@ with st.expander("💅 Escolha da Técnica"):
         "Mega Volume": "imagens/mega_volume.png",
         "Efeito Delineado": "imagens/efeito_delineado.png"
     }
-    tecnica_escolhida = st.selectbox("Escolha a técnica desejada", list(tecnicas.keys()))
-    st.image(tecnicas[tecnica_escolhida], caption=f"Técnica: {tecnica_escolhida}")
 
-# 🎨 Bloco 4: Simulação Visual
+    tecnica_escolhida = st.selectbox("🧵 Técnica disponível", list(tecnicas.keys()))
+    imagem_técnica = tecnicas.get(tecnica_escolhida)
+
+    try:
+        st.image(imagem_técnica, caption=f"Técnica: {tecnica_escolhida}")
+    except:
+        st.warning("⚠️ Imagem não encontrada — verifique se está na pasta /imagens.")
+
+# 🎨 Bloco: Simulação Visual
 with st.expander("🎨 Simulação Visual"):
-    st.markdown("Envie uma foto para visualizar como a técnica ficaria nos seus cílios.")
+    st.markdown("Envie uma foto ou use a câmera para ver como a técnica ficaria em seus cílios.")
+
     foto = st.file_uploader("📸 Foto da cliente", type=["jpg", "jpeg", "png"])
     if foto:
         imagem = Image.open(foto)
         st.image(imagem, caption="Foto original")
-        efeito = ImageEnhance.Contrast(imagem).enhance(1.4)
-        st.image(efeito, caption="Foto com simulação aproximada")
 
-# 📅 Bloco 5: Agendamento
+        efeito = ImageEnhance.Contrast(imagem).enhance(1.3)
+        st.image(efeito, caption="Foto com simulação aproximada (delineado básico)")
+
+        st.markdown(f"🧵 Técnica selecionada: **{tecnica_escolhida}**")
+
+# 📅 Bloco: Agendamento
 with st.expander("📅 Agendamento"):
+    st.markdown("Escolha a data e horário para o atendimento.")
     data_agendamento = st.date_input("Data do atendimento", value=hoje)
-    horario_opcoes = [
-        "08:00", "08:30", "09:00", "09:30",
-        "10:00", "10:30", "11:00", "11:30",
-        "14:00", "14:30", "15:00", "15:30",
-        "16:00", "16:30", "17:00", "17:30",
-        "18:00", "18:30", "19:00"
+    horarios_disponiveis = [
+        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+        "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
+        "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"
     ]
-    horario_escolhido = st.selectbox("Horário disponível", horario_opcoes)
+    horario_escolhido = st.selectbox("Horários disponíveis", horarios_disponiveis)
 
-# 📝 Bloco 6: Observações Extras
+# 📝 Bloco: Observações Extras
 with st.expander("📝 Observações Extras"):
-    observacoes = st.text_area("Anotações adicionais sobre o atendimento")
+    observacoes = st.text_area("Anotações adicionais sobre a cliente ou o atendimento")
 
-# 📊 Bloco 7: Histórico de Atendimento
+# 📊 Bloco: Histórico de Atendimento
 with st.expander("📊 Histórico de Atendimento"):
+    st.markdown("Visualize os registros salvos abaixo:")
+
+    if enviar_ficha:
+        registro = {
+            "nome": nome,
+            "telefone": telefone,
+            "nascimento": nascimento.strftime("%d/%m/%Y"),
+            "idade": idade,
+            "responsavel": responsavel,
+            "autorizacao": autorizacao,
+            "anamnese": respostas,
+            "tecnica": tecnica_escolhida,
+            "agendamento": data_agendamento.strftime("%d/%m/%Y"),
+            "horario": horario_escolhido,
+            "observacoes": observacoes
+        }
+        st.session_state.historico.append(registro)
+
     if st.session_state.historico:
-        for i, registro in enumerate(st.session_state.historico):
-            st.markdown(f"**{i+1}. {registro['nome']}** — {registro['idade']} anos")
-            st.markdown(f"- Telefone: {registro['telefone']}")
-            st.markdown(f"- Data: {registro['nascimento'].strftime('%d/%m/%Y')}")
-            st.markdown(f"- Autorização: {registro['autorizacao']}")
-            st.markdown(f"- Técnica: {tecnica_escolhida}")
-            st.markdown(f"- Agendamento: {data_agendamento.strftime('%d/%m/%Y')} às {horario_escolhido}")
-            st.markdown(f"- Observações: {observacoes}")
-            st.divider()
+        for i, reg in enumerate(st.session_state.historico, start=1):
+            st.markdown(f"**{i}. {reg['nome']}** ({reg['idade']} anos) — {reg['agendamento']} às {reg['horario']}")
+            st.markdown(f"- Técnica: {reg['tecnica']}")
+            st.markdown(f"- Tel: {reg['telefone']} | Autorização: {reg['autorizacao']}")
+            st.markdown(f"- Observações: {reg['observacoes']}")
+            st.markdown("🧾 Anamnese:")
+            for pergunta, resposta in reg['anamnese'].items():
+                st.markdown(f"• {pergunta.capitalize()}: {resposta}")
+            st.markdown("---")
     else:
         st.info("Nenhum atendimento registrado ainda.")
-
