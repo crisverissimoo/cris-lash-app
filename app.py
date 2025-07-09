@@ -132,12 +132,16 @@ with st.expander("📊 Histórico de Atendimento"):
     st.markdown("Visualize os registros salvos abaixo:")
 
     if enviar_ficha:
-        registro = {
-            "nome": nome,
-            "telefone": telefone,
-            "nascimento": nascimento.strftime("%d/%m/%Y"),
-            "idade": idade,
-            "responsavel": responsavel,
-            "autorizacao": autorizacao,
-            "anamnese": respostas,
-            "tecnica": tecnica_es
+       registro = {
+    "nome": nome,
+    "telefone": telefone,
+    "nascimento": nascimento.strftime("%d/%m/%Y"),
+    "idade": idade,
+    "responsavel": responsavel,
+    "autorizacao": autorizacao,
+    "anamnese": respostas,
+    "tecnica": tecnica_escolhida,
+    "agendamento": data_agendamento.strftime("%d/%m/%Y"),
+    "horario": horario_escolhido,
+    "observacoes": observacoes
+}
