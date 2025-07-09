@@ -61,25 +61,36 @@ with st.form("ficha_anamnese"):
         else:
             st.success("✅ Ficha finalizada com sucesso!")
 
-    if enviar_ficha:
-     contraindicoes = [
-        respostas["conjuntivite"] == "Sim",
-        respostas["infeccao"] == "Sim",
-        respostas["cirurgia"] == "Sim",
-        respostas["reacao"] == "Sim",
-        respostas["glaucoma"] == "Sim"
-    ]
-
-    if any(contraindicacoes):
-        st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir com o atendimento.")
+ if enviar_ficha:
+    if None in respostas.values():
+        st.error("⚠️ Por favor, responda todas as perguntas antes de finalizar.")
     else:
-        st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+        st.success("✅ Ficha finalizada com sucesso!")
 
+        # ⚠️ Lista de contraindicações
+        restricoes = []
+        if respostas["conjuntivite"] == "Sim":
+            restricoes.append("Conjuntivite recente")
+        if respostas["infeccao"] == "Sim":
+            restricoes.append("Infecção ocular ativa")
+        if respostas["cirurgia"] == "Sim":
+            restricoes.append("Cirurgia ocular recente")
+        if respostas["reacao"] == "Sim":
+            restricoes.append("Histórico de reação alérgica")
+        if respostas["glaucoma"] == "Sim":
+            restricoes.append("Glaucoma diagnosticado")
 
-if any(contraindicacoes):
-    st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir com o atendimento.")
-else:
-    st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+        # Mensagem final
+        if restricoes:
+            st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir:")
+            for r in restricoes:
+                st.markdown(f"• {r}")
+        else:
+            st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+
+        # Salva respostas no histórico
+        st.session_state.ficha_respostas = respostas
+
 
 
             # Alertas clínicos importantes
