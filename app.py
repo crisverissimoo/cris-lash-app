@@ -61,52 +61,29 @@ with st.form("ficha_anamnese"):
         else:
             st.success("✅ Ficha finalizada com sucesso!")
 
- if enviar_ficha:
-    if None in respostas.values():
-        st.error("⚠️ Por favor, responda todas as perguntas antes de finalizar.")
-    else:
-        st.success("✅ Ficha finalizada com sucesso!")
-
-        # ⚠️ Lista de contraindicações
-        restricoes = []
-        if respostas["conjuntivite"] == "Sim":
-            restricoes.append("Conjuntivite recente")
-        if respostas["infeccao"] == "Sim":
-            restricoes.append("Infecção ocular ativa")
-        if respostas["cirurgia"] == "Sim":
-            restricoes.append("Cirurgia ocular recente")
-        if respostas["reacao"] == "Sim":
-            restricoes.append("Histórico de reação alérgica")
-        if respostas["glaucoma"] == "Sim":
-            restricoes.append("Glaucoma diagnosticado")
-
-        # Mensagem final
-        if restricoes:
-            st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir:")
-            for r in restricoes:
-                st.markdown(f"• {r}")
-        else:
-            st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
-
-        # Salva respostas no histórico
-        st.session_state.ficha_respostas = respostas
-
-
-
-            # Alertas clínicos importantes
+            # ⚠️ Lista de restrições
+            restricoes = []
             if respostas["conjuntivite"] == "Sim":
-                st.error("❌ Conjuntivite recente impede aplicação segura.")
+                restricoes.append("Conjuntivite recente")
             if respostas["infeccao"] == "Sim":
-                st.error("❌ Infecção ocular ativa — contraindicado.")
+                restricoes.append("Infecção ocular ativa")
             if respostas["cirurgia"] == "Sim":
-                st.error("❌ Cirurgia ocular recente — exige tempo de recuperação.")
+                restricoes.append("Cirurgia ocular recente")
             if respostas["reacao"] == "Sim":
-                st.warning("⚠️ Histórico de reação alérgica — considerar teste prévio.")
+                restricoes.append("Histórico de reação alérgica")
             if respostas["glaucoma"] == "Sim":
-                st.warning("⚠️ Glaucoma diagnosticado — exige autorização médica.")
+                restricoes.append("Glaucoma diagnosticado")
 
-            # Salvamento temporário
+            if restricoes:
+                st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir com o atendimento:")
+                for item in restricoes:
+                    st.markdown(f"• {item}")
+            else:
+                st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+
+            # Salva respostas no histórico
             st.session_state.ficha_respostas = respostas
+
 
 # 💅 Bloco: Escolha da Técnica
 with st.expander("💅 Escolha da Técnica"):
