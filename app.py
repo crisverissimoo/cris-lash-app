@@ -14,7 +14,7 @@ if "historico" not in st.session_state:
 with st.expander("🗂️ Cadastro da Cliente"):
     nome = st.text_input("Nome completo")
     telefone = st.text_input("Telefone")
-    nascimento = st.date_input("📅 Data de nascimento")
+    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
     idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
     st.write(f"Idade: {idade} anos")
 
