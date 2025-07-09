@@ -61,8 +61,8 @@ with st.form("ficha_anamnese"):
         else:
             st.success("✅ Ficha finalizada com sucesso!")
 
-           if enviar_ficha:
-    contraindicoes = [
+    if enviar_ficha:
+     contraindicoes = [
         respostas["conjuntivite"] == "Sim",
         respostas["infeccao"] == "Sim",
         respostas["cirurgia"] == "Sim",
