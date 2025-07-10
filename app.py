@@ -43,10 +43,11 @@ with col2:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
 
-    with st.expander("🧾 Ficha de Anamnese Clínica"):
-    with st.form("ficha_anamnese"):
+  with st.form("ficha_anamnese"):
+    st.subheader("🧾 Ficha de Anamnese Clínica")
 
-        perguntas = {
+    respostas = {}
+    respostas["lentes"] = st.radio("Usa lentes de contato?", ["Sim", "Não"], key="clinica_lentes")
             "lentes": "Usa lentes de contato?",
             "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
             "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
