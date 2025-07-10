@@ -8,66 +8,50 @@ st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
 
 # 📅 Data atual
 hoje = datetime.date.today()
-st.write(f"📆 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
 
+# 🔐 Inicializa o histórico se ainda não existir
 if "historico" not in st.session_state:
     st.session_state.historico = []
-
 
 # 🎯 LAYOUT CENTRALIZADO
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-     # todos os blocos visuais aqui dentro
+
     st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
     st.write(f"📆 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
 
-    # 🗂️ Cadastro da Cliente
-    with st.expander("🗂️ Cadastro da Cliente"):
+    # 👤 Cadastro da Cliente
+    with st.expander("👤 Cadastro da Cliente"):
         st.markdown("### 📝 Informações Pessoais")
 
-        nome_cliente = st.text_input("Nome completo da cliente")
+        nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente_1")
         nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
-        telefone = st.text_input("Telefone para contato")
-        email = st.text_input("E-mail (opcional)")
+        telefone = st.text_input("Telefone para contato", key="telefone_cliente_1")
+        email = st.text_input("E-mail (opcional)", key="email_cliente")
 
         st.markdown("### 🌟 Preferências")
-        primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"])
+        primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"], key="primeira_vez_1")
         if primeira_vez == "Não":
-            st.text_input("Qual técnica já usou anteriormente?")
+            st.text_input("Qual técnica já usou anteriormente?", key="tecnica_ant_1")
 
         idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
         st.write(f"📌 Idade da cliente: **{idade} anos**")
 
         if idade < 18:
-            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal")
-            autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None)
+            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal", key="responsavel_cliente")
+            autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
             if autorizacao != "Sim":
                 st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
         else:
             responsavel = ""
-            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_maior")
 
         if nascimento.month == hoje.month and nome_cliente:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
     # 🧾 Ficha de Anamnese Clínica
-    with st.expander("🧾 Ficha de Anamnese Clínica"):
-        st.markdown("#### ⚕️ Histórico Clínico")
-        problemas = st.text_area("Problemas de saúde, alergias ou restrições?", key="problemas_saude")
-        usa_medicamentos = st.radio("Usa medicamentos?", ["Sim", "Não"], key="usa_medicamentos")
-        if usa_medicamentos == "Sim":
-            quais = st.text_input("Quais medicamentos?", key="quais_medicamentos")
-        else:
-            quais = ""
-
-        st.markdown("#### 💅 Preferências e Experiências")
-        fez_antes = st.radio("Já fez alongamento de cílios?", ["Sim", "Não"], key="fez_antes")
-        if fez_antes == "Sim":
-            tecnica_previa = st.text_input("Qual técnica foi utilizada?", key="tecnica_previa")
-        else:
-            tecnica_previa = ""
-
-        observacoes = st.text_area("Observações adicionais", key="obs_adicionais")
+    with st.form("ficha_anamnese"):
+        st.subheader("🧾 Ficha de Anamnese Clínica")
 
         perguntas = {
             "lentes": "Usa lentes de contato?",
@@ -87,9 +71,9 @@ with col2:
 
         respostas = {}
         for chave, pergunta in perguntas.items():
-            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"{chave}_radio")
+            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=chave)
 
-        enviar_ficha = st.button("📨 Finalizar ficha")
+        enviar_ficha = st.form_submit_button("Finalizar ficha")
 
         if enviar_ficha:
             if None in respostas.values():
@@ -98,16 +82,12 @@ with col2:
                 st.success("✅ Ficha finalizada com sucesso!")
 
                 restricoes = []
-                if respostas["conjuntivite"] == "Sim":
-                    restricoes.append("Conjuntivite recente")
-                if respostas["infeccao"] == "Sim":
-                    restricoes.append("Infecção ocular ativa")
-                if respostas["cirurgia"] == "Sim":
-                    restricoes.append("Cirurgia ocular recente")
-                if respostas["reacao"] == "Sim":
-                    restricoes.append("Histórico de reação alérgica")
-                if respostas["glaucoma"] == "Sim":
-                    restricoes.append("Glaucoma diagnosticado")
+                if respostas["conjuntivite"] == "Sim": restricoes.append("Conjuntivite recente")
+                if respostas["infeccao"] == "Sim": restricoes.append("Infecção ocular ativa")
+                if respostas["cirurgia"] == "Sim": restricoes.append("Cirurgia ocular recente")
+                if respostas["reacao"] == "Sim": restricoes.append("Histórico de reação alérgica")
+                if respostas["glaucoma"] == "Sim": restricoes.append("Glaucoma diagnosticado")
+
                 if respostas["gravida"] == "Sim":
                     st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica antes do procedimento.")
                 if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
@@ -124,68 +104,55 @@ with col2:
 
                 st.session_state.ficha_respostas = respostas
 
+    # 👁️ Identifique o formato dos olhos da cliente
+    with st.expander("👁️ Identifique o formato dos olhos da cliente"):
+        st.markdown("### 📸 Compare os formatos e selecione o mais parecido")
 
-from PIL import Image  # Já está importado no topo
+        col_a, col_b = st.columns(2)
+        formatos = {
+            "Pequenos": "Boneca — fios mais longos no centro para abrir o olhar.",
+            "Caídos": "Esquilo — eleva os cantos externos e harmoniza o olhar.",
+            "Juntos": "Gatinho — alonga os cantos externos e equilibra a distância.",
+            "Grandes": "Gatinho ou Esquilo — alonga e equilibra o volume.",
+            "Redondos": "Gatinho — suaviza a curvatura e alonga horizontalmente.",
+            "Afastados": "Boneca ou Gatinho Invertido — aproxima visualmente o olhar.",
+            "Profundos": "Boneca ou Gatinho — destaca o olhar sem pesar a pálpebra."
+        }
 
-with st.expander("👁️ Identifique o formato dos olhos da cliente"):
-    st.markdown("### 📸 Compare os formatos e selecione o mais parecido")
+        with col_a:
+            for nome, tecnica in list(formatos.items())[:3]:
+                st.image(f"https://example.com/{nome}.jpg", caption=f"Olhos {nome}")
+                if st.button(f"👁️ Esse parece comigo ({nome})", key=f"btn_{nome}"):
+                    st.session_state.formato_escolhido = tecnica
 
-    col1, col2 = st.columns(2)
+        with col_b:
+            for nome, tecnica in list(formatos.items())[3:]:
+                st.image(f"https://example.com/{nome}.jpg", caption=f"Olhos {nome}")
+                if st.button(f"👁️ Esse parece comigo ({nome})", key=f"btn_{nome}"):
+                    st.session_state.formato_escolhido = tecnica
 
-    with col1:
-        st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-pequenos.jpg", caption="Olhos Pequenos")
-        if st.button("👁️ Esse parece comigo", key="btn_pequeno"):
-            st.session_state.formato_escolhido = "Boneca — fios mais longos no centro para abrir o olhar."
+        st.markdown("### 📸 Simule a técnica")
+        foto_cliente = st.camera_input("📷 Tire uma foto agora")
+        if not foto_cliente:
+            foto_cliente = st.file_uploader("Ou envie uma foto existente", type=["jpg", "jpeg", "png"])
 
-        st.image("https://joaodabeleza.com.br/cdn/shop/articles/olhos-caidos.jpg", caption="Olhos Caídos")
-        if st.button("👁️ Esse parece comigo", key="btn_caido"):
-            st.session_state.formato_escolhido = "Esquilo — eleva os cantos externos e harmoniza o olhar."
+        if foto_cliente:
+            imagem = Image.open(foto_cliente)
+            st.image(imagem, caption="Foto da cliente para simulação")
+            tecnica_final = st.session_state.formato_escolhido if "formato_escolhido" in st.session_state else "Não selecionado"
+            st.success(f"✅ Técnica escolhida: {tecnica_final} — será aplicada conforme o modelo selecionado na próxima etapa.")
 
-        st.image("https://www.espacomulherdf.com.br/wp-content/uploads/2014/02/olhos-juntos.jpg", caption="Olhos Juntos")
-        if st.button("👁️ Esse parece comigo", key="btn_junto"):
-            st.session_state.formato_escolhido = "Gatinho — alonga os cantos externos e equilibra a distância."
+    # 📅 Agendamento
+    with st.expander("📅 Agendamento"):
+        data_agendamento = st.date_input("📅 Data do atendimento", value=hoje)
+        horario_escolhido = st.selectbox("⏰ Horários disponíveis", [
+            "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+            "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
+            "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"
+        ])
 
-    with col2:
-        st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-grandes.jpg", caption="Olhos Grandes")
-        if st.button("👁️ Esse parece comigo", key="btn_grande"):
-            st.session_state.formato_escolhido = "Gatinho ou Esquilo — alonga e equilibra o volume."
-
-        st.image("https://revistaquem.globo.com/QUEM-Inspira/noticia/2016/08/olhar-poderoso-truques-de-make-para-diferentes-formatos-de-olhos.ghtml", caption="Olhos Redondos")
-        if st.button("👁️ Esse parece comigo", key="btn_redondo"):
-            st.session_state.formato_escolhido = "Gatinho — suaviza a curvatura e alonga horizontalmente."
-
-        st.image("https://ph.pinterest.com/pin/761952830702430973/", caption="Olhos Afastados")
-        if st.button("👁️ Esse parece comigo", key="btn_afastado"):
-            st.session_state.formato_escolhido = "Boneca ou Gatinho Invertido — aproxima visualmente o olhar."
-
-    st.image("https://truquesdemaquiagem.com.br/wp-content/uploads/2022/03/olhos-profundos.jpg", caption="Olhos Profundos")
-    if st.button("👁️ Esse parece comigo", key="btn_profundo"):
-        st.session_state.formato_escolhido = "Boneca ou Gatinho — destaca o olhar sem pesar a pálpebra."
-
-    # Simulação com foto da cliente
-    st.markdown("### 📸 Simule a técnica")
-
-    foto_cliente = st.camera_input("📷 Tire uma foto agora")
-    if not foto_cliente:
-        foto_cliente = st.file_uploader("Ou envie uma foto existente", type=["jpg", "jpeg", "png"])
-
-    if foto_cliente:
-        imagem = Image.open(foto_cliente)
-        st.image(imagem, caption="Foto da cliente para simulação")
-
-        tecnica_final = st.session_state.formato_escolhido if "formato_escolhido" in st.session_state else "Nenhuma técnica selecionada"
-        st.success(f"✅ Técnica escolhida: {tecnica_final} — será aplicada conforme o modelo selecionado na próxima etapa.")
-
-
-# 📅 Agendamento
-with st.expander("📅 Agendamento"):
-    data_agendamento = st.date_input("Data do atendimento", value=hoje)
-    horarios_disponiveis = [
-        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-        "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
-        "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"
-    ]
-    horario_escolhido = st.selectbox("Horários disponíveis", horarios_disponiveis)
+    # 📝 Observações Extras
+    with
 
 # 📝 Observações Extras
 with st.expander("📝 Observações Extras"):
