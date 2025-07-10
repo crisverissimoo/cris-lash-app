@@ -1,6 +1,22 @@
 import streamlit as st
-from PIL import Image, ImageEnhance
-import datetime
+from PIL import Image  # caso ainda não esteja no seu topo
+
+with st.expander("📝 Ficha de Anamnese Clínica"):
+    st.markdown("#### 🧍 Informações da Cliente")
+    st.text_input("Nome completo")
+    st.date_input("Data do atendimento")
+    st.text_input("Profissão")
+    st.text_input("Telefone para contato")
+
+    st.markdown("#### ⚕️ Histórico Clínico")
+    st.text_area("Problemas de saúde, alergias ou restrições?")
+    st.radio("Usa medicamentos?", ["Sim", "Não"])
+    st.text_input("Quais?", disabled=False)
+
+    st.markdown("#### 💅 Preferências")
+    st.radio("Já fez alongamento de cílios antes?", ["Sim", "Não"])
+    st.text_input("Se sim, qual técnica?")
+
 
 st.set_page_config(page_title="Cris Lash Pro", layout="centered")
 st.title("💻 Sistema Cris Lash")
