@@ -1,6 +1,5 @@
 import streamlit as st
-from PIL 
-import Image  
+from PIL import Image  
 
 # caso ainda não esteja no seu topo
 
