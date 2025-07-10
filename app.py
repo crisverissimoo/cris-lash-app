@@ -13,12 +13,12 @@ st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
 hoje = datetime.date.today().strftime("%d/%m/%Y")
 st.write(f"📅 Data de hoje: `{hoje}`")
 
-# 🧍 CADASTRO DA CLIENTE (Expander fechado por padrão)
-with st.expander("👤 Cadastro da Cliente"):
+## 🗂️ Cadastro da Cliente
+with st.expander("🗂️ Cadastro da Cliente"):
     st.markdown("### 📝 Informações Pessoais")
-
-    nome_cliente = st.text_input("Nome completo da cliente")
-    data_nascimento = st.date_input("Data de nascimento")
+    
+    nnome_cliente = st.text_input("Nome completo da cliente")
+    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=datetime.date.today())
     telefone = st.text_input("Telefone para contato")
     email = st.text_input("E-mail (opcional)")
 
@@ -27,12 +27,6 @@ with st.expander("👤 Cadastro da Cliente"):
     if primeira_vez == "Não":
         st.text_input("Qual técnica já usou anteriormente?")
 
-
-## 🗂️ Cadastro da Cliente
-with st.expander("🗂️ Cadastro da Cliente"):
-    nome = st.text_input("Nome completo")
-    telefone = st.text_input("Telefone")
-    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
     idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
     st.write(f"Idade: {idade} anos")
 
