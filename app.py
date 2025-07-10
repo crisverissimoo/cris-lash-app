@@ -151,7 +151,7 @@ with col2:
         with st.expander("📝 Observações Extras"):
             obs = st.text_area("Anotações adicionais", key="obs_extras")
 
-        with st.expander("📊 Histórico"):
+        w        with st.expander("📊 Histórico"):
             if nome_cliente:
                 registro = {
                     "nome": nome_cliente,
@@ -167,4 +167,10 @@ with col2:
             if st.session_state.historico:
                 for i, r in enumerate(st.session_state.historico[::-1]):
                     st.markdown("---")
-                    st.markdown(f"### Atendimento {len(st.session_state.h
+                    st.markdown(f"### Atendimento {len(st.session_state.historico)-i}")
+                    st.markdown(f"**Cliente:** {r['nome']}")
+                    st.markdown(f"**Telefone:** {r['telefone']}")
+                    st.markdown(f"**Idade:** {r['idade']} anos")
+                    st.markdown(f"**Técnica:** {r['formato']}")
+                    st.markdown(f"**Data:** {r['data_agendamento']} às {r['horario']}")
+                    st.markdown(f"**Observações:** {r['observacoes']}")
