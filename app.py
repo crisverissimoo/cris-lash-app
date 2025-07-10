@@ -31,10 +31,26 @@ with col2:
     st.write(f"📅 Hoje é `{hoje.strftime('%d/%m/%Y')}`")
 
     # 🗂️ Cadastro
-    with st.expander("🗂️ Cadastro da Cliente"):
-        nome_cliente = st.text_input("🧍 Nome completo", key="nome_cliente")
-        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje, key="nascimento")
-        telefone = st.text_input("📞 Telefone", key="telefone")
-        email = st.text_input("📧 Email (opcional)", key="email")
+ with st.expander("📊 Histórico"):
+            if nome_cliente:
+                registro = {
+                    "nome": nome_cliente,
+                    "telefone": telefone,
+                    "idade": idade,
+                    "formato": st.session_state.formato_escolhido,
+                    "data_agendamento": data_agendamento.strftime("%d/%m/%Y"),
+                    "horario": horario,
+                    "observacoes": obs
+                }
+                st.session_state.historico.append(registro)
 
-        idade = hoje.year
+            if st.session_state.historico:
+                for i, r in enumerate(st.session_state.historico[::-1]):
+                    st.markdown(f"---")
+                    st.markdown(f"### Atendimento {len(st.session_state.historico)-i}")
+                    st.markdown(f"**Cliente:** {r['nome']}")
+                    st.markdown(f"**Telefone:** {r['telefone']}")
+                    st.markdown(f"**Idade:** {r['idade']} anos")
+                    st.markdown(f"**Técnica indicada:** {r['formato']}")
+                    st.markdown(f"**Agendado para:** {r['data_agendamento']} às {r['horario']}")
+                    st.markdown(f"**Observações:** {r['observacoes']}")
