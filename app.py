@@ -134,11 +134,6 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
         st.image("https://truquesdemaquiagem.com.br/wp-content/uploads/2022/03/olhos-profundos.jpg", caption="Olhos Profundos")
         st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
 
-    st.markdown("### 📷 Compare com uma foto da cliente")
-    foto_comparacao = st.camera_input("Tire uma foto para comparar com os exemplos")
-    if foto_comparacao:
-        imagem = Image.open(foto_comparacao)
-        st.image(imagem, caption="Foto da cliente para comparação")
 
 
     # Escolha do efeito desejado
