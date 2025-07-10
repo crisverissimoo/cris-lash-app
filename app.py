@@ -429,4 +429,5 @@ with col2:
 
         if st.session_state.historico:
             for i, reg in enumerate(st.session_state.historico, start=1):
-                st.markdown(f"**{i}. {reg['nome']}** ({reg['idade']} anos) — {reg['agendamento']}
+                st.markdown(f"**{i}. {reg['nome']}** ({reg['idade']} anos) — {reg['agendamento']}")
+
