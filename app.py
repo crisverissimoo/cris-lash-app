@@ -152,9 +152,6 @@ with col2:
         ])
 
     # 📝 Observações Extras
-    with
-
-# 📝 Observações Extras
 with st.expander("📝 Observações Extras"):
     observacoes = st.text_area("Anotações adicionais sobre a cliente ou o atendimento")
 
