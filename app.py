@@ -94,7 +94,6 @@ with st.form("ficha_anamnese"):
 
 
 # 💅 Escolha de Técnica + Formato dos Olhos + Simulação
-
 with st.expander("💅 Escolha da Técnica"):
     st.markdown("### 👁️ Formato dos olhos da cliente")
     formato_olhos = st.selectbox(
@@ -118,40 +117,30 @@ with st.expander("💅 Escolha da Técnica"):
 
     st.markdown("### ✨ Escolha o efeito desejado:")
 
-col1, col2, col3 = st.columns(3)
-with col1:
-    st.image("imagens/efeito_boneca.png", caption="Boneca", use_column_width=True)
-with col2:
-    st.image("imagens/efeito_esquilo.png", caption="Esquilo", use_column_width=True)
-with col3:
-    st.image("imagens/efeito_gatinho.png", caption="Gatinho", use_column_width=True)
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.image("imagens/efeito_boneca.png", caption="Boneca", use_column_width=True)
+    with col2:
+        st.image("imagens/efeito_esquilo.png", caption="Esquilo", use_column_width=True)
+    with col3:
+        st.image("imagens/efeito_gatinho.png", caption="Gatinho", use_column_width=True)
 
-efeito_escolhido = st.radio(
-    "Selecione o efeito desejado:",
-    ["Boneca", "Esquilo", "Gatinho"]
-)
+    efeito_escolhido = st.radio(
+        "Selecione o efeito desejado:",
+        ["Boneca", "Esquilo", "Gatinho"]
+    )
+
     st.markdown("### 📸 Simule a técnica no rosto da cliente")
 
-    foto_cliente = st.camera_input("📷 Tire uma foto agora (ou envie uma)")
+    foto_cliente = st.camera_input("📷 Tire uma foto agora")
     if not foto_cliente:
         foto_cliente = st.file_uploader("Ou envie uma foto existente", type=["jpg", "jpeg", "png"])
 
     if foto_cliente:
         imagem = Image.open(foto_cliente)
         st.image(imagem, caption="Foto da cliente para simulação")
-
         st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
 
-
-# 🎨 Simulação Visual
-with st.expander("🎨 Simulação Visual"):
-    st.markdown("Envie uma foto para ver como a técnica ficaria nos seus cílios.")
-    foto = st.file_uploader("📸 Foto da cliente", type=["jpg", "jpeg", "png"])
-    if foto:
-        imagem = Image.open(foto)
-        st.image(imagem, caption="Foto original")
-        efeito = ImageEnhance.Contrast(imagem).enhance(1.3)
-        st.image(efeito, caption="Foto com simulação aproximada")
 
 # 📅 Agendamento
 with st.expander("📅 Agendamento"):
