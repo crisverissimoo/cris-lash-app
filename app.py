@@ -93,37 +93,40 @@ with st.form("ficha_anamnese"):
    # 🔁 Revalidar Ficha Clínica (pós-envio)
 
 
-from PIL import Image  # Adicione isso no topo do seu app.py
+from PIL import Image  # Certifique-se de ter esse import no topo do app
 
-# 💅 Consultoria e Escolha da Técnica
-from PIL import Image  # se ainda não estiver no topo do seu app
-
-with st.expander("👁️ Exemplos reais de formatos de olhos"):
-    st.markdown("### 📸 Compare e escolha o que mais parece com o seu olhar")
+with st.expander("👁️ Identifique o formato dos olhos da cliente"):
+    st.markdown("### 📸 Compare os formatos e selecione o mais parecido")
 
     col1, col2 = st.columns(2)
-
     with col1:
-        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Pequenos", caption="Olhos Pequenos")
+        st.image("https://lenscope.com.br/wp-content/uploads/2022/07/olhos-pequenos.jpg", caption="Olhos Pequenos")
         if st.button("👁️ Esse parece comigo", key="btn_pequeno"):
             st.session_state.formato_escolhido = "Pequenos"
-            st.info("✨ Técnica indicada: **Boneca** — fios centralizados para abrir o olhar.")
+            st.info("✨ Técnica indicada: **Boneca** — fios mais longos no centro para abrir o olhar.")
 
-        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Ca%C3%ADdos", caption="Olhos Caídos")
+        st.image("https://joaodabeleza.com.br/cdn/shop/articles/olhos-caidos.jpg", caption="Olhos Caídos")
         if st.button("👁️ Esse parece comigo", key="btn_caido"):
             st.session_state.formato_escolhido = "Caídos"
-            st.info("✨ Técnica indicada: **Esquilo** — eleva os cantos externos.")
+            st.info("✨ Técnica indicada: **Esquilo** — eleva os cantos externos e harmoniza o olhar.")
+
+        st.image("https://www.espacomulherdf.com.br/wp-content/uploads/2014/02/olhos-juntos.jpg", caption="Olhos Juntos")
+        if st.button("👁️ Esse parece comigo", key="btn_junto"):
+            st.session_state.formato_escolhido = "Juntos"
+            st.info("✨ Técnica indicada: **Gatinho** — alonga os cantos externos e equilibra a distância.")
 
     with col2:
-        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Grandes", caption="Olhos Grandes")
+        st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-grandes.jpg", caption="Olhos Grandes")
         if st.button("👁️ Esse parece comigo", key="btn_grande"):
             st.session_state.formato_escolhido = "Grandes"
-            st.info("✨ Técnica indicada: **Gatinho ou Esquilo** — equilibra o volume.")
+            st.info("✨ Técnica indicada: **Gatinho ou Esquilo** — alonga e equilibra o volume.")
 
-        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Redondos", caption="Olhos Redondos")
+        st.image("https://www.purepeople.com.br/media/cache/amp/amp/media/para-olhos-redondos-a-especialista-indi_m2658192.jpg", caption="Olhos Redondos")
         if st.button("👁️ Esse parece comigo", key="btn_redondo"):
             st.session_state.formato_escolhido = "Redondos"
-            st.info("✨ Técnica indicada: **Gatinho** — suaviza e alonga horizontalmente.")
+            st.info("✨ Técnica indicada: **Gatinho** — suaviza a curvatura e alonga horizontalmente.")
+
+        st.image("https://ph.pinterest
 
     st.markdown("---")
     col3, col4 = st.columns(2)
