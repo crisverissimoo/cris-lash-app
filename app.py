@@ -31,7 +31,7 @@ with col2:
     st.write(f"📅 Hoje é `{hoje.strftime('%d/%m/%Y')}`")
 
     # 🗂️ Cadastro
- with st.expander("📊 Histórico"):
+with st.expander("📊 Histórico"):
             if nome_cliente:
                 registro = {
                     "nome": nome_cliente,
