@@ -141,7 +141,8 @@ with st.expander("💅 Escolha da Técnica"):
     if foto_cliente:
         imagem = Image.open(foto_cliente)
         st.image(imagem, caption="Foto da cliente para simulação")
-        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa
+        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
+
 
 
 # 📅 Agendamento
