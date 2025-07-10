@@ -96,43 +96,35 @@ with st.form("ficha_anamnese"):
 from PIL import Image  # Adicione isso no topo do seu app.py
 
 # 💅 Consultoria e Escolha da Técnica
-with st.expander("💅 Consultoria e Escolha da Técnica"):
-    st.markdown("### 👁️ Formato dos olhos da cliente:")
-    formato = st.selectbox(
-        "Qual formato mais se assemelha ao olhar da cliente?",
-        ["Pequenos", "Caídos", "Afastados", "Juntos", "Profundos", "Redondos"]
-    )
+with st.expander("👁️ Identifique seu formato de olhos"):
+    st.markdown("### 📸 Exemplos de formatos de olhos")
 
-    # Sugestão e imagem ilustrativa
-    if formato == "Pequenos":
-        st.image("https://via.placeholder.com/300x200?text=Olhos+Pequenos", caption="Olhos Pequenos")
-        st.info("✨ Técnica recomendada: **Boneca** — fios centralizados para abrir o olhar.")
-        st.markdown("💡 Curvatura: D ou CC • Comprimento: 9–13mm")
+    col1, col2 = st.columns(2)
 
-    elif formato == "Caídos":
-        st.image("https://via.placeholder.com/300x200?text=Olhos+Ca%C3%ADdos", caption="Olhos Caídos")
-        st.info("✨ Técnica recomendada: **Esquilo** — elevação dos cantos externos.")
-        st.markdown("💡 Curvatura: C para D gradual • Evite fios longos no canto final.")
+    with col1:
+        st.image("https://br.pinterest.com/pin/366199013432957353/", caption="Olhos Pequenos")
+        st.markdown("🔹 Olhos pequenos têm pálpebras menores e o globo ocular parece mais fechado.")
+        pequeno = st.button("👁️ Esse parece comigo", key="olho_pequeno")
 
-    elif formato == "Afastados":
-        st.image("https://via.placeholder.com/300x200?text=Olhos+Afastados", caption="Olhos Afastados")
-        st.info("✨ Técnica recomendada: **Boneca ou Gatinho Invertido** — centralização dos fios.")
-        st.markdown("💡 Evite cantos externos alongados • Destaque o centro.")
+        st.image("https://br.pinterest.com/pin/366199013432957353/", caption="Olhos Grandes")
+        st.markdown("🔹 Olhos grandes têm abertura ampla e são mais destacados no rosto.")
+        grande = st.button("👁️ Esse parece comigo", key="olho_grande")
 
-    elif formato == "Juntos":
-        st.image("https://via.placeholder.com/300x200?text=Olhos+Juntos", caption="Olhos Juntos")
-        st.info("✨ Técnica recomendada: **Gatinho** — alonga os cantos externos.")
-        st.markdown("💡 Curvatura: C • Fios curtos no canto interno.")
+    with col2:
+        st.image("https://revistaquem.globo.com/QUEM-Inspira/noticia/2016/08/olhar-poderoso-truques-de-make-para-diferentes-formatos-de-olhos.html", caption="Olhos Caídos")
+        st.markdown("🔹 Olhos caídos têm o canto externo mais baixo que o interno.")
+        caido = st.button("👁️ Esse parece comigo", key="olho_caido")
 
-    elif formato == "Profundos":
-        st.image("https://via.placeholder.com/300x200?text=Olhos+Profundos", caption="Olhos Profundos")
-        st.info("✨ Técnica recomendada: **Boneca ou Gatinho** — destaque sem pesar a pálpebra.")
-        st.markdown("💡 Curvatura: B ou C • Evite curvaturas muito intensas.")
+        st.image("https://lenscope.com.br/blog/formato-de-olhos/", caption="Olhos Redondos")
+        st.markdown("🔹 Olhos redondos têm formato circular e são mais abertos no centro.")
+        redondo = st.button("👁️ Esse parece comigo", key="olho_redondo")
 
-    elif formato == "Redondos":
-        st.image("https://via.placeholder.com/300x200?text=Olhos+Redondos", caption="Olhos Redondos")
-        st.info("✨ Técnica recomendada: **Gatinho** — suaviza e alonga horizontalmente.")
-        st.markdown("💡 Curvatura: C • Evite volume central excessivo.")
+    st.markdown("### 💡 Dica: Se estiver em dúvida, tire uma foto e compare com os exemplos acima.")
+
+    foto_identificacao = st.camera_input("📷 Tire uma foto para comparar")
+    if foto_identificacao:
+        imagem = Image.open(foto_identificacao)
+        st.image(imagem, caption="Sua foto para comparação")
 
     # Escolha do efeito desejado
     st.markdown("### ✨ Escolha o efeito desejado:")
