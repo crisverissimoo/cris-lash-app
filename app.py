@@ -8,6 +8,11 @@ st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
 
 # 📅 Data atual
 hoje = datetime.date.today()
+st.write(f"📆 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
+
+if "historico" not in st.session_state:
+    st.session_state.historico = []
+
 
 # 🎯 LAYOUT CENTRALIZADO
 col1, col2, col3 = st.columns([1, 2, 1])
