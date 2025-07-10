@@ -89,6 +89,38 @@ with st.form("ficha_anamnese"):
                 st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
 
             st.session_state.ficha_respostas = respostas
+            if "ficha_respostas" in st.session_state:
+    st.markdown("### 🔁 Revalidar ficha clínica")
+    revalidar = st.button("Revalidar ficha")
+
+    if revalidar:
+        respostas = st.session_state.ficha_respostas
+
+        restricoes = []
+        if respostas["conjuntivite"] == "Sim":
+            restricoes.append("Conjuntivite recente")
+        if respostas["infeccao"] == "Sim":
+            restricoes.append("Infecção ocular ativa")
+        if respostas["cirurgia"] == "Sim":
+            restricoes.append("Cirurgia ocular recente")
+        if respostas["reacao"] == "Sim":
+            restricoes.append("Histórico de reação alérgica")
+        if respostas["glaucoma"] == "Sim":
+            restricoes.append("Glaucoma diagnosticado")
+        if respostas["gravida"] == "Sim":
+            st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica antes do procedimento.")
+        if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
+            st.warning("⚠️ Este caso exige liberação médica formal — não prosseguir sem autorização documentada.")
+
+        if restricoes:
+            st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir:")
+            for item in restricoes:
+                st.markdown(f"• {item}")
+        elif idade < 18 and autorizacao != "Sim":
+            st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
+        else:
+            st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+
 
 
 # 💅 Escolha da Técnica
