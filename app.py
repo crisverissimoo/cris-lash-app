@@ -157,5 +157,6 @@ with col2:
                 "idade": idade,
                 "responsavel": responsavel,
                 autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+            }
 
 
