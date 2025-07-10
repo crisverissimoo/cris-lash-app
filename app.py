@@ -233,7 +233,7 @@ st.write(f"📅 Data de hoje: `{hoje}`")
 with st.expander("👤 Cadastro da Cliente"):
     st.markdown("### 📝 Informações Pessoais")
 
-    nome_cliente = st.text_input("Nome completo da cliente")
+    nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente_2")
     data_nascimento = st.date_input("Data de nascimento")
     telefone = st.text_input("Telefone para contato")
     email = st.text_input("E-mail (opcional)")
