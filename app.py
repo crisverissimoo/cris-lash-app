@@ -96,53 +96,55 @@ with st.form("ficha_anamnese"):
 from PIL import Image  # Adicione isso no topo do seu app.py
 
 # 💅 Consultoria e Escolha da Técnica
-from PIL import Image  # Certifique-se de ter esse import no topo do app
+from PIL import Image  # se ainda não estiver no topo do seu app
 
-with st.expander("👁️ Identifique o formato dos olhos da cliente"):
-    st.markdown("### 📸 Exemplos de formatos de olhos")
+with st.expander("👁️ Exemplos reais de formatos de olhos"):
+    st.markdown("### 📸 Compare e escolha o que mais parece com o seu olhar")
 
-    formato_escolhido = st.radio(
-        "Qual desses formatos mais se parece com o olhar da cliente?",
-        ["Pequenos", "Grandes", "Caídos", "Redondos", "Afastados", "Juntos", "Profundos"]
-    )
+    col1, col2 = st.columns(2)
 
-    # Pares de exibição
-    if formato_escolhido in ["Pequenos", "Grandes"]:
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Pequenos", caption="Olhos Pequenos")
-        with col2:
-            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Grandes", caption="Olhos Grandes")
+    with col1:
+        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Pequenos", caption="Olhos Pequenos")
+        if st.button("👁️ Esse parece comigo", key="btn_pequeno"):
+            st.session_state.formato_escolhido = "Pequenos"
+            st.info("✨ Técnica indicada: **Boneca** — fios centralizados para abrir o olhar.")
 
-    elif formato_escolhido in ["Caídos", "Redondos"]:
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Ca%C3%ADdos", caption="Olhos Caídos")
-        with col2:
-            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Redondos", caption="Olhos Redondos")
+        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Ca%C3%ADdos", caption="Olhos Caídos")
+        if st.button("👁️ Esse parece comigo", key="btn_caido"):
+            st.session_state.formato_escolhido = "Caídos"
+            st.info("✨ Técnica indicada: **Esquilo** — eleva os cantos externos.")
 
-    elif formato_escolhido in ["Afastados", "Juntos"]:
-        col1, col2 = st.columns(2)
-        with col1:
-            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Afastados", caption="Olhos Afastados")
-        with col2:
-            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Juntos", caption="Olhos Juntos")
+    with col2:
+        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Grandes", caption="Olhos Grandes")
+        if st.button("👁️ Esse parece comigo", key="btn_grande"):
+            st.session_state.formato_escolhido = "Grandes"
+            st.info("✨ Técnica indicada: **Gatinho ou Esquilo** — equilibra o volume.")
 
-    elif formato_escolhido == "Profundos":
-        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Profundos", caption="Olhos Profundos")
+        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Redondos", caption="Olhos Redondos")
+        if st.button("👁️ Esse parece comigo", key="btn_redondo"):
+            st.session_state.formato_escolhido = "Redondos"
+            st.info("✨ Técnica indicada: **Gatinho** — suaviza e alonga horizontalmente.")
 
-    # Sugestão técnica
-    sugestoes = {
-        "Pequenos": "✨ Técnica indicada: **Boneca** — fios mais longos no centro para abrir o olhar.",
-        "Grandes": "✨ Técnica indicada: **Gatinho ou Esquilo** — alonga e equilibra o volume.",
-        "Caídos": "✨ Técnica indicada: **Esquilo** — eleva os cantos externos.",
-        "Redondos": "✨ Técnica indicada: **Gatinho** — suaviza e alonga horizontalmente.",
-        "Afastados": "✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima visualmente o olhar.",
-        "Juntos": "✨ Técnica indicada: **Gatinho** — alonga os cantos externos e equilibra a distância.",
-        "Profundos": "✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra."
-    }
+    st.markdown("---")
+    col3, col4 = st.columns(2)
 
-    st.info(sugestoes[formato_escolhido])
+    with col3:
+        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Afastados", caption="Olhos Afastados")
+        if st.button("👁️ Esse parece comigo", key="btn_afastado"):
+            st.session_state.formato_escolhido = "Afastados"
+            st.info("✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima o olhar.")
+
+    with col4:
+        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Juntos", caption="Olhos Juntos")
+        if st.button("👁️ Esse parece comigo", key="btn_junto"):
+            st.session_state.formato_escolhido = "Juntos"
+            st.info("✨ Técnica indicada: **Gatinho** — alonga os cantos externos.")
+
+    st.image("https://via.placeholder.com/300x200.png?text=Olhos+Profundos", caption="Olhos Profundos")
+    if st.button("👁️ Esse parece comigo", key="btn_profundo"):
+        st.session_state.formato_escolhido = "Profundos"
+        st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca sem pesar a pálpebra.")
+
 
 
     # Simulação com foto da cliente
