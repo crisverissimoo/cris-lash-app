@@ -126,27 +126,16 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
             st.session_state.formato_escolhido = "Redondos"
             st.info("✨ Técnica indicada: **Gatinho** — suaviza a curvatura e alonga horizontalmente.")
 
-        st.image("https://ph.pinterest
-
-    st.markdown("---")
-    col3, col4 = st.columns(2)
-
-    with col3:
-        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Afastados", caption="Olhos Afastados")
+        st.image("https://ph.pinterest.com/pin/761952830702430973/", caption="Olhos Afastados")
         if st.button("👁️ Esse parece comigo", key="btn_afastado"):
             st.session_state.formato_escolhido = "Afastados"
-            st.info("✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima o olhar.")
+            st.info("✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima visualmente o olhar.")
 
-    with col4:
-        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Juntos", caption="Olhos Juntos")
-        if st.button("👁️ Esse parece comigo", key="btn_junto"):
-            st.session_state.formato_escolhido = "Juntos"
-            st.info("✨ Técnica indicada: **Gatinho** — alonga os cantos externos.")
-
-    st.image("https://via.placeholder.com/300x200.png?text=Olhos+Profundos", caption="Olhos Profundos")
+    st.image("https://truquesdemaquiagem.com.br/wp-content/uploads/2022/03/olhos-profundos.jpg", caption="Olhos Profundos")
     if st.button("👁️ Esse parece comigo", key="btn_profundo"):
         st.session_state.formato_escolhido = "Profundos"
-        st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca sem pesar a pálpebra.")
+        st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
+
 
 
 
