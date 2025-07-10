@@ -405,7 +405,7 @@ with col2:
     if "historico" not in st.session_state:
         st.session_state.historico = []
 
-   # 📊 Histórico de Atendimento
+      # 📊 Histórico de Atendimento
     with st.expander("📊 Histórico de Atendimento"):
         st.markdown("Visualize os registros salvos abaixo:")
 
@@ -413,7 +413,7 @@ with col2:
             tecnica_final = st.session_state.formato_escolhido if "formato_escolhido" in st.session_state else "Não selecionado"
 
             registro = {
-                "nome": nome_cliente,
+                "nome": st.text_input("🧍 Nome completo da cliente", key="nome_cliente_hist"),
                 "telefone": telefone,
                 "nascimento": nascimento.strftime("%d/%m/%Y"),
                 "idade": idade,
@@ -429,17 +429,4 @@ with col2:
 
         if st.session_state.historico:
             for i, reg in enumerate(st.session_state.historico, start=1):
-                st.markdown(f"**{i}. {reg['nome']}** ({reg['idade']} anos) — {reg['agendamento']} às {reg['horario']}")
-                st.markdown(f"- Técnica: **{reg['tecnica']}**")
-                st.markdown(f"- Tel: {reg['telefone']}")
-                if reg['idade'] < 18:
-                    st.markdown(f"🧒 Menor — Responsável: {reg['responsavel']} | Autorização: {reg['autorizacao']}")
-                else:
-                    st.markdown(f"- Autorização: {reg['autorizacao']}")
-                st.markdown(f"- Observações: {reg['observacoes']}")
-                st.markdown("🧾 Anamnese:")
-                for pergunta, resposta in reg["anamnese"].items():
-                    st.markdown(f"• {pergunta.capitalize()}: {resposta}")
-                st.markdown("---")
-        else:
-            st.info("Nenhum atendimento registrado ainda.")
+                st.markdown(f"**{i}. {reg['nome']}** ({reg['idade']} anos) — {reg['agendamento']}
