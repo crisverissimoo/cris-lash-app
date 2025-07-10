@@ -96,35 +96,50 @@ with st.form("ficha_anamnese"):
 from PIL import Image  # Adicione isso no topo do seu app.py
 
 # 💅 Consultoria e Escolha da Técnica
-with st.expander("👁️ Identifique seu formato de olhos"):
+from PIL import Image  # Certifique-se de ter esse import no topo do app
+
+with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     st.markdown("### 📸 Exemplos de formatos de olhos")
 
-    col1, col2 = st.columns(2)
+    formato_escolhido = st.radio(
+        "Qual desses formatos mais se parece com o olhar da cliente?",
+        ["Pequenos", "Grandes", "Caídos", "Redondos", "Afastados", "Juntos", "Profundos"]
+    )
 
-    with col1:
-        st.image("https://br.pinterest.com/pin/366199013432957353/", caption="Olhos Pequenos")
-        st.markdown("🔹 Olhos pequenos têm pálpebras menores e o globo ocular parece mais fechado.")
-        pequeno = st.button("👁️ Esse parece comigo", key="olho_pequeno")
+    if formato_escolhido == "Pequenos":
+        st.image("https://lenscope.com.br/wp-content/uploads/2022/07/olhos-pequenos.jpg", caption="Olhos Pequenos")
+        st.info("✨ Técnica indicada: **Boneca** — fios mais longos no centro para abrir o olhar.")
 
-        st.image("https://br.pinterest.com/pin/366199013432957353/", caption="Olhos Grandes")
-        st.markdown("🔹 Olhos grandes têm abertura ampla e são mais destacados no rosto.")
-        grande = st.button("👁️ Esse parece comigo", key="olho_grande")
+    elif formato_escolhido == "Grandes":
+        st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-grandes.jpg", caption="Olhos Grandes")
+        st.info("✨ Técnica indicada: **Gatinho ou Esquilo** — alonga e equilibra o volume.")
 
-    with col2:
-        st.image("https://revistaquem.globo.com/QUEM-Inspira/noticia/2016/08/olhar-poderoso-truques-de-make-para-diferentes-formatos-de-olhos.html", caption="Olhos Caídos")
-        st.markdown("🔹 Olhos caídos têm o canto externo mais baixo que o interno.")
-        caido = st.button("👁️ Esse parece comigo", key="olho_caido")
+    elif formato_escolhido == "Caídos":
+        st.image("https://joaodabeleza.com.br/cdn/shop/articles/olhos-caidos.jpg", caption="Olhos Caídos")
+        st.info("✨ Técnica indicada: **Esquilo** — eleva os cantos externos e harmoniza o olhar.")
 
-        st.image("https://lenscope.com.br/blog/formato-de-olhos/", caption="Olhos Redondos")
-        st.markdown("🔹 Olhos redondos têm formato circular e são mais abertos no centro.")
-        redondo = st.button("👁️ Esse parece comigo", key="olho_redondo")
+    elif formato_escolhido == "Redondos":
+        st.image("https://www.purepeople.com.br/media/cache/amp/amp/media/para-olhos-redondos-a-especialista-indi_m2658192.jpg", caption="Olhos Redondos")
+        st.info("✨ Técnica indicada: **Gatinho** — suaviza a curvatura e alonga horizontalmente.")
 
-    st.markdown("### 💡 Dica: Se estiver em dúvida, tire uma foto e compare com os exemplos acima.")
+    elif formato_escolhido == "Afastados":
+        st.image("https://ph.pinterest.com/pin/761952830702430973/", caption="Olhos Afastados")
+        st.info("✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima visualmente o olhar.")
 
-    foto_identificacao = st.camera_input("📷 Tire uma foto para comparar")
-    if foto_identificacao:
-        imagem = Image.open(foto_identificacao)
-        st.image(imagem, caption="Sua foto para comparação")
+    elif formato_escolhido == "Juntos":
+        st.image("https://www.espacomulherdf.com.br/wp-content/uploads/2014/02/olhos-juntos.jpg", caption="Olhos Juntos")
+        st.info("✨ Técnica indicada: **Gatinho** — alonga os cantos externos e equilibra a distância.")
+
+    elif formato_escolhido == "Profundos":
+        st.image("https://truquesdemaquiagem.com.br/wp-content/uploads/2022/03/olhos-profundos.jpg", caption="Olhos Profundos")
+        st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
+
+    st.markdown("### 📷 Compare com uma foto da cliente")
+    foto_comparacao = st.camera_input("Tire uma foto para comparar com os exemplos")
+    if foto_comparacao:
+        imagem = Image.open(foto_comparacao)
+        st.image(imagem, caption="Foto da cliente para comparação")
+
 
     # Escolha do efeito desejado
     st.markdown("### ✨ Escolha o efeito desejado:")
