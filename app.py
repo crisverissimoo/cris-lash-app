@@ -16,7 +16,7 @@ st.write(f"📅 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
 with st.expander("🗂️ Cadastro da Cliente"):
     st.markdown("### 📝 Informações Pessoais")
     
-    nome_cliente = st.text_input("Nome completo da cliente")
+    nome_cliente = st.text_input(...)
     nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
     telefone = st.text_input("Telefone para contato")
     email = st.text_input("E-mail (opcional)")
@@ -43,8 +43,25 @@ with st.expander("🗂️ Cadastro da Cliente"):
 
 
 # 🧾 Ficha de Anamnese
-with st.form("ficha_anamnese"):
-    st.subheader("🧾 Ficha de Anamnese Clínica")
+# 🧾 Ficha de Anamnese Clínica
+with st.expander("🧾 Ficha de Anamnese Clínica"):
+    st.markdown("#### ⚕️ Histórico Clínico")
+    problemas = st.text_area("Problemas de saúde, alergias ou restrições?")
+    usa_medicamentos = st.radio("Usa medicamentos?", ["Sim", "Não"])
+    if usa_medicamentos == "Sim":
+        quais = st.text_input("Quais medicamentos?")
+    else:
+        quais = ""
+
+    st.markdown("#### 💅 Preferências e Experiências")
+    fez_antes = st.radio("Já fez alongamento de cílios?", ["Sim", "Não"])
+    if fez_antes == "Sim":
+        tecnica_previa = st.text_input("Qual técnica foi utilizada?")
+    else:
+        tecnica_previa = ""
+
+    observacoes = st.text_area("Observações adicionais")
+
 
     perguntas = {
         "lentes": "Usa lentes de contato?",
