@@ -106,51 +106,44 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
         ["Pequenos", "Grandes", "Caídos", "Redondos", "Afastados", "Juntos", "Profundos"]
     )
 
-    if formato_escolhido == "Pequenos":
-        st.image("https://lenscope.com.br/wp-content/uploads/2022/07/olhos-pequenos.jpg", caption="Olhos Pequenos")
-        st.info("✨ Técnica indicada: **Boneca** — fios mais longos no centro para abrir o olhar.")
+    # Pares de exibição
+    if formato_escolhido in ["Pequenos", "Grandes"]:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Pequenos", caption="Olhos Pequenos")
+        with col2:
+            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Grandes", caption="Olhos Grandes")
 
-    elif formato_escolhido == "Grandes":
-        st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-grandes.jpg", caption="Olhos Grandes")
-        st.info("✨ Técnica indicada: **Gatinho ou Esquilo** — alonga e equilibra o volume.")
+    elif formato_escolhido in ["Caídos", "Redondos"]:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Ca%C3%ADdos", caption="Olhos Caídos")
+        with col2:
+            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Redondos", caption="Olhos Redondos")
 
-    elif formato_escolhido == "Caídos":
-        st.image("https://joaodabeleza.com.br/cdn/shop/articles/olhos-caidos.jpg", caption="Olhos Caídos")
-        st.info("✨ Técnica indicada: **Esquilo** — eleva os cantos externos e harmoniza o olhar.")
-
-    elif formato_escolhido == "Redondos":
-        st.image("https://www.purepeople.com.br/media/cache/amp/amp/media/para-olhos-redondos-a-especialista-indi_m2658192.jpg", caption="Olhos Redondos")
-        st.info("✨ Técnica indicada: **Gatinho** — suaviza a curvatura e alonga horizontalmente.")
-
-    elif formato_escolhido == "Afastados":
-        st.image("https://ph.pinterest.com/pin/761952830702430973/", caption="Olhos Afastados")
-        st.info("✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima visualmente o olhar.")
-
-    elif formato_escolhido == "Juntos":
-        st.image("https://www.espacomulherdf.com.br/wp-content/uploads/2014/02/olhos-juntos.jpg", caption="Olhos Juntos")
-        st.info("✨ Técnica indicada: **Gatinho** — alonga os cantos externos e equilibra a distância.")
+    elif formato_escolhido in ["Afastados", "Juntos"]:
+        col1, col2 = st.columns(2)
+        with col1:
+            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Afastados", caption="Olhos Afastados")
+        with col2:
+            st.image("https://via.placeholder.com/300x200.png?text=Olhos+Juntos", caption="Olhos Juntos")
 
     elif formato_escolhido == "Profundos":
-        st.image("https://truquesdemaquiagem.com.br/wp-content/uploads/2022/03/olhos-profundos.jpg", caption="Olhos Profundos")
-        st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
+        st.image("https://via.placeholder.com/300x200.png?text=Olhos+Profundos", caption="Olhos Profundos")
 
+    # Sugestão técnica
+    sugestoes = {
+        "Pequenos": "✨ Técnica indicada: **Boneca** — fios mais longos no centro para abrir o olhar.",
+        "Grandes": "✨ Técnica indicada: **Gatinho ou Esquilo** — alonga e equilibra o volume.",
+        "Caídos": "✨ Técnica indicada: **Esquilo** — eleva os cantos externos.",
+        "Redondos": "✨ Técnica indicada: **Gatinho** — suaviza e alonga horizontalmente.",
+        "Afastados": "✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima visualmente o olhar.",
+        "Juntos": "✨ Técnica indicada: **Gatinho** — alonga os cantos externos e equilibra a distância.",
+        "Profundos": "✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra."
+    }
 
+    st.info(sugestoes[formato_escolhido])
 
-    # Escolha do efeito desejado
-    st.markdown("### ✨ Escolha o efeito desejado:")
-
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.image("https://via.placeholder.com/150?text=Boneca", caption="Boneca", use_column_width=True)
-    with col2:
-        st.image("https://via.placeholder.com/150?text=Esquilo", caption="Esquilo", use_column_width=True)
-    with col3:
-        st.image("https://via.placeholder.com/150?text=Gatinho", caption="Gatinho", use_column_width=True)
-
-    efeito_escolhido = st.radio(
-        "Selecione o efeito desejado:",
-        ["Boneca", "Esquilo", "Gatinho"]
-    )
 
     # Simulação com foto da cliente
     st.markdown("### 📸 Simule a técnica no rosto da cliente")
