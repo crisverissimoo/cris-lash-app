@@ -405,6 +405,25 @@ with st.expander("📝 Observações Extras"):
     observacoes = st.text_area("Anotações adicionais sobre a cliente ou o atendimento")
 
 # 📊 Histórico de Atendimento
+# 🔐 Inicializa o histórico, se ainda não existir
+if "historico" not in st.session_state:
+    st.session_state.historico = []
+
+# 📅 Agendamento
+with st.expander("📅 Agendamento"):
+    data_agendamento = st.date_input("Data do atendimento", value=hoje)
+    horarios_disponiveis = [
+        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+        "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
+        "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"
+    ]
+    horario_escolhido = st.selectbox("Horários disponíveis", horarios_disponiveis)
+
+# 📝 Observações Extras
+with st.expander("📝 Observações Extras"):
+    observacoes = st.text_area("Anotações adicionais sobre a cliente ou o atendimento")
+
+# 📊 Histórico de Atendimento
 with st.expander("📊 Histórico de Atendimento"):
     st.markdown("Visualize os registros salvos abaixo:")
 
@@ -440,4 +459,3 @@ with st.expander("📊 Histórico de Atendimento"):
             st.markdown("---")
     else:
         st.info("Nenhum atendimento registrado ainda.")
-
