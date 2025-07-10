@@ -6,40 +6,43 @@ import datetime
 # 🎨 CONFIGURAÇÃO DE PÁGINA
 st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
 
-st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
-
-# 📆 Data atual formatada
+# 📅 Data atual (mantida como objeto)
 hoje = datetime.date.today()
-st.write(f"📅 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
 
-## 🗂️ Cadastro da Cliente
-with st.expander("🗂️ Cadastro da Cliente"):
-    st.markdown("### 📝 Informações Pessoais")
-    
-    nome_cliente = st.text_input(...)
-    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
-    telefone = st.text_input("Telefone para contato")
-    email = st.text_input("E-mail (opcional)")
+# 🎯 LAYOUT CENTRALIZADO
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
+    st.write(f"📆 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
 
-    st.markdown("### 🌟 Preferências")
-    primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"])
-    if primeira_vez == "Não":
-        st.text_input("Qual técnica já usou anteriormente?")
+    # 🗂️ Cadastro da Cliente
+    with st.expander("🗂️ Cadastro da Cliente"):
+        st.markdown("### 📝 Informações Pessoais")
 
-    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-    st.write(f"Idade: {idade} anos")
+        nome_cliente = st.text_input("Nome completo da cliente")
+        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
+        telefone = st.text_input("Telefone para contato")
+        email = st.text_input("E-mail (opcional)")
 
-    if idade < 18:
-        responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal")
-        autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None)
-        if autorizacao != "Sim":
-            st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
-    else:
-        responsavel = ""
-        autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+        st.markdown("### 🌟 Preferências")
+        primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"])
+        if primeira_vez == "Não":
+            st.text_input("Qual técnica já usou anteriormente?")
 
-    if nascimento.month == hoje.month and nome_cliente:
-        st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
+        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+        st.write(f"📌 Idade da cliente: **{idade} anos**")
+
+        if idade < 18:
+            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal")
+            autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None)
+            if autorizacao != "Sim":
+                st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
+        else:
+            responsavel = ""
+            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+
+        if nascimento.month == hoje.month and nome_cliente:
+            st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
 
 # 🧾 Ficha de Anamnese
