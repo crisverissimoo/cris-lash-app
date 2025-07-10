@@ -43,8 +43,8 @@ with col2:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
 
-    with st.expander("ficha_anamnese"):
-        st.markdown("🧾 Ficha de Anamnese Clínica")
+    with st.expander("🧾 Ficha de Anamnese Clínica"):
+    with st.form("ficha_anamnese"):
 
         perguntas = {
             "lentes": "Usa lentes de contato?",
