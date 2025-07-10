@@ -1,5 +1,9 @@
 import streamlit as st
 from PIL import Image  
+import datetime
+
+hoje = datetime.date.today().strftime("%d/%m/%Y")
+
 
 # caso ainda não esteja no seu topo
 
