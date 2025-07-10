@@ -24,10 +24,11 @@ with col2:
     with st.expander("👤 Cadastro da Cliente"):
         st.markdown("### 📝 Informações Pessoais")
 
-        nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente_1")
-        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
-        telefone = st.text_input("Telefone para contato", key="telefone_cliente_1")
-        email = st.text_input("E-mail (opcional)", key="email_cliente")
+with st.expander("🗂️ Cadastro da Cliente"):
+    nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente_main")
+    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje, key="nascimento_main")
+    telefone = st.text_input("Telefone para contato", key="telefone_main")
+    email = st.text_input("E-mail (opcional)", key="email_main")
 
         st.markdown("### 🌟 Preferências")
         primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"], key="primeira_vez_1")
