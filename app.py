@@ -93,24 +93,57 @@ with st.form("ficha_anamnese"):
    # 🔁 Revalidar Ficha Clínica (pós-envio)
 
 
-# 💅 Escolha da Técnica
+# 💅 Escolha de Técnica + Formato dos Olhos + Simulação
+
 with st.expander("💅 Escolha da Técnica"):
-    tecnicas = {
-        "Fio a Fio": "imagens/fio_a_fio.png",
-        "Volume Brasileiro": "imagens/volume_brasileiro.png",
-        "Volume Russo": "imagens/volume_russo.png",
-        "Híbrido": "imagens/hibrido.png",
-        "Mega Volume": "imagens/mega_volume.png",
-        "Efeito Delineado": "imagens/efeito_delineado.png"
-    }
+    st.markdown("### 👁️ Formato dos olhos da cliente")
+    formato_olhos = st.selectbox(
+        "Selecione o formato que mais se assemelha ao olhar da cliente:",
+        ["Amendoado", "Caído", "Redondo", "Asiático", "Profundo"]
+    )
 
-    tecnica_escolhida = st.selectbox("🧵 Técnica disponível", list(tecnicas.keys()))
-    imagem_técnica = tecnicas.get(tecnica_escolhida)
+    sugestao_tecnica = ""
+    if formato_olhos == "Caído":
+        sugestao_tecnica = "🐿️ Esquilo — realça o arco e levanta o olhar"
+    elif formato_olhos == "Redondo":
+        sugestao_tecnica = "😺 Gatinho — alonga o canto externo, criando sensualidade"
+    elif formato_olhos == "Amendoado":
+        sugestao_tecnica = "🧸 Boneca — abre o olhar com fios centralizados"
+    elif formato_olhos == "Asiático":
+        sugestao_tecnica = "🐿️ Esquilo — favorece elevação sutil do olhar"
+    elif formato_olhos == "Profundo":
+        sugestao_tecnica = "🧸 Boneca ou Gatinho — para destacar o olhar"
 
-    try:
-        st.image(imagem_técnica, caption=f"Técnica: {tecnica_escolhida}")
-    except:
-        st.warning("⚠️ Imagem não encontrada — verifique se está na pasta /imagens.")
+    st.info(f"💡 Sugestão da técnica ideal: **{sugestao_tecnica}**")
+
+    st.markdown("### ✨ Escolha o efeito desejado:")
+
+    col1, col2, col3 = st.columns(3)
+
+    with col1:
+        st.image("imagens/efeito_boneca.png", caption="Boneca", use_column_width=True)
+        efeito_escolhido = st.radio("Escolher?", ["Boneca"], key="ef_boneca")
+
+    with col2:
+        st.image("imagens/efeito_esquilo.png", caption="Esquilo", use_column_width=True)
+        efeito_escolhido = st.radio("Escolher?", ["Esquilo"], key="ef_esquilo")
+
+    with col3:
+        st.image("imagens/efeito_gatinho.png", caption="Gatinho", use_column_width=True)
+        efeito_escolhido = st.radio("Escolher?", ["Gatinho"], key="ef_gatinho")
+
+    st.markdown("### 📸 Simule a técnica no rosto da cliente")
+
+    foto_cliente = st.camera_input("📷 Tire uma foto agora (ou envie uma)")
+    if not foto_cliente:
+        foto_cliente = st.file_uploader("Ou envie uma foto existente", type=["jpg", "jpeg", "png"])
+
+    if foto_cliente:
+        imagem = Image.open(foto_cliente)
+        st.image(imagem, caption="Foto da cliente para simulação")
+
+        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
+
 
 # 🎨 Simulação Visual
 with st.expander("🎨 Simulação Visual"):
