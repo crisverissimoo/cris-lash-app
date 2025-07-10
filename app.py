@@ -148,7 +148,7 @@ with st.expander("👁️ Exemplos reais de formatos de olhos"):
 
 
     # Simulação com foto da cliente
-    st.markdown("### 📸 Simule a técnica no rosto da cliente")
+    st.markdown("### 📸 Simule a técnica")
 
     foto_cliente = st.camera_input("📷 Tire uma foto agora")
     if not foto_cliente:
