@@ -1,5 +1,8 @@
 import streamlit as st
-from PIL import Image  # caso ainda não esteja no seu topo
+from PIL 
+import Image  
+
+# caso ainda não esteja no seu topo
 
 with st.expander("📝 Ficha de Anamnese Clínica"):
     st.markdown("#### 🧍 Informações da Cliente")
