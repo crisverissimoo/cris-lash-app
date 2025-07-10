@@ -1,4 +1,3 @@
-# 📆 Data atual formatada
 # 📦 IMPORTS
 import streamlit as st
 from PIL import Image
@@ -10,16 +9,14 @@ st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
 st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
 
 # 📆 Data atual formatada
-import datetime
 hoje = datetime.date.today()
 st.write(f"📅 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
-
 
 ## 🗂️ Cadastro da Cliente
 with st.expander("🗂️ Cadastro da Cliente"):
     st.markdown("### 📝 Informações Pessoais")
     
-    nnome_cliente = st.text_input("Nome completo da cliente")
+    nome_cliente = st.text_input("Nome completo da cliente")
     nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje)
     telefone = st.text_input("Telefone para contato")
     email = st.text_input("E-mail (opcional)")
@@ -42,7 +39,7 @@ with st.expander("🗂️ Cadastro da Cliente"):
         autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
 
     if nascimento.month == hoje.month and nome_cliente:
-        st.success(f"🎉 Parabéns, {nome}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
+        st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
 
 # 🧾 Ficha de Anamnese
