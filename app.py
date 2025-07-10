@@ -93,6 +93,8 @@ with st.form("ficha_anamnese"):
    # 🔁 Revalidar Ficha Clínica (pós-envio)
 
 
+from PIL import Image  # Certifique-se de ter esse import no topo do app
+
 # 💅 Escolha de Técnica + Formato dos Olhos + Simulação
 with st.expander("💅 Escolha da Técnica"):
     st.markdown("### 👁️ Formato dos olhos da cliente")
@@ -119,11 +121,11 @@ with st.expander("💅 Escolha da Técnica"):
 
     col1, col2, col3 = st.columns(3)
     with col1:
-        st.image("imagens/efeito_boneca.png", caption="Boneca", use_column_width=True)
+        st.image("https://via.placeholder.com/150?text=Boneca", caption="Boneca", use_column_width=True)
     with col2:
-        st.image("imagens/efeito_esquilo.png", caption="Esquilo", use_column_width=True)
+        st.image("https://via.placeholder.com/150?text=Esquilo", caption="Esquilo", use_column_width=True)
     with col3:
-        st.image("imagens/efeito_gatinho.png", caption="Gatinho", use_column_width=True)
+        st.image("https://via.placeholder.com/150?text=Gatinho", caption="Gatinho", use_column_width=True)
 
     efeito_escolhido = st.radio(
         "Selecione o efeito desejado:",
@@ -139,7 +141,7 @@ with st.expander("💅 Escolha da Técnica"):
     if foto_cliente:
         imagem = Image.open(foto_cliente)
         st.image(imagem, caption="Foto da cliente para simulação")
-        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
+        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa
 
 
 # 📅 Agendamento
