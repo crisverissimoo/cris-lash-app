@@ -16,41 +16,34 @@ if "historico" not in st.session_state:
 # 🎯 LAYOUT CENTRALIZADO
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-
-    st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
-    st.write(f"📆 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
-
-    # 👤 Cadastro da Cliente
-    with st.expander("👤 Cadastro da Cliente"):
+    with st.expander("🗂️ Cadastro da Cliente"):
         st.markdown("### 📝 Informações Pessoais")
 
-with st.expander("🗂️ Cadastro da Cliente"):
-    nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente_main")
-    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje, key="nascimento_main")
-    telefone = st.text_input("Telefone para contato", key="telefone_main")
-    email = st.text_input("E-mail (opcional)", key="email_main")
-
-        st.markdown("### 🌟 Preferências")
-        primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"], key="primeira_vez_1")
-        if primeira_vez == "Não":
-            st.text_input("Qual técnica já usou anteriormente?", key="tecnica_ant_1")
+        nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente_main")
+        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje, key="nascimento_main")
+        telefone = st.text_input("📞 Telefone para contato", key="telefone_main")
+        email = st.text_input("📧 E-mail (opcional)", key="email_main")
 
         idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
         st.write(f"📌 Idade da cliente: **{idade} anos**")
 
+        st.markdown("### 🌟 Preferências")
+        primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"], key="primeira_vez_main")
+        if primeira_vez == "Não":
+            st.text_input("Qual técnica já usou anteriormente?", key="tecnica_ant_main")
+
         if idade < 18:
-            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal", key="responsavel_cliente")
-            autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal", key="responsavel_main")
+            autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor_main")
             if autorizacao != "Sim":
                 st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
         else:
             responsavel = ""
-            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_maior")
+            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_maior_main")
 
         if nascimento.month == hoje.month and nome_cliente:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
-    # 🧾 Ficha de Anamnese Clínica
     with st.form("ficha_anamnese"):
         st.subheader("🧾 Ficha de Anamnese Clínica")
 
@@ -72,16 +65,15 @@ with st.expander("🗂️ Cadastro da Cliente"):
 
         respostas = {}
         for chave, pergunta in perguntas.items():
-            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=chave)
+            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-        enviar_ficha = st.form_submit_button("Finalizar ficha")
+        enviar_ficha = st.form_submit_button("📨 Finalizar ficha")
 
         if enviar_ficha:
             if None in respostas.values():
                 st.error("⚠️ Por favor, responda todas as perguntas antes de finalizar.")
             else:
                 st.success("✅ Ficha finalizada com sucesso!")
-
                 restricoes = []
                 if respostas["conjuntivite"] == "Sim": restricoes.append("Conjuntivite recente")
                 if respostas["infeccao"] == "Sim": restricoes.append("Infecção ocular ativa")
@@ -90,7 +82,7 @@ with st.expander("🗂️ Cadastro da Cliente"):
                 if respostas["glaucoma"] == "Sim": restricoes.append("Glaucoma diagnosticado")
 
                 if respostas["gravida"] == "Sim":
-                    st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica antes do procedimento.")
+                    st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica.")
                 if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
                     st.warning("⚠️ Este caso exige liberação médica formal — não prosseguir sem autorização documentada.")
 
@@ -104,6 +96,7 @@ with st.expander("🗂️ Cadastro da Cliente"):
                     st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
 
                 st.session_state.ficha_respostas = respostas
+
 
     # 👁️ Identifique o formato dos olhos da cliente
     with st.expander("👁️ Identifique o formato dos olhos da cliente"):
