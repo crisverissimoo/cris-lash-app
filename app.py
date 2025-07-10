@@ -6,7 +6,7 @@ import datetime
 # 🎨 CONFIGURAÇÃO DE PÁGINA
 st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
 
-# 📅 Data atual (mantida como objeto)
+# 📅 Data atual
 hoje = datetime.date.today()
 
 # 🎯 LAYOUT CENTRALIZADO
@@ -44,103 +44,80 @@ with col2:
         if nascimento.month == hoje.month and nome_cliente:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
-# 🧾 Ficha de Anamnese Clínica
+    # 🧾 Ficha de Anamnese Clínica
     with st.expander("🧾 Ficha de Anamnese Clínica"):
         st.markdown("#### ⚕️ Histórico Clínico")
-        problemas = st.text_area("Problemas de saúde, alergias ou restrições?")
-        usa_medicamentos = st.radio("Usa medicamentos?", ["Sim", "Não"])
+        problemas = st.text_area("Problemas de saúde, alergias ou restrições?", key="problemas_saude")
+        usa_medicamentos = st.radio("Usa medicamentos?", ["Sim", "Não"], key="usa_medicamentos")
         if usa_medicamentos == "Sim":
-            quais = st.text_input("Quais medicamentos?")
+            quais = st.text_input("Quais medicamentos?", key="quais_medicamentos")
         else:
             quais = ""
 
         st.markdown("#### 💅 Preferências e Experiências")
-        fez_antes = st.radio("Já fez alongamento de cílios?", ["Sim", "Não"])
+        fez_antes = st.radio("Já fez alongamento de cílios?", ["Sim", "Não"], key="fez_antes")
         if fez_antes == "Sim":
-            tecnica_previa = st.text_input("Qual técnica foi utilizada?")
+            tecnica_previa = st.text_input("Qual técnica foi utilizada?", key="tecnica_previa")
         else:
             tecnica_previa = ""
 
-        observacoes = st.text_area("Observações adicionais")
+        observacoes = st.text_area("Observações adicionais", key="obs_adicionais")
 
+        perguntas = {
+            "lentes": "Usa lentes de contato?",
+            "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
+            "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
+            "irritacao": "Está com olhos irritados ou lacrimejando frequentemente?",
+            "gravida": "Está grávida ou amamentando?",
+            "colirio": "Faz uso de colírios com frequência?",
+            "infeccao": "Tem blefarite, terçol ou outras infecções oculares?",
+            "cirurgia": "Fez cirurgia ocular recentemente?",
+            "acido": "Está em tratamento dermatológico com ácido?",
+            "sensibilidade": "Tem sensibilidade a produtos químicos ou cosméticos?",
+            "extensao": "Já fez extensão de cílios antes?",
+            "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
+            "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
+        }
 
-# 🧾 Ficha de Anamnese
-# 🧾 Ficha de Anamnese Clínica
-with st.expander("🧾 Ficha de Anamnese Clínica"):
-    st.markdown("#### ⚕️ Histórico Clínico")
-    problemas = st.text_area("Problemas de saúde, alergias ou restrições?")
-    usa_medicamentos = st.radio("Usa medicamentos?", ["Sim", "Não"])
-    if usa_medicamentos == "Sim":
-        quais = st.text_input("Quais medicamentos?")
-    else:
-        quais = ""
+        respostas = {}
+        for chave, pergunta in perguntas.items():
+            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"{chave}_radio")
 
-    st.markdown("#### 💅 Preferências e Experiências")
-    fez_antes = st.radio("Já fez alongamento de cílios?", ["Sim", "Não"])
-    if fez_antes == "Sim":
-        tecnica_previa = st.text_input("Qual técnica foi utilizada?")
-    else:
-        tecnica_previa = ""
+        enviar_ficha = st.button("📨 Finalizar ficha")
 
-    observacoes = st.text_area("Observações adicionais")
-
-
-    perguntas = {
-        "lentes": "Usa lentes de contato?",
-        "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
-        "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
-        "irritacao": "Está com olhos irritados ou lacrimejando frequentemente?",
-        "gravida": "Está grávida ou amamentando?",
-        "colirio": "Faz uso de colírios com frequência?",
-        "infeccao": "Tem blefarite, terçol ou outras infecções oculares?",
-        "cirurgia": "Fez cirurgia ocular recentemente?",
-        "acido": "Está em tratamento dermatológico com ácido?",
-        "sensibilidade": "Tem sensibilidade a produtos químicos ou cosméticos?",
-        "extensao": "Já fez extensão de cílios antes?",
-        "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
-        "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
-    }
-
-    respostas = {}
-    for chave, pergunta in perguntas.items():
-        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=chave)
-
-    enviar_ficha = st.form_submit_button("Finalizar ficha")
-
-    if enviar_ficha:
-        if None in respostas.values():
-            st.error("⚠️ Por favor, responda todas as perguntas antes de finalizar.")
-        else:
-            st.success("✅ Ficha finalizada com sucesso!")
-
-            restricoes = []
-            if respostas["conjuntivite"] == "Sim":
-                restricoes.append("Conjuntivite recente")
-            if respostas["infeccao"] == "Sim":
-                restricoes.append("Infecção ocular ativa")
-            if respostas["cirurgia"] == "Sim":
-                restricoes.append("Cirurgia ocular recente")
-            if respostas["reacao"] == "Sim":
-                restricoes.append("Histórico de reação alérgica")
-            if respostas["glaucoma"] == "Sim":
-                restricoes.append("Glaucoma diagnosticado")
-            if respostas["gravida"] == "Sim":
-                st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica antes do procedimento.")
-            if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
-                st.warning("⚠️ Este caso exige liberação médica formal — não prosseguir sem autorização documentada.")
-
-            if restricoes:
-                st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir:")
-                for item in restricoes:
-                    st.markdown(f"• {item}")
-            elif idade < 18 and autorizacao != "Sim":
-                st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
+        if enviar_ficha:
+            if None in respostas.values():
+                st.error("⚠️ Por favor, responda todas as perguntas antes de finalizar.")
             else:
-                st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+                st.success("✅ Ficha finalizada com sucesso!")
 
-            st.session_state.ficha_respostas = respostas
+                restricoes = []
+                if respostas["conjuntivite"] == "Sim":
+                    restricoes.append("Conjuntivite recente")
+                if respostas["infeccao"] == "Sim":
+                    restricoes.append("Infecção ocular ativa")
+                if respostas["cirurgia"] == "Sim":
+                    restricoes.append("Cirurgia ocular recente")
+                if respostas["reacao"] == "Sim":
+                    restricoes.append("Histórico de reação alérgica")
+                if respostas["glaucoma"] == "Sim":
+                    restricoes.append("Glaucoma diagnosticado")
+                if respostas["gravida"] == "Sim":
+                    st.warning("⚠️ Cliente gestante ou lactante — recomenda-se autorização médica antes do procedimento.")
+                if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
+                    st.warning("⚠️ Este caso exige liberação médica formal — não prosseguir sem autorização documentada.")
 
-   # 🔁 Revalidar Ficha Clínica (pós-envio)
+                if restricoes:
+                    st.warning("⚠️ Cliente com restrições — avaliar antes de prosseguir:")
+                    for item in restricoes:
+                        st.markdown(f"• {item}")
+                elif idade < 18 and autorizacao != "Sim":
+                    st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
+                else:
+                    st.success("✅ Cliente apta para o procedimento! Pode seguir com a escolha da técnica e agendamento.")
+
+                st.session_state.ficha_respostas = respostas
+
 
 
 from PIL import Image  # Certifique-se de ter esse import no topo do app
