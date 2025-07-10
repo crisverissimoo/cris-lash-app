@@ -125,7 +125,7 @@ with col2:
                 st.session_state.ficha_respostas = respostas
 
 
-from PIL import Image  # Certifique-se de ter esse import no topo do app
+from PIL import Image  # Já está importado no topo
 
 with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     st.markdown("### 📸 Compare os formatos e selecione o mais parecido")
@@ -135,39 +135,32 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     with col1:
         st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-pequenos.jpg", caption="Olhos Pequenos")
         if st.button("👁️ Esse parece comigo", key="btn_pequeno"):
-            st.session_state.formato_escolhido = "Pequenos"
-            st.info("✨ Técnica indicada: **Boneca** — fios mais longos no centro para abrir o olhar.")
+            st.session_state.formato_escolhido = "Boneca — fios mais longos no centro para abrir o olhar."
 
         st.image("https://joaodabeleza.com.br/cdn/shop/articles/olhos-caidos.jpg", caption="Olhos Caídos")
         if st.button("👁️ Esse parece comigo", key="btn_caido"):
-            st.session_state.formato_escolhido = "Caídos"
-            st.info("✨ Técnica indicada: **Esquilo** — eleva os cantos externos e harmoniza o olhar.")
+            st.session_state.formato_escolhido = "Esquilo — eleva os cantos externos e harmoniza o olhar."
 
         st.image("https://www.espacomulherdf.com.br/wp-content/uploads/2014/02/olhos-juntos.jpg", caption="Olhos Juntos")
         if st.button("👁️ Esse parece comigo", key="btn_junto"):
-            st.session_state.formato_escolhido = "Juntos"
-            st.info("✨ Técnica indicada: **Gatinho** — alonga os cantos externos e equilibra a distância.")
+            st.session_state.formato_escolhido = "Gatinho — alonga os cantos externos e equilibra a distância."
 
     with col2:
         st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-grandes.jpg", caption="Olhos Grandes")
         if st.button("👁️ Esse parece comigo", key="btn_grande"):
-            st.session_state.formato_escolhido = "Grandes"
-            st.info("✨ Técnica indicada: **Gatinho ou Esquilo** — alonga e equilibra o volume.")
+            st.session_state.formato_escolhido = "Gatinho ou Esquilo — alonga e equilibra o volume."
 
         st.image("https://revistaquem.globo.com/QUEM-Inspira/noticia/2016/08/olhar-poderoso-truques-de-make-para-diferentes-formatos-de-olhos.ghtml", caption="Olhos Redondos")
         if st.button("👁️ Esse parece comigo", key="btn_redondo"):
-            st.session_state.formato_escolhido = "Redondos"
-            st.info("✨ Técnica indicada: **Gatinho** — suaviza a curvatura e alonga horizontalmente.")
+            st.session_state.formato_escolhido = "Gatinho — suaviza a curvatura e alonga horizontalmente."
 
         st.image("https://ph.pinterest.com/pin/761952830702430973/", caption="Olhos Afastados")
         if st.button("👁️ Esse parece comigo", key="btn_afastado"):
-            st.session_state.formato_escolhido = "Afastados"
-            st.info("✨ Técnica indicada: **Boneca ou Gatinho Invertido** — aproxima visualmente o olhar.")
+            st.session_state.formato_escolhido = "Boneca ou Gatinho Invertido — aproxima visualmente o olhar."
 
     st.image("https://truquesdemaquiagem.com.br/wp-content/uploads/2022/03/olhos-profundos.jpg", caption="Olhos Profundos")
     if st.button("👁️ Esse parece comigo", key="btn_profundo"):
-        st.session_state.formato_escolhido = "Profundos"
-        st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
+        st.session_state.formato_escolhido = "Boneca ou Gatinho — destaca o olhar sem pesar a pálpebra."
 
     # Simulação com foto da cliente
     st.markdown("### 📸 Simule a técnica")
@@ -179,7 +172,10 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     if foto_cliente:
         imagem = Image.open(foto_cliente)
         st.image(imagem, caption="Foto da cliente para simulação")
-        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
+
+        tecnica_final = st.session_state.formato_escolhido if "formato_escolhido" in st.session_state else "Nenhuma técnica selecionada"
+        st.success(f"✅ Técnica escolhida: {tecnica_final} — será aplicada conforme o modelo selecionado na próxima etapa.")
+
 
 # 📅 Agendamento
 with st.expander("📅 Agendamento"):
@@ -390,73 +386,45 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
 if "historico" not in st.session_state:
     st.session_state.historico = []
 
-# 📅 Agendamento
-with st.expander("📅 Agendamento"):
-    data_agendamento = st.date_input("Data do atendimento", value=hoje)
-    horarios_disponiveis = [
-        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-        "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
-        "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"
-    ]
-    horario_escolhido = st.selectbox("Horários disponíveis", horarios_disponiveis)
+with col2:
+    # 📅 Agendamento
+    with st.expander("📅 Agendamento"):
+        data_agendamento = st.date_input("📅 Data do atendimento", value=hoje)
+        horarios_disponiveis = [
+            "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
+            "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
+            "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"
+        ]
+        horario_escolhido = st.selectbox("⏰ Horários disponíveis", horarios_disponiveis)
 
-# 📝 Observações Extras
-with st.expander("📝 Observações Extras"):
-    observacoes = st.text_area("Anotações adicionais sobre a cliente ou o atendimento")
+    # 📝 Observações Extras
+    with st.expander("📝 Observações Extras"):
+        observacoes_extras = st.text_area("Anotações adicionais sobre a cliente ou o atendimento")
 
-# 🔐 Inicializa o histórico se ainda não existir
-if "historico" not in st.session_state:
-    st.session_state.historico = []
+    # 🔐 Inicializa o histórico se ainda não existir
+    if "historico" not in st.session_state:
+        st.session_state.historico = []
 
-# 📅 Agendamento
-with st.expander("📅 Agendamento"):
-    data_agendamento = st.date_input("📅 Data do atendimento", value=hoje)
-    horarios_disponiveis = [
-        "08:00", "08:30", "09:00", "09:30", "10:00", "10:30",
-        "11:00", "11:30", "14:00", "14:30", "15:00", "15:30",
-        "16:00", "16:30", "17:00", "17:30", "18:00", "18:30", "19:00"
-    ]
-    horario_escolhido = st.selectbox("⏰ Horários disponíveis", horarios_disponiveis)
+    # 📊 Histórico de Atendimento
+    with st.expander("📊 Histórico de Atendimento"):
+        st.markdown("Visualize os registros salvos abaixo:")
 
-# 📝 Observações Extras
-with st.expander("📝 Observações Extras"):
-    observacoes_extras = st.text_area("Anotações adicionais sobre a cliente ou o atendimento")
+        if enviar_ficha:
+            tecnica_final = st.session_state.formato_escolhido if "formato_escolhido" in st.session_state else "Não selecionado"
 
-# 📊 Histórico de Atendimento
-with st.expander("📊 Histórico de Atendimento"):
-    st.markdown("Visualize os registros salvos abaixo:")
+            registro = {
+                "nome": nome_cliente,
+                "telefone": telefone,
+                "nascimento": nascimento.strftime("%d/%m/%Y"),
+                "idade": idade,
+                "responsavel": responsavel,
+                "autorizacao": autorizacao,
+                "anamnese": respostas,
+                "tecnica": tecnica_final,
+                "agendamento": data_agendamento.strftime("%d/%m/%Y"),
+                "horario": horario_escolhido,
+                "observacoes": observacoes_extras
+            }
+            st.session_state.historico.append(registro)
 
-    if enviar_ficha:
-        tecnica_final = st.session_state.formato_escolhido if "formato_escolhido" in st.session_state else "Não selecionado"
-
-        registro = {
-            "nome": nome_cliente,
-            "telefone": telefone,
-            "nascimento": nascimento.strftime("%d/%m/%Y"),
-            "idade": idade,
-            "responsavel": responsavel,
-            "autorizacao": autorizacao,
-            "anamnese": respostas,
-            "tecnica": tecnica_final,
-            "agendamento": data_agendamento.strftime("%d/%m/%Y"),
-            "horario": horario_escolhido,
-            "observacoes": observacoes_extras
-        }
-        st.session_state.historico.append(registro)
-
-    if st.session_state.historico:
-        for i, reg in enumerate(st.session_state.historico, start=1):
-            st.markdown(f"**{i}. {reg['nome']}** ({reg['idade']} anos) — {reg['agendamento']} às {reg['horario']}")
-            st.markdown(f"- Técnica: **{reg['tecnica']}**")
-            st.markdown(f"- Tel: {reg['telefone']}")
-            if reg['idade'] < 18:
-                st.markdown(f"🧒 Menor — Responsável: {reg['responsavel']} | Autorização: {reg['autorizacao']}")
-            else:
-                st.markdown(f"- Autorização: {reg['autorizacao']}")
-            st.markdown(f"- Observações: {reg['observacoes']}")
-            st.markdown("🧾 Anamnese:")
-            for pergunta, resposta in reg["anamnese"].items():
-                st.markdown(f"• {pergunta.capitalize()}: {resposta}")
-            st.markdown("---")
-    else:
-        st.info("Nenhum atendimento registrado ainda.")
+        if st.session_state
