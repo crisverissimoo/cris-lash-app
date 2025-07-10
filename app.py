@@ -118,20 +118,18 @@ with st.expander("💅 Escolha da Técnica"):
 
     st.markdown("### ✨ Escolha o efeito desejado:")
 
-    col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
+with col1:
+    st.image("imagens/efeito_boneca.png", caption="Boneca", use_column_width=True)
+with col2:
+    st.image("imagens/efeito_esquilo.png", caption="Esquilo", use_column_width=True)
+with col3:
+    st.image("imagens/efeito_gatinho.png", caption="Gatinho", use_column_width=True)
 
-    with col1:
-        st.image("imagens/efeito_boneca.png", caption="Boneca", use_column_width=True)
-        efeito_escolhido = st.radio("Escolher?", ["Boneca"], key="ef_boneca")
-
-    with col2:
-        st.image("imagens/efeito_esquilo.png", caption="Esquilo", use_column_width=True)
-        efeito_escolhido = st.radio("Escolher?", ["Esquilo"], key="ef_esquilo")
-
-    with col3:
-        st.image("imagens/efeito_gatinho.png", caption="Gatinho", use_column_width=True)
-        efeito_escolhido = st.radio("Escolher?", ["Gatinho"], key="ef_gatinho")
-
+efeito_escolhido = st.radio(
+    "Selecione o efeito desejado:",
+    ["Boneca", "Esquilo", "Gatinho"]
+)
     st.markdown("### 📸 Simule a técnica no rosto da cliente")
 
     foto_cliente = st.camera_input("📷 Tire uma foto agora (ou envie uma)")
