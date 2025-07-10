@@ -12,6 +12,7 @@ hoje = datetime.date.today()
 # 🎯 LAYOUT CENTRALIZADO
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
+     # todos os blocos visuais aqui dentro
     st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
     st.write(f"📆 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
 
@@ -119,7 +120,6 @@ with col2:
                 st.session_state.ficha_respostas = respostas
 
 
-
 from PIL import Image  # Certifique-se de ter esse import no topo do app
 
 with st.expander("👁️ Identifique o formato dos olhos da cliente"):
@@ -163,10 +163,6 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     if st.button("👁️ Esse parece comigo", key="btn_profundo"):
         st.session_state.formato_escolhido = "Profundos"
         st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
-
-
-
-
 
     # Simulação com foto da cliente
     st.markdown("### 📸 Simule a técnica")
@@ -329,7 +325,6 @@ with st.form("ficha_anamnese"):
 
    # 🔁 Revalidar Ficha Clínica (pós-envio)
 
-
 from PIL import Image  # Certifique-se de ter esse import no topo do app
 
 with st.expander("👁️ Identifique o formato dos olhos da cliente"):
@@ -373,10 +368,6 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     if st.button("👁️ Esse parece comigo", key="btn_profundo"):
         st.session_state.formato_escolhido = "Profundos"
         st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
-
-
-
-
 
     # Simulação com foto da cliente
     st.markdown("### 📸 Simule a técnica")
