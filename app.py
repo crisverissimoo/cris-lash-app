@@ -156,5 +156,6 @@ with col2:
                 "nascimento": nascimento.strftime("%d/%m/%Y"),
                 "idade": idade,
                 "responsavel": responsavel,
-                "autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+                autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+
 
