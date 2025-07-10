@@ -99,8 +99,9 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     st.markdown("### 📸 Compare os formatos e selecione o mais parecido")
 
     col1, col2 = st.columns(2)
+
     with col1:
-        st.image("https://lenscope.com.br/wp-content/uploads/2022/07/olhos-pequenos.jpg", caption="Olhos Pequenos")
+        st.image("https://maquiagens.biz/wp-content/uploads/2021/06/maquiagem-olhos-pequenos.jpg", caption="Olhos Pequenos")
         if st.button("👁️ Esse parece comigo", key="btn_pequeno"):
             st.session_state.formato_escolhido = "Pequenos"
             st.info("✨ Técnica indicada: **Boneca** — fios mais longos no centro para abrir o olhar.")
@@ -121,7 +122,7 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
             st.session_state.formato_escolhido = "Grandes"
             st.info("✨ Técnica indicada: **Gatinho ou Esquilo** — alonga e equilibra o volume.")
 
-        st.image("https://www.purepeople.com.br/media/cache/amp/amp/media/para-olhos-redondos-a-especialista-indi_m2658192.jpg", caption="Olhos Redondos")
+        st.image("https://revistaquem.globo.com/QUEM-Inspira/noticia/2016/08/olhar-poderoso-truques-de-make-para-diferentes-formatos-de-olhos.ghtml", caption="Olhos Redondos")
         if st.button("👁️ Esse parece comigo", key="btn_redondo"):
             st.session_state.formato_escolhido = "Redondos"
             st.info("✨ Técnica indicada: **Gatinho** — suaviza a curvatura e alonga horizontalmente.")
@@ -135,6 +136,7 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
     if st.button("👁️ Esse parece comigo", key="btn_profundo"):
         st.session_state.formato_escolhido = "Profundos"
         st.info("✨ Técnica indicada: **Boneca ou Gatinho** — destaca o olhar sem pesar a pálpebra.")
+
 
 
 
