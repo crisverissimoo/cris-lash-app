@@ -381,6 +381,10 @@ with st.expander("👁️ Identifique o formato dos olhos da cliente"):
         st.image(imagem, caption="Foto da cliente para simulação")
         st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
 
+# 🧠 Inicializa histórico se ainda não existir
+if "historico" not in st.session_state:
+    st.session_state.historico = []
+
 # 📅 Agendamento
 with st.expander("📅 Agendamento"):
     data_agendamento = st.date_input("Data do atendimento", value=hoje)
@@ -401,14 +405,14 @@ with st.expander("📊 Histórico de Atendimento"):
 
     if enviar_ficha:
         registro = {
-            "nome": nome,
+            "nome": nome_cliente,
             "telefone": telefone,
             "nascimento": nascimento.strftime("%d/%m/%Y"),
             "idade": idade,
             "responsavel": responsavel,
             "autorizacao": autorizacao,
             "anamnese": respostas,
-            "tecnica": tecnica_escolhida,
+            "tecnica": st.session_state.formato_escolhido if "formato_escolhido" in st.session_state else "Não selecionado",
             "agendamento": data_agendamento.strftime("%d/%m/%Y"),
             "horario": horario_escolhido,
             "observacoes": observacoes
@@ -431,3 +435,4 @@ with st.expander("📊 Histórico de Atendimento"):
             st.markdown("---")
     else:
         st.info("Nenhum atendimento registrado ainda.")
+
