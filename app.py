@@ -93,8 +93,9 @@ with st.form("ficha_anamnese"):
    # 🔁 Revalidar Ficha Clínica (pós-envio)
 
 
-from PIL import Image  # Certifique-se de ter esse import no topo do app
+from PIL import Image  # Adicione isso no topo do seu app.py
 
+# 💅 Consultoria e Escolha da Técnica
 with st.expander("💅 Consultoria e Escolha da Técnica"):
     st.markdown("### 👁️ Formato dos olhos da cliente:")
     formato = st.selectbox(
@@ -130,9 +131,36 @@ with st.expander("💅 Consultoria e Escolha da Técnica"):
 
     elif formato == "Redondos":
         st.image("https://via.placeholder.com/300x200?text=Olhos+Redondos", caption="Olhos Redondos")
-        st.info("✨ Técnica recomendada: **
+        st.info("✨ Técnica recomendada: **Gatinho** — suaviza e alonga horizontalmente.")
+        st.markdown("💡 Curvatura: C • Evite volume central excessivo.")
 
+    # Escolha do efeito desejado
+    st.markdown("### ✨ Escolha o efeito desejado:")
 
+    col1, col2, col3 = st.columns(3)
+    with col1:
+        st.image("https://via.placeholder.com/150?text=Boneca", caption="Boneca", use_column_width=True)
+    with col2:
+        st.image("https://via.placeholder.com/150?text=Esquilo", caption="Esquilo", use_column_width=True)
+    with col3:
+        st.image("https://via.placeholder.com/150?text=Gatinho", caption="Gatinho", use_column_width=True)
+
+    efeito_escolhido = st.radio(
+        "Selecione o efeito desejado:",
+        ["Boneca", "Esquilo", "Gatinho"]
+    )
+
+    # Simulação com foto da cliente
+    st.markdown("### 📸 Simule a técnica no rosto da cliente")
+
+    foto_cliente = st.camera_input("📷 Tire uma foto agora")
+    if not foto_cliente:
+        foto_cliente = st.file_uploader("Ou envie uma foto existente", type=["jpg", "jpeg", "png"])
+
+    if foto_cliente:
+        imagem = Image.open(foto_cliente)
+        st.image(imagem, caption="Foto da cliente para simulação")
+        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
 
 # 📅 Agendamento
 with st.expander("📅 Agendamento"):
