@@ -10,8 +10,9 @@ st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
 st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
 
 # 📆 Data atual formatada
-hoje = datetime.date.today().strftime("%d/%m/%Y")
-st.write(f"📅 Data de hoje: `{hoje}`")
+hoje = datetime.date.today()
+st.write(f"📅 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
+
 
 ## 🗂️ Cadastro da Cliente
 with st.expander("🗂️ Cadastro da Cliente"):
