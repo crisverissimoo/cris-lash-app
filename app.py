@@ -1,48 +1,47 @@
-# 📦 IMPORTS
 import streamlit as st
 from PIL import Image
 import datetime
 
-# 🎨 CONFIGURAÇÃO DE PÁGINA
 st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
-
-# 📅 Data atual
 hoje = datetime.date.today()
 
-# 🔐 Inicializa o histórico se ainda não existir
 if "historico" not in st.session_state:
     st.session_state.historico = []
 
 # 🎯 LAYOUT CENTRALIZADO
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
+    st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
+    st.write(f"📆 Data de hoje: `{hoje.strftime('%d/%m/%Y')}`")
+
     with st.expander("🗂️ Cadastro da Cliente"):
         st.markdown("### 📝 Informações Pessoais")
 
-        nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente_main")
-        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje, key="nascimento_main")
-        telefone = st.text_input("📞 Telefone para contato", key="telefone_main")
-        email = st.text_input("📧 E-mail (opcional)", key="email_main")
+        nome_cliente = st.text_input("🧍 Nome completo da cliente", key="nome_cliente")
+        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime.date(1920, 1, 1), max_value=hoje, key="nascimento")
+        telefone = st.text_input("📞 Telefone para contato", key="telefone")
+        email = st.text_input("📧 E-mail (opcional)", key="email")
 
         idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
         st.write(f"📌 Idade da cliente: **{idade} anos**")
 
         st.markdown("### 🌟 Preferências")
-        primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"], key="primeira_vez_main")
+        primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"], key="primeira_vez")
         if primeira_vez == "Não":
-            st.text_input("Qual técnica já usou anteriormente?", key="tecnica_ant_main")
+            st.text_input("Qual técnica já usou anteriormente?", key="tecnica_usada")
 
         if idade < 18:
-            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal", key="responsavel_main")
-            autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor_main")
+            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável legal", key="responsavel")
+            autorizacao = st.radio("Autorização do responsável recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
             if autorizacao != "Sim":
                 st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
         else:
             responsavel = ""
-            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_maior_main")
+            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_maior")
 
         if nascimento.month == hoje.month and nome_cliente:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
+
 
     with st.form("ficha_anamnese"):
         st.subheader("🧾 Ficha de Anamnese Clínica")
