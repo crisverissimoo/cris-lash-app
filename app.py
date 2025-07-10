@@ -170,4 +170,3 @@ with st.expander("📊 Histórico de Atendimento"):
             st.markdown("---")
     else:
         st.info("Nenhum atendimento registrado ainda.")
-        }
