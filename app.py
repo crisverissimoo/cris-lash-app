@@ -1,36 +1,31 @@
+# 📦 IMPORTS
 import streamlit as st
-from PIL import Image  
+from PIL import Image
 import datetime
 
+# 🎨 CONFIGURAÇÃO DE PÁGINA
+st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
+
+st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
+
+# 📆 Data atual formatada
 hoje = datetime.date.today().strftime("%d/%m/%Y")
+st.write(f"📅 Data de hoje: `{hoje}`")
 
+# 🧍 CADASTRO DA CLIENTE (Expander fechado por padrão)
+with st.expander("👤 Cadastro da Cliente"):
+    st.markdown("### 📝 Informações Pessoais")
 
-# caso ainda não esteja no seu topo
+    nome_cliente = st.text_input("Nome completo da cliente")
+    data_nascimento = st.date_input("Data de nascimento")
+    telefone = st.text_input("Telefone para contato")
+    email = st.text_input("E-mail (opcional)")
 
-with st.expander("📝 Ficha de Anamnese Clínica"):
-    st.markdown("#### 🧍 Informações da Cliente")
-    st.text_input("Nome completo")
-    st.date_input("Data do atendimento")
-    st.text_input("Profissão")
-    st.text_input("Telefone para contato")
+    st.markdown("### 🌟 Preferências")
+    primeira_vez = st.radio("É a primeira vez que faz alongamento de cílios?", ["Sim", "Não"])
+    if primeira_vez == "Não":
+        st.text_input("Qual técnica já usou anteriormente?")
 
-    st.markdown("#### ⚕️ Histórico Clínico")
-    st.text_area("Problemas de saúde, alergias ou restrições?")
-    st.radio("Usa medicamentos?", ["Sim", "Não"])
-    st.text_input("Quais?", disabled=False)
-
-    st.markdown("#### 💅 Preferências")
-    st.radio("Já fez alongamento de cílios antes?", ["Sim", "Não"])
-    st.text_input("Se sim, qual técnica?")
-
-
-st.set_page_config(page_title="Cris Lash Pro", layout="centered")
-st.title("💻 Sistema Cris Lash")
-st.markdown("### Atendimento digital completo com segurança, estilo e carinho 👑💅")
-
-hoje = datetime.date.today()
-if "historico" not in st.session_state:
-    st.session_state.historico = []
 
 ## 🗂️ Cadastro da Cliente
 with st.expander("🗂️ Cadastro da Cliente"):
