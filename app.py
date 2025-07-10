@@ -44,7 +44,7 @@ with col2:
 
 
     with st.expander("ficha_anamnese"):
-        st.subheader("🧾 Ficha de Anamnese Clínica")
+        st.markdown("🧾 Ficha de Anamnese Clínica")
 
         perguntas = {
             "lentes": "Usa lentes de contato?",
