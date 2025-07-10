@@ -44,6 +44,25 @@ with col2:
         if nascimento.month == hoje.month and nome_cliente:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
 
+# 🧾 Ficha de Anamnese Clínica
+    with st.expander("🧾 Ficha de Anamnese Clínica"):
+        st.markdown("#### ⚕️ Histórico Clínico")
+        problemas = st.text_area("Problemas de saúde, alergias ou restrições?")
+        usa_medicamentos = st.radio("Usa medicamentos?", ["Sim", "Não"])
+        if usa_medicamentos == "Sim":
+            quais = st.text_input("Quais medicamentos?")
+        else:
+            quais = ""
+
+        st.markdown("#### 💅 Preferências e Experiências")
+        fez_antes = st.radio("Já fez alongamento de cílios?", ["Sim", "Não"])
+        if fez_antes == "Sim":
+            tecnica_previa = st.text_input("Qual técnica foi utilizada?")
+        else:
+            tecnica_previa = ""
+
+        observacoes = st.text_area("Observações adicionais")
+
 
 # 🧾 Ficha de Anamnese
 # 🧾 Ficha de Anamnese Clínica
