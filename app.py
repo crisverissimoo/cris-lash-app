@@ -1,13 +1,3 @@
-# 📦 IMPORTS
-import streamlit as st
-from PIL import Image
-import datetime
-
-# 🎨 CONFIGURAÇÃO DE PÁGINA
-st.set_page_config(page_title="Consultoria de Olhos", layout="wide")
-
-st.markdown("## 👁️ Sistema de Atendimento Estético e Técnico")
-
 # 📆 Data atual formatada
 # 📦 IMPORTS
 import streamlit as st
