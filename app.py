@@ -95,53 +95,42 @@ with st.form("ficha_anamnese"):
 
 from PIL import Image  # Certifique-se de ter esse import no topo do app
 
-# 💅 Escolha de Técnica + Formato dos Olhos + Simulação
-with st.expander("💅 Escolha da Técnica"):
-    st.markdown("### 👁️ Formato dos olhos da cliente")
-    formato_olhos = st.selectbox(
-        "Selecione o formato que mais se assemelha ao olhar da cliente:",
-        ["Amendoado", "Caído", "Redondo", "Asiático", "Profundo"]
+with st.expander("💅 Consultoria e Escolha da Técnica"):
+    st.markdown("### 👁️ Formato dos olhos da cliente:")
+    formato = st.selectbox(
+        "Qual formato mais se assemelha ao olhar da cliente?",
+        ["Pequenos", "Caídos", "Afastados", "Juntos", "Profundos", "Redondos"]
     )
 
-    sugestao_tecnica = ""
-    if formato_olhos == "Caído":
-        sugestao_tecnica = "🐿️ Esquilo — realça o arco e levanta o olhar"
-    elif formato_olhos == "Redondo":
-        sugestao_tecnica = "😺 Gatinho — alonga o canto externo, criando sensualidade"
-    elif formato_olhos == "Amendoado":
-        sugestao_tecnica = "🧸 Boneca — abre o olhar com fios centralizados"
-    elif formato_olhos == "Asiático":
-        sugestao_tecnica = "🐿️ Esquilo — favorece elevação sutil do olhar"
-    elif formato_olhos == "Profundo":
-        sugestao_tecnica = "🧸 Boneca ou Gatinho — para destacar o olhar"
+    # Sugestão e imagem ilustrativa
+    if formato == "Pequenos":
+        st.image("https://via.placeholder.com/300x200?text=Olhos+Pequenos", caption="Olhos Pequenos")
+        st.info("✨ Técnica recomendada: **Boneca** — fios centralizados para abrir o olhar.")
+        st.markdown("💡 Curvatura: D ou CC • Comprimento: 9–13mm")
 
-    st.info(f"💡 Sugestão da técnica ideal: **{sugestao_tecnica}**")
+    elif formato == "Caídos":
+        st.image("https://via.placeholder.com/300x200?text=Olhos+Ca%C3%ADdos", caption="Olhos Caídos")
+        st.info("✨ Técnica recomendada: **Esquilo** — elevação dos cantos externos.")
+        st.markdown("💡 Curvatura: C para D gradual • Evite fios longos no canto final.")
 
-    st.markdown("### ✨ Escolha o efeito desejado:")
+    elif formato == "Afastados":
+        st.image("https://via.placeholder.com/300x200?text=Olhos+Afastados", caption="Olhos Afastados")
+        st.info("✨ Técnica recomendada: **Boneca ou Gatinho Invertido** — centralização dos fios.")
+        st.markdown("💡 Evite cantos externos alongados • Destaque o centro.")
 
-    col1, col2, col3 = st.columns(3)
-    with col1:
-        st.image("https://via.placeholder.com/150?text=Boneca", caption="Boneca", use_column_width=True)
-    with col2:
-        st.image("https://via.placeholder.com/150?text=Esquilo", caption="Esquilo", use_column_width=True)
-    with col3:
-        st.image("https://via.placeholder.com/150?text=Gatinho", caption="Gatinho", use_column_width=True)
+    elif formato == "Juntos":
+        st.image("https://via.placeholder.com/300x200?text=Olhos+Juntos", caption="Olhos Juntos")
+        st.info("✨ Técnica recomendada: **Gatinho** — alonga os cantos externos.")
+        st.markdown("💡 Curvatura: C • Fios curtos no canto interno.")
 
-    efeito_escolhido = st.radio(
-        "Selecione o efeito desejado:",
-        ["Boneca", "Esquilo", "Gatinho"]
-    )
+    elif formato == "Profundos":
+        st.image("https://via.placeholder.com/300x200?text=Olhos+Profundos", caption="Olhos Profundos")
+        st.info("✨ Técnica recomendada: **Boneca ou Gatinho** — destaque sem pesar a pálpebra.")
+        st.markdown("💡 Curvatura: B ou C • Evite curvaturas muito intensas.")
 
-    st.markdown("### 📸 Simule a técnica no rosto da cliente")
-
-    foto_cliente = st.camera_input("📷 Tire uma foto agora")
-    if not foto_cliente:
-        foto_cliente = st.file_uploader("Ou envie uma foto existente", type=["jpg", "jpeg", "png"])
-
-    if foto_cliente:
-        imagem = Image.open(foto_cliente)
-        st.image(imagem, caption="Foto da cliente para simulação")
-        st.success(f"✅ Técnica escolhida: {efeito_escolhido} — será aplicada conforme o modelo selecionado na próxima etapa.")
+    elif formato == "Redondos":
+        st.image("https://via.placeholder.com/300x200?text=Olhos+Redondos", caption="Olhos Redondos")
+        st.info("✨ Técnica recomendada: **
 
 
 
