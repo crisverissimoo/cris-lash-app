@@ -48,4 +48,7 @@ with col2:
                 st.error("❌ Cliente menor sem autorização — atendimento não permitido.")
         else:
             responsavel = ""
-            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key
+            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_maior")
+
+        if nascimento.month == hoje.month and nome_cliente:
+            st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza, amor e cuidado! 💝")
