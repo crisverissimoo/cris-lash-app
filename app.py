@@ -127,16 +127,16 @@ with col2:
         st.session_state.historico.append(registro)
         st.success(txt("✅ Atendimento registrado!", "✅ Atención registrada!"))
 
-        if st.session_state.historico:
+       # 📋 Exibir atendimentos anteriores
+if st.session_state.historico:
     for i, atend in enumerate(st.session_state.historico[::-1]):
         st.markdown(f"### 🧍 Atendimento #{len(st.session_state.historico) - i}")
-        st.write(f"📅 Data: `{atend['Data']} — {atend['Horário']}`")
-        st.write(f"👁️ Tipo de olho: **{atend.get('Tipo de olho', 'N/A')}**")
-        st.write(f"💡 Sugestão de técnica: *{atend.get('Técnica sugerida', 'N/A')}*")
-        st.write(f"🎨 Técnica escolhida: **{atend.get('Técnica escolhida', 'N/A')}**")
+        st.write(f"📅 Data: `{atend.get('Data', '—')} — {atend.get('Horário', '—')}`")
+        st.write(f"👁️ Tipo de olho: **{atend.get('Tipo de olho', '—')}**")
+        st.write(f"💡 Sugestão de técnica: *{atend.get('Técnica sugerida', '—')}*")
+        st.write(f"🎨 Técnica escolhida: **{atend.get('Técnica escolhida', '—')}**")
         if atend.get("Observações"):
             st.markdown(f"📝 Observações: {atend['Observações']}")
         st.markdown("---")
 else:
     st.info("ℹ️ Nenhum atendimento registrado ainda.")
-
