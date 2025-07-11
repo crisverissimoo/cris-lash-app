@@ -111,6 +111,7 @@ if enviar:
     st.error("❌ Cliente **não está apta para atendimento**.\n\n" +
              "\n".join([f"- {motivo}" for motivo in bloqueios_detectados]))
     st.session_state.ficha_validada = False
+
 else:
     if alertas_detectados:
         st.warning("⚠️ **Atenção!** Condições que requerem avaliação profissional:\n\n" +
