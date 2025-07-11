@@ -102,60 +102,7 @@ with col2:
                             st.success("✅ Cliente apta para atendimento!")
                             st.session_state.ficha_validada = True
 
-        # 👁️ Identificação do Formato de Olho — só com botões
-        with st.expander("👁️ Identifique o formato do seu olhar"):
-            st.write("Veja abaixo os estilos e clique no que mais se parece com o seu:")
-
-            formatos = {
-                "Olhos Caídos": {
-                    "imagem": "URL_OLHO_CAIDO",
-                    "sugestao": "Volume russo — realça e corrige o caimento"
-                },
-                "Olhos Pequenos": {
-                    "imagem": "URL_OLHO_PEQUENO",
-                    "sugestao": "Fio a fio ou Híbrido — leve e alonga com delicadeza"
-                },
-                "Olhos Grandes": {
-                    "imagem": "URL_OLHO_GRANDE",
-                    "sugestao": "Híbrido — suaviza e valoriza o contorno"
-                },
-                "Olhos Asiáticos": {
-                    "imagem": "URL_OLHO_ASIATICO",
-                    "sugestao": "Híbrido — define sem pesar"
-                },
-                "Pálpebra Caída": {
-                    "imagem": "URL_PALPEBRA_CAIDA",
-                    "sugestao": "Fio a fio — leve e natural"
-                },
-                "Olhos Juntos": {
-                    "imagem": "URL_OLHO_JUNTO",
-                    "sugestao": "Fio a fio — evita efeito fechado e alonga sutilmente"
-                },
-                "Olhos Separados": {
-                    "imagem": "URL_OLHO_SEPARADO",
-                    "sugestao": "Volume russo — dá destaque ao centro e equilibra distância"
-                },
-                "Olhos Padrão": {
-                    "imagem": "URL_OLHO_PADRAO",
-                    "sugestao": "Qualquer técnica — aceita bem todas"
-                }
-            }
-
-            colunas = st.columns(2)
-            index = 0
-            for tipo, dados in formatos.items():
-                with colunas[index % 2]:
-                    st.image(dados["imagem"], caption=f"{tipo}", use_column_width=True)
-                    if st.button(f"✅ Esse se parece comigo", key=f"botao_{tipo}"):
-                        st.session_state.tipo_olho = tipo
-                        st.session_state.sugestao_tecnica = dados["sugestao"]
-                        st.success(f"👁️ Formato selecionado: **{tipo}**")
-                        st.info(f"💡 Sugestão de técnica: **{dados['sugestao']}**")
-                index += 1
-
-    
-        # 👁️ Tipo de Olho + Sugestão de Técnica
-       with st.expander("✨ Estilos Visuais + Indicação"):
+        with st.expander("✨ Estilos Visuais + Indicação"):
     st.markdown("""
     ## 🌿 Clássico  
     🖼️ [Imagem do estilo Clássico]  
@@ -187,25 +134,6 @@ with col2:
     📌 Indicado para olhos caídos, encapotados ou amendoados  
     ✨ Efeito elevado e elegante que levanta o olhar sem exagero
     """)
-
-
-    # 🎨 Escolha de Técnica
-    if st.session_state.ficha_validada:
-        with st.expander("🎨 Escolha da Técnica"):
-            st.write("Selecione a técnica desejada para este atendimento:")
-
-            formatos = {
-                "Fio a fio": "✨ Natural, delicado e clássico",
-                "Volume russo": "💥 Impactante, curvado e volumoso",
-                "Híbrido": "⚖️ Equilíbrio entre clássico e volume",
-                "Colorido": "🌈 Criativo e com tons vibrantes"
-            }
-
-            for nome, descricao in formatos.items():
-                if st.button(nome, key=f"formato_{nome}"):
-                    st.session_state.formato_escolhido = nome
-                    st.success(f"Técnica selecionada: **{nome}** — {descricao}")
-
 
                 # 📸 Foto da Cliente
         with st.expander("📸 Foto da Cliente"):
