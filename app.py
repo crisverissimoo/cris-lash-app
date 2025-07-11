@@ -155,39 +155,39 @@ with col2:
 
     
         # 👁️ Tipo de Olho + Sugestão de Técnica
-        with st.expander("👁️ Tipo de Olho da Cliente"):
-            tipo_olho = st.selectbox("Qual o formato predominante dos olhos da cliente?", [
-                "Padrão",
-                "Pequeno",
-                "Caído",
-                "Asiático",
-                "Abertos",
-                "Arredondado",
-                "Profundo",
-                "Pálpebra caída",
-                "Outro"
-            ], key="tipo_olho")
+        with st.expander("✨ Estilos Visuais + Indicação"):
+    st.markdown("""
+    ## 🌿 Clássico  
+    🖼️ [Imagem do estilo Clássico]  
+    🔘 **Clássico**  
+    📌 Indicado para **todos os tipos de olhos**  
+    ✨ Efeito leve, natural e equilibrado — ideal para iniciantes ou quem busca discrição
 
-            sugestao = ""
-            if tipo_olho == "Caído":
-                sugestao = "Volume russo — realça o olhar e corrige o caimento"
-            elif tipo_olho == "Pequeno":
-                sugestao = "Fio a fio ou Híbrido — evita sobrecarga visual e alonga com leveza"
-            elif tipo_olho == "Asiático":
-                sugestao = "Híbrido — preenche com definição sem pesar"
-            elif tipo_olho == "Abertos":
-                sugestao = "Híbrido ou Colorido — destaca o formato e permite brincar com cor"
-            elif tipo_olho == "Profundo":
-                sugestao = "Volume russo ou Híbrido — ajuda a trazer profundidade e destaque"
-            elif tipo_olho == "Pálpebra caída":
-                sugestao = "Fio a fio — natural, leve e adequado para não pesar o olhar"
-            elif tipo_olho == "Arredondado":
-                sugestao = "Híbrido — suaviza e valoriza o contorno"
-            elif tipo_olho == "Padrão":
-                sugestao = "Qualquer técnica — o formato aceita bem todas as abordagens"
+    ---
 
-            if sugestao:
-                st.success(f"👁️ Sugestão: **{sugestao}**")
+    ## 🧸 Boneca  
+    🖼️ [Imagem do estilo Boneca]  
+    🔘 **Boneca**  
+    📌 Indicado para **olhos pequenos, amendoados ou asiáticos**  
+    ✨ Efeito aberto e arredondado como o de uma boneca
+
+    ---
+
+    ## 🐱 Gatinho  
+    🖼️ [Imagem do estilo Gatinho]  
+    🔘 **Gatinho**  
+    📌 Indicado para **olhos juntos, saltados ou amendoados**  
+    ✨ Efeito puxado, felino e sofisticado
+
+    ---
+
+    ## 🐿️ Esquilo  
+    🖼️ [Imagem do estilo Esquilo]  
+    🔘 **Esquilo**  
+    📌 Indicado para **olhos caídos, encapotados ou amendoados**  
+    ✨ Efeito elevado e elegante que levanta o olhar sem exagero
+    """)
+
 
     # 🎨 Escolha de Técnica
     if st.session_state.ficha_validada:
