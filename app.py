@@ -68,10 +68,53 @@ with col2:
                 enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
                 if enviar:
-                    impeditivos = ["glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao", "alergia", "irritacao"]
-                    if any(respostas[m] == "Sim" for m in impeditivos):
-                        st.error(txt("⚠️ Cliente não está apta — atendimento bloqueado.", "⚠️ Cliente no apta — atención bloqueada."))
-                        st.session_state.ficha_validada = False
-                    else:
-                        st.success(txt("✅ Ficha clínica validada com sucesso.", "✅ Ficha validada correctamente."))
-                        st.session_state.ficha_validada = True
+    # ❌ Motivos impeditivos
+    impeditivos = {
+        "glaucoma": "Glaucoma ou condição ocular diagnosticada",
+        "infeccao": "Infecção ocular (blefarite, terçol, etc)",
+        "conjuntivite": "Conjuntivite recente (últimos 30 dias)",
+        "cirurgia": "Cirurgia ocular recente",
+        "reacao": "Reação alérgica em procedimentos anteriores"
+    }
+
+    # ⚠️ Motivos de alerta
+    alerta = {
+        "alergia": "Histórico de alergias nos olhos ou pálpebras",
+        "irritacao": "Olhos irritados ou lacrimejando frequentemente",
+        "gravida": "Gestante ou lactante — recomenda-se autorização médica",
+        "acido": "Tratamento dermatológico com ácido",
+        "sensibilidade": "Sensibilidade a produtos químicos ou cosméticos"
+    }
+
+    # ✅ Informativos
+    informativos = {
+        "colirio": "Uso de colírios frequente",
+        "lentes": "Usa lentes de contato",
+        "extensao": "Já fez extensão de cílios antes"
+    }
+
+    bloqueios_detectados = []
+    alertas_detectados = []
+    info_detectados = []
+
+    for chave, resposta in respostas.items():
+        if resposta == "Sim":
+            if chave in impeditivos:
+                bloqueios_detectados.append(f"❌ {impeditivos[chave]}")
+            elif chave in alerta:
+                alertas_detectados.append(f"⚠️ {alerta[chave]}")
+            elif chave in informativos:
+                info_detectados.append(f"📌 {informativos[chave]}")
+
+    if bloqueios_detectados:
+        st.error("⚠️ Cliente não está apta para atendimento.\n\n" + "\n".join(bloqueios_detectados))
+        st.session_state.ficha_validada = False
+    else:
+        if alertas_detectados:
+            st.warning("⚠️ Atenção! Condições que requerem avaliação profissional:\n\n" + "\n".join(alertas_detectados))
+        if info_detectados:
+            st.info("📎 Informações adicionais para registro:\n\n" + "\n".join(info_detectados))
+
+        st.success("✅ Ficha clínica validada — cliente apta para continuar.")
+        st.session_state.ficha_validada = True
+
