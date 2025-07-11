@@ -102,41 +102,39 @@ with col2:
                             st.success("✅ Cliente apta para atendimento!")
                             st.session_state.ficha_validada = True
 
-# 🎨 Escolha de Técnica
-if st.session_state.ficha_validada:
-    with st.expander("🎨 Escolha da Técnica"):
-        st.write("Selecione a técnica desejada:")
-        formatos = {
-            "Fio a fio": "✨ Natural, delicado e clássico",
-            "Volume russo": "💥 Impactante, curvado e volumoso",
-            "Híbrido": "⚖️ Equilíbrio entre clássico e volume",
-            "Colorido": "🌈 Criativo e com tons vibrantes"
-        }
+    # 🎨 Escolha de Técnica
+    if st.session_state.ficha_validada:
+        with st.expander("🎨 Escolha da Técnica"):
+            st.write("Selecione a técnica desejada:")
+            formatos = {
+                "Fio a fio": "✨ Natural, delicado e clássico",
+                "Volume russo": "💥 Impactante, curvado e volumoso",
+                "Híbrido": "⚖️ Equilíbrio entre clássico e volume",
+                "Colorido": "🌈 Criativo e com tons vibrantes"
+            }
+            for nome, descricao in formatos.items():
+                if st.button(nome, key=f"formato_{nome}"):
+                    st.session_state.formato_escolhido = nome
+                    st.success(f"Técnica selecionada: {nome} — {descricao}")
 
-        for nome, descricao in formatos.items():
-            if st.button(nome, key=f"formato_{nome}"):
-                st.session_state.formato_escolhido = nome
-                st.success(f"Técnica selecionada: {nome} — {descricao}")
+        # 📸 Foto da Cliente
+        with st.expander("📸 Foto da Cliente"):
+            tipo_imagem = st.radio("Como deseja adicionar a imagem?", ["Upload", "Câmera"], index=0, key="tipo_imagem")
+            if tipo_imagem == "Upload":
+                imagem_cliente = st.file_uploader("📎 Enviar imagem", type=["jpg", "jpeg", "png"], key="upload_foto")
+            else:
+                imagem_cliente = st.camera_input("📷 Tirar foto agora", key="camera_foto")
+            if imagem_cliente:
+                st.image(imagem_cliente, caption="📸 Prévia da imagem enviada", use_column_width=True)
 
-# 📸 Foto da Cliente
-    with st.expander("📸 Foto da Cliente"):
-        tipo_imagem = st.radio("Como deseja adicionar a imagem?", ["Upload", "Câmera"], index=0, key="tipo_imagem")
-        if tipo_imagem == "Upload":
-            imagem_cliente = st.file_uploader("📎 Enviar imagem", type=["jpg", "jpeg", "png"], key="upload_foto")
-        else:
-            imagem_cliente = st.camera_input("📷 Tirar foto agora", key="camera_foto")
+        # 📝 Observações
+        with st.expander("📝 Observações Personalizadas"):
+            observacoes = st.text_area("Comentários sobre o atendimento, preferências, cuidados especiais…", key="obs_cliente")
 
-        if imagem_cliente:
-            st.image(imagem_cliente, caption="📸 Prévia da imagem enviada", use_column_width=True)
-
-# 📝 Observações
-    with st.expander("📝 Observações Personalizadas"):
-        observacoes = st.text_area("Comentários sobre o atendimento, preferências, cuidados especiais…", key="obs_cliente")
-
-# ⏰ Agendamento
-    with st.expander("⏰ Agendamento"):
-        horarios_disponiveis = ["09:00", "10:30", "12:00", "14:00", "15:30", "17:00"]
-        horario_escolhido = st.selectbox("Selecione o horário disponível:", horarios_disponiveis, key="horario_agendamento")
-        if horario_escolhido:
-            st.success(f"🗓️ Atendimento agendado para `{horario_escolhido}`.")
+        # ⏰ Agendamento
+        with st.expander("⏰ Agendamento"):
+            horarios_disponiveis = ["09:00", "10:30", "12:00", "14:00", "15:30", "17:00"]
+            horario_escolhido = st.selectbox("Selecione o horário disponível:", horarios_disponiveis, key="horario_agendamento")
+            if horario_escolhido:
+                st.success(f"🗓️ Atendimento agendado para `{horario_escolhido}`.")
 
