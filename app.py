@@ -119,84 +119,25 @@ if autorizada:
                                     "\n".join([f"- {motivo}" for motivo in info_detectados]))
                         st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
                         st.session_state.ficha_validada = True
-with st.expander(txt("🎨 Técnica e Estilo Visual", "🎨 Técnica y Estilo Visual")):
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        st.markdown(f"<h4 style='text-align:center;'>{txt('Escolha da Técnica','Elección de Técnica')}</h4>", unsafe_allow_html=True)
-
-        tecnica = st.selectbox(txt("💆 Técnica de extensão", "💆 Técnica de extensiones"), 
-                               ["Volume Russo", "Híbrido", "Clássico"], key="tecnica")
-
-        formato_olho = st.selectbox(txt("👁️ Formato do olho", "👁️ Forma del ojo"), 
-                                    ["Encapotado", "Asiático", "Amendoado", "Redondo"], key="formato")
-
-        curvatura = st.selectbox(txt("🔀 Curvatura desejada", "🔀 Curvatura deseada"), 
-                                 ["C", "CC", "D", "L", "M"], key="curvatura")
-
-        espessura = st.selectbox(txt("🔬 Espessura dos fios", "🔬 Grosor de los pelos"), 
-                                 ["0.05", "0.07", "0.10", "0.12"], key="espessura")
-
-        # Referência visual (personalizável com suas imagens)
-        st.markdown(f"<h5 style='text-align:center;'>{txt('Referência visual da técnica escolhida','Referencia visual de la técnica elegida')}</h5>", unsafe_allow_html=True)
-
-        if tecnica == "Volume Russo":
-            st.image("caminho_para_imagem_volume_russo.jpg", caption=txt("Volume Russo — Alta densidade", "Volumen ruso — alta densidad"))
-        elif tecnica == "Híbrido":
-            st.image("caminho_para_imagem_hibrido.jpg", caption=txt("Híbrido — mistura de volume e clássico", "Híbrido — mezcla entre volumen y clásico"))
-        elif tecnica == "Clássico":
-            st.image("caminho_para_imagem_classico.jpg", caption=txt("Clássico — 1 a 1 com naturalidade", "Clásico — uno a uno con naturalidad"))
-
-        st.success(txt("✅ Técnica registrada com sucesso!", "✅ Técnica registrada correctamente!"))
-
-with st.expander(txt("🎯 Escolha de Efeito e Técnica", "🎯 Elección de Efecto y Técnica")):
+                        
+with st.expander(txt("✨ Escolha do Efeito", "✨ Elección del Efecto")):
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         st.markdown(f"<h4 style='text-align:center;'>{txt('Selecione o efeito desejado','Seleccione el efecto deseado')}</h4>", unsafe_allow_html=True)
 
-        efeito_escolhido = st.radio(txt("🖼️ Escolha o efeito visual", "🖼️ Elija el efecto visual"), 
-            options=["Efeito 1", "Efeito 2", "Efeito 3", "Efeito 4"], 
+        efeito_escolhido = st.radio(txt("🖼️ Escolha o efeito", "🖼️ Elija el efecto"), 
+            options=["Clássica", "Boneca", "Gatinho", "Esquilo"], 
             format_func=lambda x: txt(x, x),
             index=None
         )
 
-        st.image("foto_efeito_1.jpg", caption=txt("Efeito 1 — Volume Leve", "Efecto 1 — Volumen Ligero"))
-        st.image("foto_efeito_2.jpg", caption=txt("Efeito 2 — Alongado Natural", "Efecto 2 — Alargado Natural"))
-        st.image("foto_efeito_3.jpg", caption=txt("Efeito 3 — Gato Intenso", "Efecto 3 — Gato Intenso"))
-        st.image("foto_efeito_4.jpg", caption=txt("Efeito 4 — Boneca Curvada", "Efecto 4 — Muñeca Curvada"))
+        st.image("imagem_classica.jpg", caption=txt("Técnica Clássica", "Técnica Clásica"))
+        st.image("imagem_boneca.jpg", caption=txt("Efeito Boneca", "Efecto Muñeca"))
+        st.image("imagem_gatinho.jpg", caption=txt("Efeito Gatinho", "Efecto Gato"))
+        st.image("imagem_esquilo.jpg", caption=txt("Efeito Esquilo", "Efecto Ardilla"))
 
-        st.markdown("---")
-        st.markdown(f"<h4 style='text-align:center;'>{txt('Selecione a técnica','Seleccione la técnica')}</h4>", unsafe_allow_html=True)
-
-        col1, col2 = st.columns(2)
-        with col1:
-            tecnica_1 = st.radio(txt("🧵 Técnica 1", "🧵 Técnica 1"), ["Fio a Fio"], index=0, key="tec1")
-            st.markdown(txt(
-                "Aplicação de 1 fio sintético por fio natural — resultado leve e natural.",
-                "Aplicación de 1 pelo sintético por cada pelo natural — resultado ligero y natural."
-            ))
-
-        with col2:
-            tecnica_2 = st.radio(txt("🧵 Técnica 2", "🧵 Técnica 2"), ["Volume Russo"], index=0, key="tec2")
-            st.markdown(txt(
-                "Leques de fios finos aplicados para criar volume intenso e dramático.",
-                "Abanicos de pelos finos aplicados para crear volumen intenso y dramático."
-            ))
-
-        col3, col4 = st.columns(2)
-        with col3:
-            tecnica_3 = st.radio(txt("🧵 Técnica 3", "🧵 Técnica 3"), ["Híbrido"], index=0, key="tec3")
-            st.markdown(txt(
-                "Combinação de fio a fio com volume — equilíbrio entre natural e cheio.",
-                "Combinación de uno a uno con volumen — equilibrio entre natural y lleno."
-            ))
-
-        with col4:
-            tecnica_4 = st.radio(txt("🧵 Técnica 4", "🧵 Técnica 4"), ["Mega Volume"], index=0, key="tec4")
-            st.markdown(txt(
-                "Leques densos para efeito ultra volumoso — indicado para olhos marcantes.",
-                "Abanicos densos para efecto ultra voluminoso — indicado para ojos llamativos."
-            ))
-
-        st.success(txt("✅ Escolha registrada com sucesso!", "✅ Elección registrada correctamente!"))
+        if efeito_escolhido:
+            st.success(txt(f"✅ Efeito selecionado: {efeito_escolhido}", f"✅ Efecto seleccionado: {efeito_escolhido}"))
+            st.session_state.efeito_escolhido = efeito_escolhido
 
 
