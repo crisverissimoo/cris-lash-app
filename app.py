@@ -128,4 +128,4 @@ with col2:
         st.success(txt("✅ Atendimento registrado!", "✅ Atención registrada!"))
 
         if st.session_state.historico:
-            for i, atend in enumerate(st.session_state.historico
+            for i, atend in enumerate(st.session_state.historico):
