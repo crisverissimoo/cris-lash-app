@@ -67,7 +67,8 @@ with col2:
 
                 enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-                if enviar:
+
+if enviar:
     # ❌ Motivos impeditivos
     impeditivos = {
         "glaucoma": "Glaucoma ou condição ocular diagnosticada",
@@ -117,4 +118,5 @@ with col2:
 
         st.success("✅ Ficha clínica validada — cliente apta para continuar.")
         st.session_state.ficha_validada = True
+
 
