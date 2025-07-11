@@ -102,7 +102,7 @@ with col2:
                             st.success("✅ Cliente apta para atendimento!")
                             st.session_state.ficha_validada = True
 
-                        # 👁️ Identificação do Formato de Olho — só com botões
+        # 👁️ Identificação do Formato de Olho — só com botões
         with st.expander("👁️ Identifique o formato do seu olhar"):
             st.write("Veja abaixo os estilos e clique no que mais se parece com o seu:")
 
