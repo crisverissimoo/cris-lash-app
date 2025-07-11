@@ -49,7 +49,7 @@ with col2:
         if nascimento.month == hoje.month and nome_cliente:
             st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza e carinho! 💝")
 
-    # 🧾 Ficha Clínica
+   # 🧾 Ficha Clínica
 if autorizada:
     with st.expander("🧾 Ficha de Anamnese Clínica"):
         with st.form("ficha_anamnese"):
@@ -81,29 +81,25 @@ if autorizada:
                     st.session_state.ficha_validada = False
                 else:
                     st.session_state.ficha_respostas = respostas
-                    restricoes = []
-                    bloqueio_total = []
+                    bloqueios_criticos = []
 
-                    # Lista de bloqueios críticos
-                    if respostas["infeccao"] == "Sim": bloqueio_total.append("Infecção ocular ativa")
-                    if respostas["conjuntivite"] == "Sim": bloqueio_total.append("Conjuntivite recente")
-                    if respostas["cirurgia"] == "Sim": bloqueio_total.append("Cirurgia ocular recente")
-                    if respostas["reacao"] == "Sim": bloqueio_total.append("Reação alérgica anterior")
-                    if respostas["glaucoma"] == "Sim": bloqueio_total.append("Glaucoma")
+                    if respostas["infeccao"] == "Sim": bloqueios_criticos.append("Infecção ocular ativa")
+                    if respostas["conjuntivite"] == "Sim": bloqueios_criticos.append("Conjuntivite recente")
+                    if respostas["cirurgia"] == "Sim": bloqueios_criticos.append("Cirurgia ocular recente")
+                    if respostas["reacao"] == "Sim": bloqueios_criticos.append("Reação alérgica anterior")
+                    if respostas["glaucoma"] == "Sim": bloqueios_criticos.append("Glaucoma")
 
-                    # Alertas éticos
                     if respostas["gravida"] == "Sim":
                         st.warning("⚠️ Gestante ou lactante — recomenda-se autorização médica.")
                     if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
                         st.warning("⚠️ Liberação médica obrigatória.")
 
-                    if bloqueio_total:
-                        st.warning("⚠️ Cliente com restrições graves:")
-                        for item in bloqueio_total:
+                    if bloqueios_criticos:
+                        st.warning("⚠️ Cliente com condições que impedem o procedimento:")
+                        for item in bloqueios_criticos:
                             st.markdown(f"- {item}")
-                        st.error("❌ Cliente não apta para atendimento neste momento. Remanejar ou solicitar liberação médica.")
+                        st.error("❌ Atendimento não permitido neste momento. Agende nova data após liberação médica.")
                         st.session_state.ficha_validada = False
                     else:
                         st.success("✅ Cliente apta para atendimento!")
                         st.session_state.ficha_validada = True
-
