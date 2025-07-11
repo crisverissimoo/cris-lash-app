@@ -119,4 +119,32 @@ if autorizada:
                                     "\n".join([f"- {motivo}" for motivo in info_detectados]))
                         st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
                         st.session_state.ficha_validada = True
+with st.expander(txt("🎨 Técnica e Estilo Visual", "🎨 Técnica y Estilo Visual")):
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        st.markdown(f"<h4 style='text-align:center;'>{txt('Escolha da Técnica','Elección de Técnica')}</h4>", unsafe_allow_html=True)
+
+        tecnica = st.selectbox(txt("💆 Técnica de extensão", "💆 Técnica de extensiones"), 
+                               ["Volume Russo", "Híbrido", "Clássico"], key="tecnica")
+
+        formato_olho = st.selectbox(txt("👁️ Formato do olho", "👁️ Forma del ojo"), 
+                                    ["Encapotado", "Asiático", "Amendoado", "Redondo"], key="formato")
+
+        curvatura = st.selectbox(txt("🔀 Curvatura desejada", "🔀 Curvatura deseada"), 
+                                 ["C", "CC", "D", "L", "M"], key="curvatura")
+
+        espessura = st.selectbox(txt("🔬 Espessura dos fios", "🔬 Grosor de los pelos"), 
+                                 ["0.05", "0.07", "0.10", "0.12"], key="espessura")
+
+        # Referência visual (personalizável com suas imagens)
+        st.markdown(f"<h5 style='text-align:center;'>{txt('Referência visual da técnica escolhida','Referencia visual de la técnica elegida')}</h5>", unsafe_allow_html=True)
+
+        if tecnica == "Volume Russo":
+            st.image("caminho_para_imagem_volume_russo.jpg", caption=txt("Volume Russo — Alta densidade", "Volumen ruso — alta densidad"))
+        elif tecnica == "Híbrido":
+            st.image("caminho_para_imagem_hibrido.jpg", caption=txt("Híbrido — mistura de volume e clássico", "Híbrido — mezcla entre volumen y clásico"))
+        elif tecnica == "Clássico":
+            st.image("caminho_para_imagem_classico.jpg", caption=txt("Clássico — 1 a 1 com naturalidade", "Clásico — uno a uno con naturalidad"))
+
+        st.success(txt("✅ Técnica registrada com sucesso!", "✅ Técnica registrada correctamente!"))
 
