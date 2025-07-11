@@ -51,113 +51,109 @@ with col2:
 
   # 🧾 Ficha Clínica
     if autorizada:
-        with st.expander("🧾 Ficha de Anamnese Clínica"):
-            with st.form("ficha_anamnese"):
-                perguntas = {
-                    "lentes": "Usa lentes de contato?",
-                    "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
-                    "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
-                    "irritacao": "Está com olhos irritados ou lacrimejando frequentemente?",
-                    "gravida": "Está grávida ou amamentando?",
-                    "colirio": "Faz uso de colírios com frequência?",
-                    "infeccao": "Tem blefarite, terçol ou outras infecções oculares?",
-                    "cirurgia": "Fez cirurgia ocular recentemente?",
-                    "acido": "Está em tratamento dermatológico com ácido?",
-                    "sensibilidade": "Tem sensibilidade a produtos químicos ou cosméticos?",
-                    "extensao": "Já fez extensão de cílios antes?",
-                    "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
-                    "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
-                }
+    # 🧾 Ficha Clínica
+    with st.expander("🧾 Ficha de Anamnese Clínica"):
+        with st.form("ficha_anamnese"):
+            perguntas = {
+                "lentes": "Usa lentes de contato?",
+                "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
+                "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
+                "irritacao": "Está com olhos irritados ou lacrimejando frequentemente?",
+                "gravida": "Está grávida ou amamentando?",
+                "colirio": "Faz uso de colírios com frequência?",
+                "infeccao": "Tem blefarite, terçol ou outras infecções oculares?",
+                "cirurgia": "Fez cirurgia ocular recentemente?",
+                "acido": "Está em tratamento dermatológico com ácido?",
+                "sensibilidade": "Tem sensibilidade a produtos químicos ou cosméticos?",
+                "extensao": "Já fez extensão de cílios antes?",
+                "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
+                "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
+            }
 
-                respostas = {}
-                for chave, pergunta in perguntas.items():
-                    respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+            respostas = {}
+            for chave, pergunta in perguntas.items():
+                respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-                enviar_ficha = st.form_submit_button("📨 Finalizar ficha")
+            enviar_ficha = st.form_submit_button("📨 Finalizar ficha")
 
-                if enviar_ficha:
-                    if None in respostas.values():
-                        st.error("⚠️ Responda todas as perguntas.")
-                        st.session_state.ficha_validada = False
-                    else:
-                        bloqueios_criticos = []
-                        if respostas["infeccao"] == "Sim": bloqueios_criticos.append("Infecção ocular ativa")
-                        if respostas["conjuntivite"] == "Sim": bloqueios_criticos.append("Conjuntivite recente")
-                        if respostas["cirurgia"] == "Sim": bloqueios_criticos.append("Cirurgia ocular recente")
-                        if respostas["reacao"] == "Sim": bloqueios_criticos.append("Reação alérgica anterior")
-                        if respostas["glaucoma"] == "Sim": bloqueios_criticos.append("Glaucoma")
+            if enviar_ficha:
+                st.success("📋 Ficha clínica registrada com sucesso!")
 
-                        if respostas["gravida"] == "Sim":
-                            st.warning("⚠️ Gestante ou lactante — recomenda-se autorização médica.")
-                        if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
-                            st.warning("⚠️ Liberação médica obrigatória.")
+    # 🎨 Escolha da Técnica
+    with st.expander("🎨 Escolha da Técnica"):
+        st.write("Selecione a técnica desejada para este atendimento:")
+        formatos = {
+            "Fio a fio": "✨ Natural, delicado e clássico",
+            "Volume russo": "💥 Impactante, curvado e volumoso",
+            "Híbrido": "⚖️ Equilíbrio entre clássico e volume",
+            "Colorido": "🌈 Criativo e com tons vibrantes"
+        }
+        for nome, descricao in formatos.items():
+            if st.button(nome, key=f"formato_{nome}"):
+                st.session_state.formato_escolhido = nome
+                st.success(f"Técnica selecionada: **{nome}** — {descricao}")
 
-                        if bloqueios_criticos:
-                            st.warning("⚠️ Cliente com condições que impedem o procedimento:")
-                            for item in bloqueios_criticos:
-                                st.markdown(f"- {item}")
-                            st.error("❌ Atendimento não permitido neste momento. Agende nova data após liberação médica.")
-                            st.session_state.ficha_validada = False
-                        else:
-                            st.success("✅ Cliente apta para atendimento!")
-                            st.session_state.ficha_validada = True
+    # ✨ Estilos Visuais + Indicação
+    with st.expander("✨ Estilos Visuais + Indicação"):
+        col1, col2 = st.columns(2)
 
-      # ✨ Estilos Visuais + Indicação
-with st.expander("✨ Estilos Visuais + Indicação"):
-    st.markdown("""
-    ## 🌿 Clássico  
-    🖼️ [Imagem do estilo Clássico]  
-    🔘 **Clássico**  
-    📌 Indicado para todos os tipos de olhos  
-    ✨ Efeito leve, natural e equilibrado — ideal para iniciantes ou quem busca discrição
+        with col1:
+            st.image("static/imgs/classico.png", caption="Clássico", use_container_width=True)
+            st.markdown("🔘 **Clássico** — Indicado para todos os tipos de olhos.")
 
-    ---
+            st.image("static/imgs/boneca.png", caption="Boneca", use_container_width=True)
+            st.markdown("🔘 **Boneca** — Olhos pequenos, amendoados ou asiáticos.")
 
-    ## 🧸 Boneca  
-    🖼️ [Imagem do estilo Boneca]  
-    🔘 **Boneca**  
-    📌 Indicado para olhos pequenos, amendoados ou asiáticos  
-    ✨ Efeito aberto e arredondado como o de uma boneca
+        with col2:
+            st.image("static/imgs/gatinho.png", caption="Gatinho", use_container_width=True)
+            st.markdown("🔘 **Gatinho** — Olhos juntos, saltados ou amendoados.")
 
-    ---
+            st.image("static/imgs/esquilo.png", caption="Esquilo", use_container_width=True)
+            st.markdown("🔘 **Esquilo** — Olhos caídos, encapotados ou amendoados.")
 
-    ## 🐱 Gatinho  
-    🖼️ [Imagem do estilo Gatinho]  
-    🔘 **Gatinho**  
-    📌 Indicado para olhos juntos, saltados ou amendoados  
-    ✨ Efeito puxado, felino e sofisticado
+    # 📅 Agendamento
+    with st.expander("📅 Agendamento"):
+        st.date_input("Data do atendimento", key="data_atendimento")
+        st.time_input("Horário do atendimento", key="horario_atendimento")
 
-    ---
+    # 📝 Observações
+    with st.expander("📝 Observações Personalizadas"):
+        st.text_area("Anotações do atendimento", key="observacoes_cliente")
 
-    ## 🐿️ Esquilo  
-    🖼️ [Imagem do estilo Esquilo]  
-    🔘 **Esquilo**  
-    📌 Indicado para olhos caídos, encapotados ou amendoados  
-    ✨ Efeito elevado e elegante que levanta o olhar sem exagero
-    """)
+    # 📚 Histórico
+    with st.expander("📚 Histórico da Cliente"):
+        st.text_area("Últimos atendimentos ou observações relevantes", key="historico_cliente")
 
-# 📝 Observações Personalizadas
-with st.expander("📝 Observações Personalizadas"):
-    st.text_area("Anotações do atendimento", key="observacoes_cliente")
+    # 🧾 Registro da Sessão
+    registro = {
+        "Tipo de olho": st.session_state.get("tipo_olho", ""),
+        "Técnica sugerida": st.session_state.get("sugestao_tecnica", ""),
+        "Técnica escolhida": st.session_state.get("formato_escolhido", ""),
+        "Data": st.session_state.get("data_atendimento", ""),
+        "Horário": st.session_state.get("horario_atendimento", ""),
+        "Histórico": st.session_state.get("historico_cliente", ""),
+        "Observações": st.session_state.get("observacoes_cliente", "")
+    }
 
-# 📅 Agendamento
-with st.expander("📅 Agendamento"):
-    st.date_input("Data do atendimento", key="data_atendimento")
-    st.time_input("Horário do atendimento", key="horario_atendimento")
+    if "historico" not in st.session_state:
+        st.session_state.historico = []
 
-# 📚 Histórico da Cliente
-with st.expander("📚 Histórico da Cliente"):
-    st.text_area("Últimos atendimentos ou observações relevantes", key="historico_cliente")
+    st.session_state.historico.append(registro)
+    st.success("✅ Atendimento registrado com sucesso!")
 
-# 🧾 Registro da Sessão
-registro = {
-    "Tipo de olho": st.session_state.get("tipo_olho", ""),
-    "Técnica sugerida": st.session_state.get("sugestao_tecnica", ""),
-    "Técnica escolhida": st.session_state.get("formato_escolhido", ""),
-    "Data": st.session_state.get("data_atendimento", ""),
-    "Horário": st.session_state.get("horario_atendimento", ""),
-    "Histórico": st.session_state.get("historico_cliente", ""),
-    "Observações": st.session_state.get("observacoes_cliente", "")
-}
+    # 📋 Exibir registros salvos
+    if st.session_state.historico:
+        for i, atend in enumerate(st.session_state.historico[::-1]):
+            st.markdown(f"### 🧍 Atendimento #{len(st.session_state.historico)-i}")
+            st.write(f"📅 Data: `{atend['Data']} — {atend['Horário']}`")
+            st.write(f"👁️ Tipo de olho: **{atend['Tipo de olho']}**")
+            st.write(f"💡 Sugestão de técnica: *{atend['Técnica sugerida']}*")
+            st.write(f"🎨 Técnica escolhida: **{atend['Técnica escolhida']}**")
+            if atend["Observações"]:
+                st.markdown(f"📝 Observações: {atend['Observações']}")
+            st.markdown("---")
+    else:
+        st.info("ℹ️ Nenhum atendimento registrado ainda.")
+else:
+    st.warning("⚠️ Atendimento bloqueado — cliente menor sem autorização válida.")
 
-# Salvar registro
