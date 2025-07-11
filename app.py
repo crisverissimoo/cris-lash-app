@@ -21,7 +21,6 @@ if "ficha_respostas" not in st.session_state:
 if "ficha_validada" not in st.session_state:
     st.session_state.ficha_validada = False
 
-# 🎯 Layout
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.markdown("## 💎 Sistema de Atendimento — Cris Lash")
@@ -45,45 +44,4 @@ with col2:
                 st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
         else:
             responsavel = ""
-            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_maior")
-
-        if nascimento.month == hoje.month and nome_cliente:
-            st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza! 💝")
-
-    # 🔓 Verifica se cliente está liberada
-    autorizada = (not menor and autorizacao == "Sim") or (menor and autorizacao == "Sim")
-
-    # 🧾 Ficha Clínica
-    if autorizada:
-        with st.expander("🧾 Ficha de Anamnese Clínica"):
-            with st.form("ficha_anamnese"):
-                perguntas = {
-                    "lentes": "Usa lentes de contato?",
-                    "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
-                    "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
-                    "irritacao": "Está com olhos irritados ou lacrimejando frequentemente?",
-                    "gravida": "Está grávida ou amamentando?",
-                    "colirio": "Faz uso de colírios com frequência?",
-                    "infeccao": "Tem blefarite, terçol ou outras infecções oculares?",
-                    "cirurgia": "Fez cirurgia ocular recentemente?",
-                    "acido": "Está em tratamento dermatológico com ácido?",
-                    "sensibilidade": "Tem sensibilidade a produtos químicos ou cosméticos?",
-                    "extensao": "Já fez extensão de cílios antes?",
-                    "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
-                    "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
-                }
-
-                respostas = {}
-                for chave, pergunta in perguntas.items():
-                    respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
-
-                enviar_ficha = st.form_submit_button("📨 Finalizar ficha")
-
-                if enviar_ficha:
-                    if None in respostas.values():
-                        st.error("⚠️ Responda todas as perguntas.")
-                        st.session_state.ficha_validada = False
-                    else:
-                        st.session_state.ficha_respostas = respostas
-                        restricoes = []
-                        if respostas["conjuntivite"] ==
+            autorizacao = st.radio("Autorização
