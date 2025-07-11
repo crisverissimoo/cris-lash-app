@@ -102,7 +102,55 @@ with col2:
                             st.success("✅ Cliente apta para atendimento!")
                             st.session_state.ficha_validada = True
 
-              # 👁️ Tipo de Olho + Sugestão de Técnica
+                # 👁️ Identificação Visual do Formato de Olhos
+        with st.expander("👁️ Identifique o formato do seu olhar"):
+            st.write("Veja abaixo os estilos e escolha o que mais se parece com o seu:")
+
+            formatos = {
+                "Olhos Caídos": {
+                    "imagem": "URL_DA_IMAGEM_OLHO_CAIDO",
+                    "sugestao": "Volume russo — realça e corrige o caimento"
+                },
+                "Olhos Pequenos": {
+                    "imagem": "URL_DA_IMAGEM_OLHO_PEQUENO",
+                    "sugestao": "Fio a fio ou Híbrido — leve e alonga com delicadeza"
+                },
+                "Olhos Grandes": {
+                    "imagem": "URL_DA_IMAGEM_OLHO_GRANDE",
+                    "sugestao": "Híbrido — suaviza e valoriza o contorno"
+                },
+                "Olhos Asiáticos": {
+                    "imagem": "URL_DA_IMAGEM_OLHO_ASIATICO",
+                    "sugestao": "Híbrido — define sem pesar"
+                },
+                "Pálpebra Caída": {
+                    "imagem": "URL_DA_IMAGEM_PALPEBRA_CAIDA",
+                    "sugestao": "Fio a fio — leve e natural"
+                },
+                "Olhos Juntos": {
+                    "imagem": "URL_DA_IMAGEM_OLHO_JUNTO",
+                    "sugestao": "Fio a fio — evita efeito fechado e alonga sutilmente"
+                },
+                "Olhos Separados": {
+                    "imagem": "URL_DA_IMAGEM_OLHO_SEPARADO",
+                    "sugestao": "Volume russo — dá destaque ao centro e equilibra distância"
+                },
+                "Olhos Padrão": {
+                    "imagem": "URL_DA_IMAGEM_OLHO_PADRAO",
+                    "sugestao": "Qualquer técnica — aceita bem todas"
+                }
+            }
+
+            for tipo, dados in formatos.items():
+                st.markdown(f"### 👁️ {tipo}")
+                st.image(dados["imagem"], caption=f"Exemplo: {tipo}", use_column_width=True)
+                if st.button(f"✅ Esse se parece comigo ({tipo})", key=f"botao_{tipo}"):
+                    st.session_state.tipo_olho = tipo
+                    st.session_state.sugestao_tecnica = dados["sugestao"]
+                    st.success(f"👁️ Você selecionou: **{tipo}**")
+                    st.info(f"💡 Sugestão de técnica: **{dados['sugestao']}**")
+    
+        # 👁️ Tipo de Olho + Sugestão de Técnica
         with st.expander("👁️ Tipo de Olho da Cliente"):
             tipo_olho = st.selectbox("Qual o formato predominante dos olhos da cliente?", [
                 "Padrão",
