@@ -131,7 +131,7 @@ with st.expander(txt("✨ Escolha do Efeito", "✨ Elección del Efecto")):
             index=None
         )
 
-        st.image("imagem_classica.jpg", caption=txt("Técnica Clássica", "Técnica Clásica"))
+        st.image("https://br.pinterest.com/pin/6544361953373525/", caption=txt("Técnica Clássica", "Técnica Clásica"))
         st.image("imagem_boneca.jpg", caption=txt("Efeito Boneca", "Efecto Muñeca"))
         st.image("imagem_gatinho.jpg", caption=txt("Efeito Gatinho", "Efecto Gato"))
         st.image("imagem_esquilo.jpg", caption=txt("Efeito Esquilo", "Efecto Ardilla"))
