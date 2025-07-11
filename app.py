@@ -149,9 +149,10 @@ with st.expander("📅 Agendamento"):
     st.time_input("Horário do atendimento", key="horario_atendimento")
 
 
-        # 🗂️ Histórico do Atendimento
-        with st.expander("🗂️ Histórico da Cliente"):
-            if st.button("📌 Registrar Atendimento", key="registrar_atend"):
+       # 📚 Histórico da Cliente
+with st.expander("📚 Histórico da Cliente"):
+    st.text_area("Últimos atendimentos ou observações relevantes", key="historico_cliente")
+
                 registro = {
                     "nome": st.session_state.nome_cliente,
                     "idade": idade,
