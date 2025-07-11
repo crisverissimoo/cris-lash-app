@@ -143,12 +143,11 @@ with st.expander("📝 Observações Personalizadas"):
     st.text_area("Anotações do atendimento", key="observacoes_cliente")
 
 
-        # ⏰ Agendamento
-        with st.expander("⏰ Agendamento"):
-            horarios_disponiveis = ["09:00", "10:30", "12:00", "14:00", "15:30", "17:00"]
-            horario_escolhido = st.selectbox("Selecione o horário disponível:", horarios_disponiveis, key="horario_agendamento")
-            if horario_escolhido:
-                st.success(f"🗓️ Atendimento agendado para `{horario_escolhido}`.")
+        # 📅 Agendamento
+with st.expander("📅 Agendamento"):
+    st.date_input("Data do atendimento", key="data_atendimento")
+    st.time_input("Horário do atendimento", key="horario_atendimento")
+
 
         # 🗂️ Histórico do Atendimento
         with st.expander("🗂️ Histórico da Cliente"):
