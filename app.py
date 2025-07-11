@@ -108,15 +108,20 @@ if enviar:
                 info_detectados.append(f"📌 {informativos[chave]}")
 
     if bloqueios_detectados:
-        st.error("⚠️ Cliente não está apta para atendimento.\n\n" + "\n".join(bloqueios_detectados))
-        st.session_state.ficha_validada = False
-    else:
-        if alertas_detectados:
-            st.warning("⚠️ Atenção! Condições que requerem avaliação profissional:\n\n" + "\n".join(alertas_detectados))
-        if info_detectados:
-            st.info("📎 Informações adicionais para registro:\n\n" + "\n".join(info_detectados))
+    st.error("❌ Cliente **não está apta para atendimento**.\n\n" +
+             "\n".join([f"- {motivo}" for motivo in bloqueios_detectados]))
+    st.session_state.ficha_validada = False
+else:
+    if alertas_detectados:
+        st.warning("⚠️ **Atenção!** Condições que requerem avaliação profissional:\n\n" +
+                   "\n".join([f"- {motivo}" for motivo in alertas_detectados]))
 
-        st.success("✅ Ficha clínica validada — cliente apta para continuar.")
-        st.session_state.ficha_validada = True
+    if info_detectados:
+        st.info("📎 Informações adicionais para registro:\n\n" +
+                "\n".join([f"- {motivo}" for motivo in info_detectados]))
+
+    st.success("✅ Cliente **apta para continuar** — ficha clínica validada com sucesso.")
+    st.session_state.ficha_validada = True
+
 
 
