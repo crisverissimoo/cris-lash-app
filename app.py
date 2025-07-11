@@ -153,15 +153,17 @@ with st.expander("📅 Agendamento"):
 with st.expander("📚 Histórico da Cliente"):
     st.text_area("Últimos atendimentos ou observações relevantes", key="historico_cliente")
 
-                registro = {
-                    "nome": st.session_state.nome_cliente,
-                    "idade": idade,
-                    "tipo_olho": st.session_state.get("tipo_olho", "Não informado"),
-                    "sugestao_tecnica": st.session_state.get("sugestao_tecnica", "Não gerada"),
-                    "tecnica_escolhida": st.session_state.get("formato_escolhido", "Não selecionada"),
-                    "observacoes": st.session_state.get("obs_cliente", ""),
-                    "horario": st.session_state.get("horario_agendamento", "Não agendado"),
-                    "data": hoje.strftime("%d/%m/%Y")
+                # 🧾 Registro da Sessão
+registro = {
+    "Tipo de olho": st.session_state.get("tipo_olho", ""),
+    "Técnica sugerida": st.session_state.get("sugestao_tecnica", ""),
+    "Técnica escolhida": st.session_state.get("formato_escolhido", ""),
+    "Data": st.session_state.get("data_atendimento", ""),
+    "Horário": st.session_state.get("horario_atendimento", ""),
+    "Histórico": st.session_state.get("historico_cliente", ""),
+    "Observações": st.session_state.get("observacoes_cliente", "")
+}
+
                 }
                 st.session_state.historico.append(registro)
                 st.success("✅ Atendimento registrado com sucesso!")
