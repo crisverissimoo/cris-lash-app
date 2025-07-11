@@ -102,7 +102,7 @@ with col2:
                             st.success("✅ Cliente apta para atendimento!")
                             st.session_state.ficha_validada = True
 
-       # 👁️ Tipo de Olho + Sugestão de Técnica
+      # ✨ Estilos Visuais + Indicação
 with st.expander("✨ Estilos Visuais + Indicação"):
     st.markdown("""
     ## 🌿 Clássico  
@@ -136,24 +136,20 @@ with st.expander("✨ Estilos Visuais + Indicação"):
     ✨ Efeito elevado e elegante que levanta o olhar sem exagero
     """)
 
-
-                
-       # 📝 Observações Personalizadas
+# 📝 Observações Personalizadas
 with st.expander("📝 Observações Personalizadas"):
     st.text_area("Anotações do atendimento", key="observacoes_cliente")
 
-
-        # 📅 Agendamento
+# 📅 Agendamento
 with st.expander("📅 Agendamento"):
     st.date_input("Data do atendimento", key="data_atendimento")
     st.time_input("Horário do atendimento", key="horario_atendimento")
 
-
-       # 📚 Histórico da Cliente
+# 📚 Histórico da Cliente
 with st.expander("📚 Histórico da Cliente"):
     st.text_area("Últimos atendimentos ou observações relevantes", key="historico_cliente")
 
-                # 🧾 Registro da Sessão
+# 🧾 Registro da Sessão
 registro = {
     "Tipo de olho": st.session_state.get("tipo_olho", ""),
     "Técnica sugerida": st.session_state.get("sugestao_tecnica", ""),
@@ -164,21 +160,4 @@ registro = {
     "Observações": st.session_state.get("observacoes_cliente", "")
 }
 
-                }
-                st.session_state.historico.append(registro)
-                st.success("✅ Atendimento registrado com sucesso!")
-
-            # 📋 Exibir registros salvos
-            if st.session_state.historico:
-                for i, atend in enumerate(st.session_state.historico[::-1]):
-                    st.markdown(f"### 🧍 Atendimento #{len(st.session_state.historico)-i}")
-                    st.write(f"📅 Data: `{atend['data']} — {atend['horario']}`")
-                    st.write(f"👁️ Tipo de olho: **{atend['tipo_olho']}**")
-                    st.write(f"💡 Sugestão de técnica: *{atend['sugestao_tecnica']}*")
-                    st.write(f"🎨 Técnica escolhida: **{atend['tecnica_escolhida']}**")
-                    if atend["observacoes"]:
-                        st.markdown(f"📝 Observações: {atend['observacoes']}")
-                    st.markdown("---")
-            else:
-                st.info("ℹ️ Nenhum atendimento registrado ainda.")
-
+# Salvar registro
