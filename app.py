@@ -41,7 +41,7 @@ with col2:
                 st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
                 autorizada = False
 
-   if autorizada:
+if autorizada:
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
         with st.form("form_clinica"):
             perguntas = {
@@ -115,4 +115,3 @@ with col2:
                                 "\n".join([f"- {motivo}" for motivo in info_detectados]))
                     st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
                     st.session_state.ficha_validada = True
-
