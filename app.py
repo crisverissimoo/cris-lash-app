@@ -138,9 +138,8 @@ with st.expander("✨ Estilos Visuais + Indicação"):
 
 
                 
-        # 📝 Observações
         with st.expander("📝 Observações Personalizadas"):
-            observacoes = st.text_area("Comentários sobre o atendimento, preferências, cuidados especiais…", key="obs_cliente")
+    st.text_area("Anotações do atendimento", key="observacoes_cliente")
 
         # ⏰ Agendamento
         with st.expander("⏰ Agendamento"):
