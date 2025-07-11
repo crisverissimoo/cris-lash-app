@@ -110,3 +110,4 @@ if autorizada:
                         st.success("✅ Cliente apta para atendimento!")
                         st.session_state.ficha_validada = True
 
+
