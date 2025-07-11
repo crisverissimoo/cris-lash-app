@@ -116,4 +116,5 @@ with col2:
             hora = st.time_input(txt("Horário do atendimento", "Hora de la cita"), key="horario_atendimento")
 
         with st.expander(txt("📝 Observações", "📝 Observaciones")):
-            observacoes = st.text_area(txt("Notas do
+            observacoes = st.text_area(txt("Notas do atendimento", "Notas de la sesión"), key="observacoes_cliente")
+
