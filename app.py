@@ -155,12 +155,12 @@ with col2:
 
     
         # 👁️ Tipo de Olho + Sugestão de Técnica
-        with st.expander("✨ Estilos Visuais + Indicação"):
+       with st.expander("✨ Estilos Visuais + Indicação"):
     st.markdown("""
     ## 🌿 Clássico  
     🖼️ [Imagem do estilo Clássico]  
     🔘 **Clássico**  
-    📌 Indicado para **todos os tipos de olhos**  
+    📌 Indicado para todos os tipos de olhos  
     ✨ Efeito leve, natural e equilibrado — ideal para iniciantes ou quem busca discrição
 
     ---
@@ -168,7 +168,7 @@ with col2:
     ## 🧸 Boneca  
     🖼️ [Imagem do estilo Boneca]  
     🔘 **Boneca**  
-    📌 Indicado para **olhos pequenos, amendoados ou asiáticos**  
+    📌 Indicado para olhos pequenos, amendoados ou asiáticos  
     ✨ Efeito aberto e arredondado como o de uma boneca
 
     ---
@@ -176,7 +176,7 @@ with col2:
     ## 🐱 Gatinho  
     🖼️ [Imagem do estilo Gatinho]  
     🔘 **Gatinho**  
-    📌 Indicado para **olhos juntos, saltados ou amendoados**  
+    📌 Indicado para olhos juntos, saltados ou amendoados  
     ✨ Efeito puxado, felino e sofisticado
 
     ---
@@ -184,7 +184,7 @@ with col2:
     ## 🐿️ Esquilo  
     🖼️ [Imagem do estilo Esquilo]  
     🔘 **Esquilo**  
-    📌 Indicado para **olhos caídos, encapotados ou amendoados**  
+    📌 Indicado para olhos caídos, encapotados ou amendoados  
     ✨ Efeito elevado e elegante que levanta o olhar sem exagero
     """)
 
