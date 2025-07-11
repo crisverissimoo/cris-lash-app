@@ -26,77 +26,77 @@ with col2:
     st.markdown("## 💎 Sistema de Atendimento — Cris Lash")
     st.write(f"📅 Hoje é `{hoje.strftime('%d/%m/%Y')}`")
 
-with st.expander("🗂️ Cadastro da Cliente"):
-    nome_cliente = st.text_input("🧍 Nome completo", key="nome_cliente")
-    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje, key="nascimento")
-    telefone = st.text_input("📞 Telefone", key="telefone")
-    email = st.text_input("📧 Email (opcional)", key="email")
+    # 🗂️ Cadastro
+    with st.expander("🗂️ Cadastro da Cliente"):
+        nome_cliente = st.text_input("🧍 Nome completo", key="nome_cliente")
+        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje, key="nascimento")
+        telefone = st.text_input("📞 Telefone", key="telefone")
+        email = st.text_input("📧 Email (opcional)", key="email")
 
-    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-    menor = idade < 18
-    st.write(f"📌 Idade: **{idade} anos**")
+        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+        menor = idade < 18
+        st.write(f"📌 Idade: **{idade} anos**")
 
-    if menor:
-        responsavel = st.text_input("👨‍👩‍👧 Nome do responsável", key="responsavel")
-        autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
-        if autorizacao != "Sim":
-            st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
-        autorizada = autorizacao == "Sim"
-    else:
-        autorizada = True  # Maior de idade, atendimento liberado
+        if menor:
+            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável", key="responsavel")
+            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+            if autorizacao != "Sim":
+                st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
+            autorizada = autorizacao == "Sim"
+        else:
+            autorizada = True
 
-    if nascimento.month == hoje.month and nome_cliente:
-        st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza e carinho! 💝")
+        if nascimento.month == hoje.month and nome_cliente:
+            st.success(f"🎉 Parabéns, {nome_cliente}! Este mês é seu aniversário — a Cris Lash deseja ainda mais beleza e carinho! 💝")
 
-# 🧾 Ficha Clínica — aparece só se autorizada
-if autorizada:
-    with st.expander("🧾 Ficha de Anamnese Clínica"):
-        with st.form("ficha_anamnese"):
-            perguntas = {
-                "lentes": "Usa lentes de contato?",
-                "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
-                "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
-                "irritacao": "Está com olhos irritados ou lacrimejando frequentemente?",
-                "gravida": "Está grávida ou amamentando?",
-                "colirio": "Faz uso de colírios com frequência?",
-                "infeccao": "Tem blefarite, terçol ou outras infecções oculares?",
-                "cirurgia": "Fez cirurgia ocular recentemente?",
-                "acido": "Está em tratamento dermatológico com ácido?",
-                "sensibilidade": "Tem sensibilidade a produtos químicos ou cosméticos?",
-                "extensao": "Já fez extensão de cílios antes?",
-                "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
-                "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
-            }
+    # 🧾 Ficha Clínica
+    if autorizada:
+        with st.expander("🧾 Ficha de Anamnese Clínica"):
+            with st.form("ficha_anamnese"):
+                perguntas = {
+                    "lentes": "Usa lentes de contato?",
+                    "alergia": "Tem histórico de alergias nos olhos ou pálpebras?",
+                    "conjuntivite": "Já teve conjuntivite nos últimos 30 dias?",
+                    "irritacao": "Está com olhos irritados ou lacrimejando frequentemente?",
+                    "gravida": "Está grávida ou amamentando?",
+                    "colirio": "Faz uso de colírios com frequência?",
+                    "infeccao": "Tem blefarite, terçol ou outras infecções oculares?",
+                    "cirurgia": "Fez cirurgia ocular recentemente?",
+                    "acido": "Está em tratamento dermatológico com ácido?",
+                    "sensibilidade": "Tem sensibilidade a produtos químicos ou cosméticos?",
+                    "extensao": "Já fez extensão de cílios antes?",
+                    "reacao": "Teve alguma reação alérgica em procedimentos anteriores?",
+                    "glaucoma": "Possui glaucoma ou outra condição ocular diagnosticada?"
+                }
 
-            respostas = {}
-            for chave, pergunta in perguntas.items():
-                respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+                respostas = {}
+                for chave, pergunta in perguntas.items():
+                    respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-            enviar_ficha = st.form_submit_button("📨 Finalizar ficha")
+                enviar_ficha = st.form_submit_button("📨 Finalizar ficha")
 
-            if enviar_ficha:
-                if None in respostas.values():
-                    st.error("⚠️ Responda todas as perguntas.")
-                    st.session_state.ficha_validada = False
-                else:
-                    st.session_state.ficha_respostas = respostas
-                    restricoes = []
-                    if respostas["conjuntivite"] == "Sim": restricoes.append("Conjuntivite recente")
-                    if respostas["infeccao"] == "Sim": restricoes.append("Infecção ocular ativa")
-                    if respostas["cirurgia"] == "Sim": restricoes.append("Cirurgia ocular recente")
-                    if respostas["reacao"] == "Sim": restricoes.append("Reação anterior")
-                    if respostas["glaucoma"] == "Sim": restricoes.append("Glaucoma")
-
-                    if respostas["gravida"] == "Sim":
-                        st.warning("⚠️ Gestante ou lactante — recomenda-se autorização médica.")
-                    if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
-                        st.warning("⚠️ Liberação médica obrigatória.")
-
-                    if restricoes:
-                        st.warning("⚠️ Cliente com restrições:")
-                        for item in restricoes:
-                            st.markdown(f"- {item}")
+                if enviar_ficha:
+                    if None in respostas.values():
+                        st.error("⚠️ Responda todas as perguntas.")
                         st.session_state.ficha_validada = False
                     else:
-                        st.success("✅ Cliente apta para atendimento!")
-                        st.session_state.ficha_validada = True
+                        restricoes = []
+                        if respostas["conjuntivite"] == "Sim": restricoes.append("Conjuntivite recente")
+                        if respostas["infeccao"] == "Sim": restricoes.append("Infecção ocular ativa")
+                        if respostas["cirurgia"] == "Sim": restricoes.append("Cirurgia ocular recente")
+                        if respostas["reacao"] == "Sim": restricoes.append("Reação anterior")
+                        if respostas["glaucoma"] == "Sim": restricoes.append("Glaucoma")
+
+                        if respostas["gravida"] == "Sim":
+                            st.warning("⚠️ Gestante ou lactante — recomenda-se autorização médica.")
+                        if respostas["glaucoma"] == "Sim" or respostas["cirurgia"] == "Sim":
+                            st.warning("⚠️ Liberação médica obrigatória.")
+
+                        if restricoes:
+                            st.warning("⚠️ Cliente com restrições:")
+                            for item in restricoes:
+                                st.markdown(f"- {item}")
+                            st.session_state.ficha_validada = False
+                        else:
+                            st.success("✅ Cliente apta para atendimento!")
+                            st.session_state.ficha_validada = True
