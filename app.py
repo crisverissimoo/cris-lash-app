@@ -137,17 +137,7 @@ with st.expander("✨ Estilos Visuais + Indicação"):
     """)
 
 
-                # 📸 Foto da Cliente
-        with st.expander("📸 Foto da Cliente"):
-            tipo_imagem = st.radio("Como deseja adicionar a imagem?", ["Upload", "Câmera"], index=0, key="tipo_imagem")
-            if tipo_imagem == "Upload":
-                imagem_cliente = st.file_uploader("📎 Enviar imagem", type=["jpg", "jpeg", "png"], key="upload_foto")
-            else:
-                imagem_cliente = st.camera_input("📷 Tirar foto agora", key="camera_foto")
-
-            if imagem_cliente:
-                st.image(imagem_cliente, caption="📸 Prévia da imagem enviada", use_column_width=True)
-
+                
         # 📝 Observações
         with st.expander("📝 Observações Personalizadas"):
             observacoes = st.text_area("Comentários sobre o atendimento, preferências, cuidados especiais…", key="obs_cliente")
