@@ -176,3 +176,34 @@ with col2:
             horario_escolhido = st.selectbox("Selecione o horário disponível:", horarios_disponiveis, key="horario_agendamento")
             if horario_escolhido:
                 st.success(f"🗓️ Atendimento agendado para `{horario_escolhido}`.")
+
+        # 🗂️ Histórico do Atendimento
+        with st.expander("🗂️ Histórico da Cliente"):
+            if st.button("📌 Registrar Atendimento", key="registrar_atend"):
+                registro = {
+                    "nome": st.session_state.nome_cliente,
+                    "idade": idade,
+                    "tipo_olho": st.session_state.get("tipo_olho", "Não informado"),
+                    "sugestao_tecnica": st.session_state.get("sugestao_tecnica", "Não gerada"),
+                    "tecnica_escolhida": st.session_state.get("formato_escolhido", "Não selecionada"),
+                    "observacoes": st.session_state.get("obs_cliente", ""),
+                    "horario": st.session_state.get("horario_agendamento", "Não agendado"),
+                    "data": hoje.strftime("%d/%m/%Y")
+                }
+                st.session_state.historico.append(registro)
+                st.success("✅ Atendimento registrado com sucesso!")
+
+            # 📋 Exibir registros salvos
+            if st.session_state.historico:
+                for i, atend in enumerate(st.session_state.historico[::-1]):
+                    st.markdown(f"### 🧍 Atendimento #{len(st.session_state.historico)-i}")
+                    st.write(f"📅 Data: `{atend['data']} — {atend['horario']}`")
+                    st.write(f"👁️ Tipo de olho: **{atend['tipo_olho']}**")
+                    st.write(f"💡 Sugestão de técnica: *{atend['sugestao_tecnica']}*")
+                    st.write(f"🎨 Técnica escolhida: **{atend['tecnica_escolhida']}**")
+                    if atend["observacoes"]:
+                        st.markdown(f"📝 Observações: {atend['observacoes']}")
+                    st.markdown("---")
+            else:
+                st.info("ℹ️ Nenhum atendimento registrado ainda.")
+
