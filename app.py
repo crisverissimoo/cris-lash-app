@@ -44,7 +44,7 @@ with col2:
     # 🧾 Ficha Clínica
     if autorizada:
         with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
-           with st.form("form_clinica"):
+          with st.form("form_clinica"):
     perguntas = {
         "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
         "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
@@ -69,7 +69,7 @@ with col2:
 
     if enviar:
         impeditivos = {
-            "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
+            "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular diagnosticada"),
             "infeccao": txt("Infecção ocular (blefarite, terçol, etc)", "Infección ocular (blefaritis, orzuelos, etc)"),
             "conjuntivite": txt("Conjuntivite recente (últimos 30 dias)", "Conjuntivitis reciente (últimos 30 días)"),
             "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
@@ -97,11 +97,11 @@ with col2:
         for chave, resposta in respostas.items():
             if resposta == "Sim":
                 if chave in impeditivos:
-                    bloqueios_detectados.append(f"❌ {impeditivos[chave]}")
+                    bloqueios_detectados.append(f"{impeditivos[chave]}")
                 elif chave in alerta:
-                    alertas_detectados.append(f"⚠️ {alerta[chave]}")
+                    alertas_detectados.append(f"{alerta[chave]}")
                 elif chave in informativos:
-                    info_detectados.append(f"📌 {informativos[chave]}")
+                    info_detectados.append(f"{informativos[chave]}")
 
         if bloqueios_detectados:
             st.error("❌ " + txt("Cliente **não está apta para atendimento**.", "Cliente no apta para atención") + "\n\n" +
@@ -116,7 +116,3 @@ with col2:
                         "\n".join([f"- {motivo}" for motivo in info_detectados]))
             st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
             st.session_state.ficha_validada = True
-
-
-
-
