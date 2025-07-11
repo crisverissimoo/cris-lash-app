@@ -68,8 +68,9 @@ with col2:
     enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
     if enviar:
+        # Classificação dos motivos
         impeditivos = {
-            "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular diagnosticada"),
+            "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
             "infeccao": txt("Infecção ocular (blefarite, terçol, etc)", "Infección ocular (blefaritis, orzuelos, etc)"),
             "conjuntivite": txt("Conjuntivite recente (últimos 30 dias)", "Conjuntivitis reciente (últimos 30 días)"),
             "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
@@ -116,3 +117,4 @@ with col2:
                         "\n".join([f"- {motivo}" for motivo in info_detectados]))
             st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
             st.session_state.ficha_validada = True
+
