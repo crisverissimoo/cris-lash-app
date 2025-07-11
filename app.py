@@ -69,7 +69,6 @@ with col2:
 
 
 if enviar:
-    # ❌ Motivos impeditivos
     impeditivos = {
         "glaucoma": "Glaucoma ou condição ocular diagnosticada",
         "infeccao": "Infecção ocular (blefarite, terçol, etc)",
@@ -78,7 +77,6 @@ if enviar:
         "reacao": "Reação alérgica em procedimentos anteriores"
     }
 
-    # ⚠️ Motivos de alerta
     alerta = {
         "alergia": "Histórico de alergias nos olhos ou pálpebras",
         "irritacao": "Olhos irritados ou lacrimejando frequentemente",
@@ -87,7 +85,6 @@ if enviar:
         "sensibilidade": "Sensibilidade a produtos químicos ou cosméticos"
     }
 
-    # ✅ Informativos
     informativos = {
         "colirio": "Uso de colírios frequente",
         "lentes": "Usa lentes de contato",
@@ -108,21 +105,21 @@ if enviar:
                 info_detectados.append(f"📌 {informativos[chave]}")
 
     if bloqueios_detectados:
-    st.error("❌ Cliente **não está apta para atendimento**.\n\n" +
-             "\n".join([f"- {motivo}" for motivo in bloqueios_detectados]))
-    st.session_state.ficha_validada = False
+        st.error("❌ Cliente **não está apta para atendimento**.\n\n" +
+                 "\n".join([f"- {motivo}" for motivo in bloqueios_detectados]))
+        st.session_state.ficha_validada = False
+    else:
+        if alertas_detectados:
+            st.warning("⚠️ **Atenção!** Condições que requerem avaliação profissional:\n\n" +
+                       "\n".join([f"- {motivo}" for motivo in alertas_detectados]))
 
-else:
-    if alertas_detectados:
-        st.warning("⚠️ **Atenção!** Condições que requerem avaliação profissional:\n\n" +
-                   "\n".join([f"- {motivo}" for motivo in alertas_detectados]))
+        if info_detectados:
+            st.info("📎 Informações adicionais para registro:\n\n" +
+                    "\n".join([f"- {motivo}" for motivo in info_detectados]))
 
-    if info_detectados:
-        st.info("📎 Informações adicionais para registro:\n\n" +
-                "\n".join([f"- {motivo}" for motivo in info_detectados]))
+        st.success("✅ Cliente **apta para continuar** — ficha clínica validada com sucesso.")
+        st.session_state.ficha_validada = True
 
-    st.success("✅ Cliente **apta para continuar** — ficha clínica validada com sucesso.")
-    st.session_state.ficha_validada = True
 
 
 
