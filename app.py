@@ -102,7 +102,8 @@ with col2:
                             st.success("✅ Cliente apta para atendimento!")
                             st.session_state.ficha_validada = True
 
-        with st.expander("✨ Estilos Visuais + Indicação"):
+       # 👁️ Tipo de Olho + Sugestão de Técnica
+with st.expander("✨ Estilos Visuais + Indicação"):
     st.markdown("""
     ## 🌿 Clássico  
     🖼️ [Imagem do estilo Clássico]  
@@ -134,6 +135,7 @@ with col2:
     📌 Indicado para olhos caídos, encapotados ou amendoados  
     ✨ Efeito elevado e elegante que levanta o olhar sem exagero
     """)
+
 
                 # 📸 Foto da Cliente
         with st.expander("📸 Foto da Cliente"):
