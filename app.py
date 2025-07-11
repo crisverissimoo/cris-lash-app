@@ -120,13 +120,14 @@ with col2:
                     st.success(f"Técnica selecionada: **{nome}** — {descricao}")
 
 
-        # 📸 Foto da Cliente
+                # 📸 Foto da Cliente
         with st.expander("📸 Foto da Cliente"):
             tipo_imagem = st.radio("Como deseja adicionar a imagem?", ["Upload", "Câmera"], index=0, key="tipo_imagem")
             if tipo_imagem == "Upload":
                 imagem_cliente = st.file_uploader("📎 Enviar imagem", type=["jpg", "jpeg", "png"], key="upload_foto")
             else:
                 imagem_cliente = st.camera_input("📷 Tirar foto agora", key="camera_foto")
+
             if imagem_cliente:
                 st.image(imagem_cliente, caption="📸 Prévia da imagem enviada", use_column_width=True)
 
@@ -140,4 +141,3 @@ with col2:
             horario_escolhido = st.selectbox("Selecione o horário disponível:", horarios_disponiveis, key="horario_agendamento")
             if horario_escolhido:
                 st.success(f"🗓️ Atendimento agendado para `{horario_escolhido}`.")
-
