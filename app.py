@@ -124,9 +124,10 @@ if autorizada:
                         st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
                         st.session_state.ficha_validada = True
                         
+# 🔒 BLOQUEIO — Cliente apta?
 if "cliente_apta" in st.session_state and st.session_state.cliente_apta == False:
     st.error("❌ Cliente não está apta para atendimento. Reação alérgica ou condição contraindicada.")
-    st.stop() 
+    st.stop()
                         
 # 🎯 Bloco 1 — Escolha do Efeito (liberado após ficha validada)
 if st.session_state.ficha_validada:
@@ -224,10 +225,12 @@ if "efeito_escolhido" in st.session_state:
                     tipo = tipos[nome]
                     with col:
                         st.markdown(
-                            f"<div style='text-align:center;'>"
-                            f"<img src='{tipo['img']}' alt='Imagem {nome}' style='height:140px; width:100%; object-fit:cover; border-radius:6px;'>"
-                            f"<p style='font-size:13px; margin-top:6px;'>{tipo['desc']}</p>"
-                            f"</div>",
+                            f"""
+                            <div style='text-align:center;'>
+                                <img src='{tipo['img']}' alt='Imagem {nome}' style='height:140px; width:100%; object-fit:cover; border-radius:6px;'>
+                                <p style='font-size:12px; margin:4px 0 4px;'>{tipo['desc']}</p>
+                            </div>
+                            """,
                             unsafe_allow_html=True
                         )
                         if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
