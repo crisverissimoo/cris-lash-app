@@ -183,7 +183,7 @@ if st.session_state.ficha_validada:
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 
 # Só exibe o bloco se efeito_escolhido estiver definido
-if "efeito_escolhido" in st.session_state:
+if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido is not None:
 
     with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
@@ -220,14 +220,16 @@ if "efeito_escolhido" in st.session_state:
                     tipo = tipos[nome]
                     with col:
                         st.markdown(
-                            f"<div style='text-align:center;'>"
-                            f"<img src='{tipo['img']}' alt='{nome}' style='height:120px; width:auto; border-radius:6px;'>"
-                            f"</div>",
-                            unsafe_allow_html=True
+                            f"""
+                            <div style='text-align:center;'>
+                                <img src='{tipo['img']}' alt='{nome}' style='height:120px; object-fit:cover; border-radius:6px; margin-bottom:6px;'>
+                            </div>
+                            """, unsafe_allow_html=True
                         )
                         st.caption(tipo["desc"])
-                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                            st.session_state.tipo_aplicacao = nome
+                        with col:
+                            if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                                st.session_state.tipo_aplicacao = nome
 
         if "tipo_aplicacao" in st.session_state:
             selecionado = st.session_state.tipo_aplicacao
