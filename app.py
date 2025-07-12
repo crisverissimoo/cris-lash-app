@@ -182,38 +182,38 @@ if "efeito_escolhido" in st.session_state:
 
             tipos = {
                 "Fio a Fio": {
-                    "img": "https://i.imgur.com/0DRvMCw.png",
+                    "img": "https://i.imgur.com/8Xz3vJv.jpg",
                     "desc": txt(
-                        "É aplicado 1 fio sintético sobre cada fio natural. Indicado para quem busca naturalidade com acabamento tipo rímel.",
+                        "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
                         "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
                     )
                 },
                 "Volume Brasileiro": {
-                    "img": "https://i.imgur.com/Ddu8ZWE.png",
+                    "img": "https://i.imgur.com/3Yz9bqK.jpg",
                     "desc": txt(
-                        "São aplicados fios em formato Y. O volume varia conforme a quantidade de fios naturais — traz volume e leveza.",
-                        "Se aplican fibras en forma de Y. El volumen varía según la cantidad de pestañas naturales — aporta volumen y ligereza."
+                        "Fios em formato Y. O volume depende da quantidade de fios naturais — traz volume e leveza com naturalidade.",
+                        "Fibras en forma de Y. El volumen varía según la cantidad de pestañas naturales — aporta volumen y naturalidad."
                     )
                 },
                 "Híbrido": {
-                    "img": "https://i.imgur.com/GP2z4vY.png",
+                    "img": "https://i.imgur.com/2ZQvZzG.jpg",
                     "desc": txt(
-                        "Mistura entre Fio a Fio e Volume Brasileiro — proporciona densidade com naturalidade e toque suave.",
-                        "Combinación entre Fio a Fio y Volumen Brasileño — aporta densidad con naturalidad y suavidad."
+                        "Combina Fio a Fio com Volume — equilíbrio entre leveza e densidade para um olhar marcante e suave.",
+                        "Combina Fio a Fio con Volumen — equilibrio entre ligereza y densidad para una mirada llamativa y suave."
                     )
                 },
                 "Egípcio": {
-                    "img": "https://i.imgur.com/meL9v9z.png",
+                    "img": "https://i.imgur.com/4XgYgqP.jpg",
                     "desc": txt(
-                        "Design gráfico e angulado — fios aplicados com geometria precisa para resultado artístico e marcante.",
-                        "Diseño gráfico y angulado — fibras colocadas con geometría precisa para un resultado artístico y llamativo."
+                        "Fios em formato W aplicados com geometria precisa — resultado artístico, gráfico e sofisticado.",
+                        "Fibras en forma de W aplicadas con geometría precisa — resultado artístico, gráfico y sofisticado."
                     )
                 },
                 "Volume Russo": {
-                    "img": "https://i.imgur.com/MrNj0YQ.png",
+                    "img": "https://i.imgur.com/5YwWwqR.jpg",
                     "desc": txt(
-                        "Feixes densos de 4 a 6 fios por natural — proporciona olhar glamouroso, intenso e sofisticado.",
-                        "Racimos densos de 4 a 6 fibras por pestaña — proporciona una mirada glamorosa, intensa y sofisticada."
+                        "Feixes densos de 4 a 6 fios por natural — proporciona olhar glamouroso, intenso e estruturado.",
+                        "Racimos densos de 4 a 6 fibras por pestaña — proporciona una mirada glamorosa, intensa y estructurada."
                     )
                 }
             }
@@ -242,3 +242,4 @@ if "efeito_escolhido" in st.session_state:
                     f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
                     f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
                 ))
+
