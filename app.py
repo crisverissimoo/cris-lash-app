@@ -228,7 +228,7 @@ if "efeito_escolhido" in st.session_state:
                             f"""
                             <div style='text-align:center;'>
                                 <img src='{tipo['img']}' alt='Imagem {nome}' style='height:140px; width:100%; object-fit:cover; border-radius:6px;'>
-                                <p style='font-size:12px; margin:4px 0 4px;'>{tipo['desc']}</p>
+                                <p style='font-size:12px; margin:6px 0;'>{tipo['desc']}</p>
                             </div>
                             """,
                             unsafe_allow_html=True
