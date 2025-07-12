@@ -70,41 +70,13 @@ if autorizada:
                     with col_b:
                         respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-                enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
+                col_botao_esq, col_botao_centro, col_botao_dir = st.columns([1, 2, 1])
+                with col_botao_centro:
+                    enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
                 if enviar:
                     impeditivos = {
                         "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
-                        "infeccao": txt("Infecção ocular (blefarite, terçol, etc)", "Infección ocular (blefaritis, orzuelos, etc)"),
-                        "conjuntivite": txt("Conjuntivite recente (últimos 30 dias)", "Conjuntivitis reciente (últimos 30 días)"),
-                        "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
-                        "reacao": txt("Reação alérgica em procedimentos anteriores", "Reacción alérgica en procedimientos anteriores")
-                    }
-
-                    alerta = {
-                        "alergia": txt("Histórico de alergias nos olhos ou pálpebras", "Historial de alergias en ojos o párpados"),
-                        "irritacao": txt("Olhos irritados ou lacrimejando frequentemente", "Ojos irritados o llorosos frecuentemente"),
-                        "gravida": txt("Gestante ou lactante — recomenda-se autorização médica", "Embarazada o lactante — se recomienda autorización médica"),
-                        "acido": txt("Tratamento dermatológico com ácido", "Tratamiento dermatológico con ácido"),
-                        "sensibilidade": txt("Sensibilidade a produtos químicos ou cosméticos", "Sensibilidad a productos químicos o cosméticos")
-                    }
-
-                    informativos = {
-                        "colirio": txt("Uso de colírios frequente", "Uso frecuente de colirios"),
-                        "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
-                        "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
-                    }
-
-                    bloqueios_detectados = []
-                    alertas_detectados = []
-                    info_detectados = []
-
-                    for chave, resposta in respostas.items():
-                        if resposta == "Sim":
-                            if chave in impeditivos:
-                                bloqueios_detectados.append(f"- {impeditivos[chave]}")
-                            elif chave in alerta:
-                                alertas_detectados
 
 
                         
