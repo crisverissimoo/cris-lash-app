@@ -126,11 +126,10 @@ if autorizada:
 
                         
 if st.session_state.ficha_validada:
-    
     with st.expander(txt("✨ Escolha do Efeito Lash", "✨ Elección del Efecto Lash")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
-            st.markdown("<h4 style='text-align:center;'>Escolha o Efeito</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito</h4>", unsafe_allow_html=True)
 
             efeitos = {
                 "Clássica": "https://i.imgur.com/Nqrwdcm.png",
@@ -139,17 +138,27 @@ if st.session_state.ficha_validada:
                 "Esquilo": "https://i.imgur.com/BY5eEsr.png"
             }
 
-            for nome, link in efeitos.items():
-                with st.container():
-                    st.image(link, caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_column_width=True)
+            col1, col2 = st.columns(2)
+            with col1:
+                for nome in list(efeitos.keys())[:2]:
+                    with st.container():
+                        st.image(efeitos[nome], caption=txt(f"Efeito {nome}", f"Efecto {nome}"), use_container_width=True)
+                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
+                            st.session_state.efeito_escolhido = nome
+                        st.markdown("</div>", unsafe_allow_html=True)
 
-                    # Botão centralizado abaixo de cada imagem
-                    st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
-                        st.session_state.efeito_escolhido = nome
-                    st.markdown("</div>", unsafe_allow_html=True)
+            with col2:
+                for nome in list(efeitos.keys())[2:]:
+                    with st.container():
+                        st.image(efeitos[nome], caption=txt(f"Efeito {nome}", f"Efecto {nome}"), use_container_width=True)
+                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
+                            st.session_state.efeito_escolhido = nome
+                        st.markdown("</div>", unsafe_allow_html=True)
 
-
-
-
-
+            if "efeito_escolhido" in st.session_state:
+                st.success(txt(
+                    f"✅ Efeito selecionado: {st.session_state.efeito_escolhido}",
+                    f"✅ Efecto seleccionado: {st.session_state.efeito_escolhido}"
+                ))
