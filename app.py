@@ -13,6 +13,9 @@ if "formato_escolhido" not in st.session_state:
     st.session_state.formato_escolhido = None
 if "ficha_validada" not in st.session_state:
     st.session_state.ficha_validada = False
+if "cliente_apta" in st.session_state and st.session_state.cliente_apta == False:
+    st.error("❌ Cliente não está apta para atendimento. Reação alérgica ou condição contraindicada.")
+    st.stop()
 
 # 🌐 Idioma
 col1, col2, col3 = st.columns([1, 2, 1])
