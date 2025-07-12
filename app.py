@@ -131,10 +131,10 @@ with st.expander(txt("✨ Escolha do Efeito", "✨ Elección del Efecto")):
             index=None
         )
 
-        st.image("https://br.pinterest.com/pin/6544361953373525/", caption=txt("Técnica Clássica", "Técnica Clásica"))
-        st.image("imagem_boneca.jpg", caption=txt("Efeito Boneca", "Efecto Muñeca"))
-        st.image("imagem_gatinho.jpg", caption=txt("Efeito Gatinho", "Efecto Gato"))
-        st.image("imagem_esquilo.jpg", caption=txt("Efeito Esquilo", "Efecto Ardilla"))
+        st.image("[img]https://i.imgur.com/Nqrwdcm.png[/img]", caption=txt("Técnica Clássica", "Técnica Clásica"))
+        st.image("[img]https://i.imgur.com/vJUuvsl.png[/img]", caption=txt("Efeito Boneca", "Efecto Muñeca"))
+        st.image("[img]https://i.imgur.com/zpBFK0e.png[/img]", caption=txt("Efeito Gatinho", "Efecto Gato"))
+        st.image("[img]https://i.imgur.com/BY5eEsr.png[/img]", caption=txt("Efeito Esquilo", "Efecto Ardilla"))
 
         if efeito_escolhido:
             st.success(txt(f"✅ Efeito selecionado: {efeito_escolhido}", f"✅ Efecto seleccionado: {efeito_escolhido}"))
