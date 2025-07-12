@@ -133,20 +133,15 @@ if st.session_state.ficha_validada:
                 "Esquilo": "https://i.imgur.com/BY5eEsr.png"
             }
 
-            efeito_escolhido = None
             for nome, link in efeitos.items():
                 with st.container():
                     st.image(link, caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_column_width=True)
 
-                    # Botão centralizado
+                    # Botão centralizado abaixo de cada imagem
                     st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
                     if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
-                        efeito_escolhido = nome
                         st.session_state.efeito_escolhido = nome
                     st.markdown("</div>", unsafe_allow_html=True)
-
-            if efeito_escolhido:
-                st.success(txt(f"Efeito selecionado: {efeito_escolhido}", f"Efecto seleccionado: {efeito_escolhido}"))
 
 
 
