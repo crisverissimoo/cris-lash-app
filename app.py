@@ -88,6 +88,40 @@ if autorizada:
                         "acido": txt("Tratamento dermatológico com ácido", "Tratamiento dermatológico con ácido"),
                         "sensibilidade": txt("Sensibilidade a produtos químicos ou cosméticos", "Sensibilidad a productos químicos o cosméticos")
                     }
+
+                    informativos = {
+                        "colirio": txt("Uso de colírios frequente", "Uso frecuente de colirios"),
+                        "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
+                        "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
+                    }
+
+                    bloqueios_detectados = []
+                    alertas_detectados = []
+                    info_detectados = []
+
+                    for chave, resposta in respostas.items():
+                        if resposta == "Sim":
+                            if chave in impeditivos:
+                                bloqueios_detectados.append(f"- {impeditivos[chave]}")
+                            elif chave in alerta:
+                                alertas_detectados.append(f"- {alerta[chave]}")
+                            elif chave in informativos:
+                                info_detectados.append(f"- {informativos[chave]}")
+
+                    if bloqueios_detectados:
+                        st.error("❌ " + txt("Cliente **não está apta para atendimento**.", "Cliente no apta para atención") + "\n\n" +
+                                 "\n".join(bloqueios_detectados))
+                        st.session_state.ficha_validada = False
+                    else:
+                        if alertas_detectados:
+                            st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:", "Condiciones que requieren evaluación profesional:") + "\n\n" +
+                                       "\n".join(alertas_detectados))
+                        if info_detectados:
+                            st.info("📎 " + txt("Informações adicionais para registro:", "Información adicional para el registro:") + "\n\n" +
+                                    "\n".join(info_detectados))
+                        st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
+                        st.session_state.ficha_validada = True
+
                         
 if st.session_state.ficha_validada:
     
