@@ -172,3 +172,32 @@ if st.session_state.ficha_validada:
                     f"✅ Efecto seleccionado: {selecionado}\n{efeitos[selecionado]['desc']}"
                 ))
 
+if st.session_state.ficha_validada:
+    with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
+        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+        with col_centro:
+            st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
+
+            tipos = {
+                "Fio a Fio": txt("Aplicação individual — visual natural e delicado", "Aplicación individual — aspecto natural y delicado"),
+                "Volume Brasileiro": txt("Feixes leves de 2–3 fios — destaque suave com leve volume", "Racimos ligeros de 2–3 fibras — volumen suave y elegante"),
+                "Híbrido": txt("Combinação de fio a fio e volume — efeito balanceado", "Combinación de individual y volumen — efecto equilibrado"),
+                "Volume Russo": txt("Feixes de 4+ fios — olhar marcante e volumoso", "Racimos de 4+ fibras — mirada intensa y volumétrica"),
+                "Mega Volume": txt("Máximo impacto — mega volume para eventos ou estilo glam", "Máximo impacto — mega volumen para eventos o estilo glamuroso")
+            }
+
+            tipo_escolhido = None
+            for nome, descricao in tipos.items():
+                st.markdown(f"**{nome}** — {descricao}")
+                st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                    tipo_escolhido = nome
+                    st.session_state.tipo_aplicacao = nome
+                st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown("---")
+
+            if tipo_escolhido:
+                st.success(txt(
+                    f"✅ Tipo selecionado: {tipo_escolhido} — {tipos[tipo_escolhido]}",
+                    f"✅ Tipo seleccionado: {tipo_escolhido} — {tipos[tipo_escolhido]}"
+                ))
