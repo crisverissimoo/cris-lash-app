@@ -124,7 +124,7 @@ if st.session_state.ficha_validada:
     with st.expander(txt("✨ Escolha do Efeito Lash", "✨ Elección del Efecto Lash")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
-            st.markdown(f"<h4 style='text-align:center;'>{txt('Selecione o estilo desejado','Seleccione el estilo deseado')}</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='text-align:center;'>Escolha o Efeito</h4>", unsafe_allow_html=True)
 
             efeitos = {
                 "Clássica": "https://i.imgur.com/Nqrwdcm.png",
@@ -136,14 +136,18 @@ if st.session_state.ficha_validada:
             efeito_escolhido = None
             for nome, link in efeitos.items():
                 with st.container():
-                    st.image(link, caption=txt(f"Efeito {nome}", f"Efecto {nome}"), use_container_width=True)
-                    escolher = st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}")
-                    if escolher:
+                    st.image(link, caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_column_width=True)
+
+                    # Botão centralizado
+                    st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
                         efeito_escolhido = nome
                         st.session_state.efeito_escolhido = nome
+                    st.markdown("</div>", unsafe_allow_html=True)
 
             if efeito_escolhido:
                 st.success(txt(f"Efeito selecionado: {efeito_escolhido}", f"Efecto seleccionado: {efeito_escolhido}"))
+
 
 
 
