@@ -176,41 +176,41 @@ if st.session_state.ficha_validada:
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 if "efeito_escolhido" in st.session_state:
     with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
-        col_esq, col_centro, col_dir = st.columns([1,2,1])
+        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
             st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
             tipos = {
                 "Fio a Fio": {
-                    "img": "https://staleksbrasil.com.br/cilios/extensao-de-cilios-fio-a-fio-entenda-essa-tecnica/",
+                    "img": "https://i.imgur.com/8Xz3vJv.jpg",
                     "desc": txt(
                         "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
                         "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
                     )
                 },
                 "Volume Brasileiro": {
-                    "img": "https://gmcilios.com.br/produto/extensao-de-cilios/volume-brasileiro/",
+                    "img": "https://i.imgur.com/3Yz9bqK.jpg",
                     "desc": txt(
                         "Fios em formato Y. O volume depende da quantidade de fios naturais — traz volume e leveza com naturalidade.",
                         "Fibras en forma de Y. El volumen varía según la cantidad de pestañas naturales — aporta volumen y naturalidad."
                     )
                 },
                 "Híbrido": {
-                    "img": "https://amocilios.com.br/extensao-de-cilios-volume-hibrido/",
+                    "img": "https://i.imgur.com/2ZQvZzG.jpg",
                     "desc": txt(
                         "Combina Fio a Fio com Volume — equilíbrio entre leveza e densidade para um olhar marcante e suave.",
                         "Combina Fio a Fio con Volumen — equilibrio entre ligereza y densidad para una mirada llamativa y suave."
                     )
                 },
                 "Egípcio": {
-                    "img": "https://gmcilios.com.br/produto/extensao-de-cilios/volume-egipcio/",
+                    "img": "https://i.imgur.com/4XgYgqP.jpg",
                     "desc": txt(
                         "Fios em formato W aplicados com geometria precisa — resultado artístico, gráfico e sofisticado.",
                         "Fibras en forma de W aplicadas con geometría precisa — resultado artístico, gráfico y sofisticado."
                     )
                 },
                 "Volume Russo": {
-                    "img": "https://amocilios.com.br/extensao-de-cilios-volume-russo/",
+                    "img": "https://i.imgur.com/5YwWwqR.jpg",
                     "desc": txt(
                         "Feixes densos de 4 a 6 fios por natural — proporciona olhar glamouroso, intenso e estruturado.",
                         "Racimos densos de 4 a 6 fibras por pestaña — proporciona una mirada glamorosa, intensa y estructurada."
@@ -227,7 +227,7 @@ if "efeito_escolhido" in st.session_state:
                     for nome in nomes:
                         tipo = tipos[nome]
                         st.markdown(
-                            f"<iframe src='{tipo['img']}' style='height:260px; width:100%; border:none;'></iframe>",
+                            f"<img src='{tipo['img']}' alt='Imagem {nome}' style='height:260px; width:100%; object-fit:cover; border-radius:8px;'>",
                             unsafe_allow_html=True
                         )
                         st.markdown("<div style='text-align:center; margin-top:6px;'>", unsafe_allow_html=True)
