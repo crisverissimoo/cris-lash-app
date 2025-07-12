@@ -242,4 +242,3 @@ if "efeito_escolhido" in st.session_state:
                     f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
                     f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
                 ))
-
