@@ -176,30 +176,51 @@ if st.session_state.ficha_validada:
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 if "efeito_escolhido" in st.session_state:
     with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
-        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+        col_esq, col_centro, col_dir = st.columns([1,2,1])
         with col_centro:
             st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
             tipos = {
-                "Fio a Fio": txt("Aplicação individual — visual natural e delicado", "Aplicación individual — aspecto natural y delicado"),
-                "Volume Brasileiro": txt("Feixes leves de 2–3 fios — destaque suave com leve volume", "Racimos ligeros de 2–3 fibras — volumen suave y elegante"),
-                "Híbrido": txt("Combinação de fio a fio e volume — efeito balanceado", "Combinación de individual y volumen — efecto equilibrado"),
-                "Volume Russo": txt("Feixes de 4+ fios — olhar marcante e volumoso", "Racimos de 4+ fibras — mirada intensa y volumétrica"),
-                "Mega Volume": txt("Máximo impacto — mega volume para eventos ou estilo glam", "Máximo impacto — mega volumen para eventos o estilo glamuroso")
+                "Fio a Fio": {
+                    "img": "https://i.imgur.com/0DRvMCw.png",
+                    "desc": txt("Aplicação clássica com fios individuais — visual natural e delicado", "Aplicación clásica con fibras individuales — aspecto natural y delicado")
+                },
+                "Volume Brasileiro": {
+                    "img": "https://i.imgur.com/Ddu8ZWE.png",
+                    "desc": txt("Feixes leves de 2 a 3 fios — destaque suave com volume discreto", "Racimos ligeros de 2 a 3 fibras — volumen suave y elegante")
+                },
+                "Híbrido": {
+                    "img": "https://i.imgur.com/GP2z4vY.png",
+                    "desc": txt("Combinação de técnicas — equilíbrio entre naturalidade e volume", "Combinación de técnicas — equilibrio entre naturalidad y volumen")
+                },
+                "Egípcio": {
+                    "img": "https://i.imgur.com/meL9v9z.png",
+                    "desc": txt("Design angular e gráfico — cílios com personalidade marcante", "Diseño angular y gráfico — pestañas con personalidad marcada")
+                },
+                "Volume Russo": {
+                    "img": "https://i.imgur.com/MrNj0YQ.png",
+                    "desc": txt("Feixes densos de 4+ fios — olhar glamuroso e intenso", "Racimos densos de 4+ fibras — mirada glamorosa e intensa")
+                }
             }
 
-            for nome, descricao in tipos.items():
-                st.markdown(f"**{nome}** — {descricao}")
-                st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                    st.session_state.tipo_aplicacao = nome
-                st.markdown("</div>", unsafe_allow_html=True)
-                st.markdown("---")
+            col1, col2 = st.columns(2)
+            lado_esq = list(tipos.keys())[:3]
+            lado_dir = list(tipos.keys())[3:]
+
+            for col, nomes in zip([col1, col2], [lado_esq, lado_dir]):
+                with col:
+                    for nome in nomes:
+                        tipo = tipos[nome]
+                        st.image(tipo["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
+                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                        label = txt(f"Selecionar {nome}: {tipo['desc']}", f"Seleccionar {nome}: {tipo['desc']}")
+                        if st.button(label, key=f"tipo_{nome}"):
+                            st.session_state.tipo_aplicacao = nome
+                        st.markdown("</div>", unsafe_allow_html=True)
 
             if "tipo_aplicacao" in st.session_state:
                 selecionado = st.session_state.tipo_aplicacao
                 st.success(txt(
-                    f"✅ Tipo selecionado: {selecionado} — {tipos[selecionado]}",
-                    f"✅ Tipo seleccionado: {selecionado} — {tipos[selecionado]}"
+                    f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
+                    f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
                 ))
-
