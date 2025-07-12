@@ -182,64 +182,13 @@ if "efeito_escolhido" in st.session_state:
 
             tipos = {
                 "Fio a Fio": {
-                    "img": "https://i.imgur.com/8Xz3vJv.jpg",
+                    "img": "https://i.imgur.com/VzlySv4.jpeg",
                     "desc": txt(
                         "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
                         "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
                     )
                 },
                 "Volume Brasileiro": {
-                    "img": "https://i.imgur.com/3Yz9bqK.jpg",
+                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
                     "desc": txt(
-                        "Fios em formato Y. O volume depende da quantidade de fios naturais — traz volume e leveza com naturalidade.",
-                        "Fibras en forma de Y. El volumen varía según la cantidad de pestañas naturales — aporta volumen y naturalidad."
-                    )
-                },
-                "Híbrido": {
-                    "img": "https://i.imgur.com/2ZQvZzG.jpg",
-                    "desc": txt(
-                        "Combina Fio a Fio com Volume — equilíbrio entre leveza e densidade para um olhar marcante e suave.",
-                        "Combina Fio a Fio con Volumen — equilibrio entre ligereza y densidad para una mirada llamativa y suave."
-                    )
-                },
-                "Egípcio": {
-                    "img": "https://i.imgur.com/4XgYgqP.jpg",
-                    "desc": txt(
-                        "Fios em formato W aplicados com geometria precisa — resultado artístico, gráfico e sofisticado.",
-                        "Fibras en forma de W aplicadas con geometría precisa — resultado artístico, gráfico y sofisticado."
-                    )
-                },
-                "Volume Russo": {
-                    "img": "https://i.imgur.com/5YwWwqR.jpg",
-                    "desc": txt(
-                        "Feixes densos de 4 a 6 fios por natural — proporciona olhar glamouroso, intenso e estruturado.",
-                        "Racimos densos de 4 a 6 fibras por pestaña — proporciona una mirada glamorosa, intensa y estructurada."
-                    )
-                }
-            }
-
-            col1, col2 = st.columns(2)
-            lado_esq = list(tipos.keys())[:3]
-            lado_dir = list(tipos.keys())[3:]
-
-            for col, nomes in zip([col1, col2], [lado_esq, lado_dir]):
-                with col:
-                    for nome in nomes:
-                        tipo = tipos[nome]
-                        st.markdown(
-                            f"<img src='{tipo['img']}' alt='Imagem {nome}' style='height:260px; width:100%; object-fit:cover; border-radius:8px;'>",
-                            unsafe_allow_html=True
-                        )
-                        st.markdown("<div style='text-align:center; margin-top:6px;'>", unsafe_allow_html=True)
-                        label = txt(f"Selecionar {nome}: {tipo['desc']}", f"Seleccionar {nome}: {tipo['desc']}")
-                        if st.button(label, key=f"tipo_{nome}"):
-                            st.session_state.tipo_aplicacao = nome
-                        st.markdown("</div>", unsafe_allow_html=True)
-
-            if "tipo_aplicacao" in st.session_state:
-                selecionado = st.session_state.tipo_aplicacao
-                st.success(txt(
-                    f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
-                    f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
-                ))
-
+                        "Fios em formato Y. Traz volume leve e natural, respeitando a quantidade de fios naturais existentes.",
