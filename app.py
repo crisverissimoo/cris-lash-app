@@ -120,24 +120,21 @@ if autorizada:
                         st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
                         st.session_state.ficha_validada = True
                         
-with st.expander(txt("✨ Escolha do Efeito", "✨ Elección del Efecto")):
+with st.expander("Escolha o efeito"):
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
-        st.markdown(f"<h4 style='text-align:center;'>{txt('Selecione o efeito desejado','Seleccione el efecto deseado')}</h4>", unsafe_allow_html=True)
+        st.markdown("### Escolha visual")
 
-        efeito_escolhido = st.radio(txt("🖼️ Escolha o efeito", "🖼️ Elija el efecto"), 
-            options=["Clássica", "Boneca", "Gatinho", "Esquilo"], 
-            format_func=lambda x: txt(x, x),
-            index=None
-        )
+        efeito = st.radio("Qual efeito deseja aplicar?", ["Clássica", "Boneca", "Gatinho", "Esquilo"], index=None)
 
-        st.image("imagem_classica.jpg", caption=txt("Técnica Clássica", "Técnica Clásica"))
-        st.image("imagem_boneca.jpg", caption=txt("Efeito Boneca", "Efecto Muñeca"))
-        st.image("imagem_gatinho.jpg", caption=txt("Efeito Gatinho", "Efecto Gato"))
-        st.image("imagem_esquilo.jpg", caption=txt("Efeito Esquilo", "Efecto Ardilla"))
+        st.image("https://i.imgur.com/Nqrwdcm.png", caption="Clássica", use_column_width=True)
+        st.image("https://i.imgur.com/vJUuvsl.png", caption="Boneca", use_column_width=True)
+        st.image("https://i.imgur.com/zpBFK0e.png", caption="Gatinho", use_column_width=True)
+        st.image("https://i.imgur.com/BY5eEsr.png", caption="Esquilo", use_column_width=True)
 
-        if efeito_escolhido:
-            st.success(txt(f"✅ Efeito selecionado: {efeito_escolhido}", f"✅ Efecto seleccionado: {efeito_escolhido}"))
-            st.session_state.efeito_escolhido = efeito_escolhido
+        if efeito:
+            st.success(f"✅ Efeito selecionado: {efeito}")
+            st.session_state.efeito = efeito
+
 
 
