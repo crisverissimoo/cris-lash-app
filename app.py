@@ -86,38 +86,7 @@ if autorizada:
                         "irritacao": txt("Olhos irritados ou lacrimejando frequentemente", "Ojos irritados o llorosos frecuentemente"),
                         "gravida": txt("Gestante ou lactante — recomenda-se autorização médica", "Embarazada o lactante — se recomienda autorización médica"),
                         "acido": txt("Tratamento dermatológico com ácido", "Tratamiento dermatológico con ácido"),
-                        "sensibilidade": txt("Sensibilidade a produtos químicos ou cosméticos", "Sensibilidad a productos químicos o cosméticos")
-                    }
-
-                    informativos = {
-                        "colirio": txt("Uso de colírios frequente", "Uso frecuente de colirios"),
-                        "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
-                        "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
-                    }
-
-                    bloqueios_detectados = []
-                    alertas_detectados = []
-                    info_detectados = []
-
-                    for chave, resposta in respostas.items():
-                        if resposta == "Sim":
-                            if chave in impeditivos:
-                                bloqueios_detectados.append(f"{impeditivos[chave]}")
-                            elif chave in alerta:
-                                alertas_detectados.append(f"{alerta[chave]}")
-                            elif chave in informativos:
-                                info_detectados.append(f"{informativos[chave]}")
-
-                    if bloqueios_detectados:
-                        st.error("❌ " + txt("Cliente **não está apta para atendimento**.", "Cliente no apta para atención") + "\n\n" +
-                                 "\n".join([f"- {motivo}" for motivo in bloqueios_detectados]))
-                        st.session_state.ficha_validada = False
-                    else:
-                        if alertas_detectados:
-                            st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:", "Condiciones que requieren evaluación profesional:") + "\n\n" +
-                                       "\n".join([f"- {motivo}" for motivo in alertas_detectados]))
-                        if info_detectados:
-                            st.info("📎 " + txt("Informações adicionais para registro:", "Información adicional para el registro:") + "\
+                        "sensibilidade": txt("Sensibilidade a produtos químicos ou cosméticos",
                         
 if st.session_state.ficha_validada:
     
