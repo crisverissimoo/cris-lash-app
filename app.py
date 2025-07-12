@@ -77,6 +77,7 @@ if autorizada:
                 if enviar:
                     impeditivos = {
                         "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
+                }
 
 
                         
