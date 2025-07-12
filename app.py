@@ -125,6 +125,7 @@ if autorizada:
                         st.session_state.ficha_validada = True
 
                         
+# 🎯 Bloco 1 — Escolha do Efeito (liberado após ficha validada)
 if st.session_state.ficha_validada:
     with st.expander(txt("✨ Escolha do Efeito Lash", "✨ Elección del Efecto Lash")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
@@ -172,6 +173,7 @@ if st.session_state.ficha_validada:
                     f"✅ Efecto seleccionado: {selecionado}\n{efeitos[selecionado]['desc']}"
                 ))
 
+# 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 if "efeito_escolhido" in st.session_state:
     with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
@@ -200,3 +202,4 @@ if "efeito_escolhido" in st.session_state:
                     f"✅ Tipo selecionado: {selecionado} — {tipos[selecionado]}",
                     f"✅ Tipo seleccionado: {selecionado} — {tipos[selecionado]}"
                 ))
+
