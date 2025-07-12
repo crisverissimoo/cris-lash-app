@@ -174,7 +174,9 @@ if st.session_state.ficha_validada:
                 ))
 
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
+# Primeiro, só entra aqui se efeito_escolhido tiver sido definido
 if "efeito_escolhido" in st.session_state:
+
     with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
@@ -222,9 +224,18 @@ if "efeito_escolhido" in st.session_state:
                     st.session_state.tipo_aplicacao = nome
                 st.markdown("</div>", unsafe_allow_html=True)
 
+            # Feedback de técnica selecionada
             if "tipo_aplicacao" in st.session_state:
                 selecionado = st.session_state.tipo_aplicacao
                 st.success(txt(
                     f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
                     f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
                 ))
+
+# A partir daqui, liberar os próximos blocos só se a técnica tiver sido selecionada
+if "tipo_aplicacao" in st.session_state:
+    # Aqui entra o bloco de curvatura, mix ou mapping
+    st.write("🎯 Etapa liberada! Agora você pode escolher a curvatura ou seguir para o mix.")
+else:
+    st.warning("🔒 Esta etapa será liberada após a escolha do tipo de aplicação.")
+
