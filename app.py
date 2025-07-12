@@ -123,7 +123,10 @@ if autorizada:
                                     "\n".join(info_detectados))
                         st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
                         st.session_state.ficha_validada = True
-
+                        
+if "cliente_apta" in st.session_state and st.session_state.cliente_apta == False:
+    st.error("❌ Cliente não está apta para atendimento. Reação alérgica ou condição contraindicada.")
+    st.stop() 
                         
 # 🎯 Bloco 1 — Escolha do Efeito (liberado após ficha validada)
 if st.session_state.ficha_validada:
@@ -184,32 +187,32 @@ if "efeito_escolhido" in st.session_state:
             st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
             tipos = {
-                "Fio a Fio": {
-                    "img": "https://images.unsplash.com/photo-1604335399104-98063e405a36?auto=format&fit=crop&w=800&q=80",
+                "Egípcio 3D": {
+                    "img": "https://i.imgur.com/TOPRWFQ.jpeg",
                     "desc": txt(
-                        "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
-                        "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
-                    )
-                },
-                "Volume Brasileiro": {
-                    "img": "https://images.unsplash.com/photo-1603252102227-d9975869ce53?auto=format&fit=crop&w=800&q=80",
-                    "desc": txt(
-                        "Fios em formato Y. Traz volume leve e natural, respeitando a quantidade de fios naturais existentes.",
-                        "Fibras en forma de Y. Aporta volumen ligero y natural, respetando la cantidad de pestañas naturales."
+                        "Fios em leque 3D com geometria precisa — efeito artístico, definido e sofisticado.",
+                        "Fibras en abanico 3D con geometría precisa — efecto artístico, definido y sofisticado."
                     )
                 },
                 "Volume Russo 4D": {
-                    "img": "https://images.unsplash.com/photo-1605061288348-74e2513b1406?auto=format&fit=crop&w=800&q=80",
+                    "img": "https://i.imgur.com/tBX2O8e.jpeg",
                     "desc": txt(
                         "Aplicação de 4 fios sintéticos por fio natural — resultado intenso, estruturado e glamouroso.",
                         "Aplicación de 4 fibras sintéticas por pestaña natural — resultado intenso, estructurado y glamoroso."
                     )
                 },
-                "Egípcio 3D": {
-                    "img": "https://images.unsplash.com/photo-1621766402680-857a5ef65d42?auto=format&fit=crop&w=800&q=80",
+                "Volume Brasileiro": {
+                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
                     "desc": txt(
-                        "Fios em leque 3D com geometria precisa — efeito artístico, definido e sofisticado.",
-                        "Fibras en abanico 3D con geometría precisa — efecto artístico, definido y sofisticado."
+                        "Fios em formato Y. Traz volume leve e natural, respeitando a quantidade de fios naturais existentes.",
+                        "Fibras en forma de Y. Aporta volumen ligero y natural, respetando la cantidad de pestañas naturales."
+                    )
+                },
+                "Fio a Fio": {
+                    "img": "https://i.imgur.com/VzlySv4.jpeg",
+                    "desc": txt(
+                        "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
+                        "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
                     )
                 }
             }
@@ -232,6 +235,11 @@ if "efeito_escolhido" in st.session_state:
                     f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
                 ))
 
+# 🚧 Travamento das etapas seguintes
+if "tipo_aplicacao" in st.session_state:
+    st.write("🎯 Etapa liberada! Agora você pode escolher a curvatura ou seguir para o mix.")
+else:
+    st.warning("🔒 Esta etapa será liberada após a escolha do tipo de aplicação.")
 # Travamento para os blocos seguintes
 if "tipo_aplicacao" in st.session_state:
     st.write("🎯 Etapa liberada! Agora você pode escolher a curvatura ou seguir para o mix.")
