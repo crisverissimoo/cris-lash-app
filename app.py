@@ -132,33 +132,43 @@ if st.session_state.ficha_validada:
             st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito</h4>", unsafe_allow_html=True)
 
             efeitos = {
-                "Clássica": "https://i.imgur.com/Nqrwdcm.png",
-                "Boneca": "https://i.imgur.com/vJUuvsl.png",
-                "Gatinho": "https://i.imgur.com/zpBFK0e.png",
-                "Esquilo": "https://i.imgur.com/BY5eEsr.png"
+                "Clássica": {
+                    "img": "https://i.imgur.com/Nqrwdcm.png",
+                    "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado")
+                },
+                "Boneca": {
+                    "img": "https://i.imgur.com/vJUuvsl.png",
+                    "desc": txt("Maior concentração no centro — abre e arredonda o olhar", "Mayor concentración en el centro — abre y redondea la mirada")
+                },
+                "Gatinho": {
+                    "img": "https://i.imgur.com/zpBFK0e.png",
+                    "desc": txt("Fios longos no canto externo — efeito sensual e alongado", "Fibras largas en la esquina externa — efecto sensual y alargado")
+                },
+                "Esquilo": {
+                    "img": "https://i.imgur.com/BY5eEsr.png",
+                    "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante", "Volumen acentuado entre el centro y la esquina externa — estilo llamativo")
+                }
             }
 
             col1, col2 = st.columns(2)
-            with col1:
-                for nome in list(efeitos.keys())[:2]:
-                    with st.container():
-                        st.image(efeitos[nome], caption=txt(f"Efeito {nome}", f"Efecto {nome}"), use_container_width=True)
-                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
-                            st.session_state.efeito_escolhido = nome
-                        st.markdown("</div>", unsafe_allow_html=True)
+            lado_esq = list(efeitos.keys())[:2]
+            lado_dir = list(efeitos.keys())[2:]
 
-            with col2:
-                for nome in list(efeitos.keys())[2:]:
-                    with st.container():
-                        st.image(efeitos[nome], caption=txt(f"Efeito {nome}", f"Efecto {nome}"), use_container_width=True)
+            for col, nomes in zip([col1, col2], [lado_esq, lado_dir]):
+                with col:
+                    for nome in nomes:
+                        efeito = efeitos[nome]
+                        st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
                         st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
+                        label = txt(f"Selecionar {nome}: {efeito['desc']}", f"Seleccionar {nome}: {efeito['desc']}")
+                        if st.button(label, key=f"btn_{nome}"):
                             st.session_state.efeito_escolhido = nome
                         st.markdown("</div>", unsafe_allow_html=True)
 
             if "efeito_escolhido" in st.session_state:
+                selecionado = st.session_state.efeito_escolhido
                 st.success(txt(
-                    f"✅ Efeito selecionado: {st.session_state.efeito_escolhido}",
-                    f"✅ Efecto seleccionado: {st.session_state.efeito_escolhido}"
+                    f"✅ Efeito selecionado: {selecionado}\n{efeitos[selecionado]['desc']}",
+                    f"✅ Efecto seleccionado: {selecionado}\n{efeitos[selecionado]['desc']}"
                 ))
+
