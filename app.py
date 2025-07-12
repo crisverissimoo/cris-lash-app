@@ -184,36 +184,36 @@ if "efeito_escolhido" in st.session_state:
                 "Fio a Fio": {
                     "img": "https://i.imgur.com/0DRvMCw.png",
                     "desc": txt(
-                        "Aplicado 1 fio sintético sobre cada fio natural. Indicado para quem busca naturalidade com acabamento tipo rímel.",
+                        "É aplicado 1 fio sintético sobre cada fio natural. Indicado para quem busca naturalidade com acabamento tipo rímel.",
                         "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
                     )
                 },
                 "Volume Brasileiro": {
                     "img": "https://i.imgur.com/Ddu8ZWE.png",
                     "desc": txt(
-                        "Feixes em formato Y. O volume depende da quantidade de fios naturais — traz efeito volumoso mas ainda natural.",
-                        "Racimos en forma de Y. El volumen varía según la cantidad de pestañas naturales — efecto voluminoso y natural."
+                        "São aplicados fios em formato Y. O volume varia conforme a quantidade de fios naturais — traz volume e leveza.",
+                        "Se aplican fibras en forma de Y. El volumen varía según la cantidad de pestañas naturales — aporta volumen y ligereza."
                     )
                 },
                 "Híbrido": {
                     "img": "https://i.imgur.com/GP2z4vY.png",
                     "desc": txt(
-                        "Mistura entre Fio a Fio e Volume Brasileiro — proporciona densidade com leveza e naturalidade.",
-                        "Combinación entre Clásico y Volumen Brasileño — aporta densidad con ligereza y naturalidad."
+                        "Mistura entre Fio a Fio e Volume Brasileiro — proporciona densidade com naturalidade e toque suave.",
+                        "Combinación entre Fio a Fio y Volumen Brasileño — aporta densidad con naturalidad y suavidad."
                     )
                 },
                 "Egípcio": {
                     "img": "https://i.imgur.com/meL9v9z.png",
                     "desc": txt(
-                        "Design gráfico e angulado — fios aplicados com geometria precisa para resultado ousado e artístico.",
-                        "Diseño gráfico y angular — fibras colocadas con geometría precisa para un resultado llamativo y artístico."
+                        "Design gráfico e angulado — fios aplicados com geometria precisa para resultado artístico e marcante.",
+                        "Diseño gráfico y angulado — fibras colocadas con geometría precisa para un resultado artístico y llamativo."
                     )
                 },
                 "Volume Russo": {
                     "img": "https://i.imgur.com/MrNj0YQ.png",
                     "desc": txt(
-                        "Feixes densos de 4 a 6 fios por natural — proporciona olhar intenso, glamouroso e estruturado.",
-                        "Racimos densos de 4 a 6 fibras por pestaña — brinda una mirada intensa, glamorosa y estructurada."
+                        "Feixes densos de 4 a 6 fios por natural — proporciona olhar glamouroso, intenso e sofisticado.",
+                        "Racimos densos de 4 a 6 fibras por pestaña — proporciona una mirada glamorosa, intensa y sofisticada."
                     )
                 }
             }
@@ -226,8 +226,11 @@ if "efeito_escolhido" in st.session_state:
                 with col:
                     for nome in nomes:
                         tipo = tipos[nome]
-                        st.image(tipo["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
-                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                        st.markdown(
+                            f"<img src='{tipo['img']}' alt='Imagem {nome}' style='height:260px; width:100%; object-fit:cover; border-radius:8px;'>",
+                            unsafe_allow_html=True
+                        )
+                        st.markdown("<div style='text-align:center; margin-top:6px;'>", unsafe_allow_html=True)
                         label = txt(f"Selecionar {nome}: {tipo['desc']}", f"Seleccionar {nome}: {tipo['desc']}")
                         if st.button(label, key=f"tipo_{nome}"):
                             st.session_state.tipo_aplicacao = nome
@@ -239,4 +242,3 @@ if "efeito_escolhido" in st.session_state:
                     f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
                     f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
                 ))
-
