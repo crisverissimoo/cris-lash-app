@@ -45,9 +45,9 @@ if autorizada:
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
-            st.markdown(f"<h4 style='text-align:center;'>{txt('Ficha Clínica','Ficha Clínica')}</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='text-align:center;'>Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
-            with st.form("form_clinica"):
+    with st.form("form_clinica"):
                 perguntas = {
                     "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
                     "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
