@@ -172,7 +172,7 @@ if st.session_state.ficha_validada:
                     f"✅ Efecto seleccionado: {selecionado}\n{efeitos[selecionado]['desc']}"
                 ))
 
-if st.session_state.ficha_validada:
+if "efeito_escolhido" in st.session_state:
     with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
