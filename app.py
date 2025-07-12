@@ -223,10 +223,15 @@ if "efeito_escolhido" in st.session_state:
                     nome = nomes[i + idx]
                     tipo = tipos[nome]
                     with col:
-                        st.image(tipo["img"], caption=nome, use_column_width=True)
-                        label = txt(f"Selecionar {nome}: {tipo['desc']}", f"Seleccionar {nome}: {tipo['desc']}")
+                        st.markdown(
+                            f"<img src='{tipo['img']}' alt='Imagem {nome}' style='height:180px; width:100%; object-fit:cover; border-radius:8px;'>",
+                            unsafe_allow_html=True
+                        )
+                        st.markdown("<div style='text-align:center; margin-top:4px;'>", unsafe_allow_html=True)
+                        label = txt(f"Selecionar {nome}", f"Seleccionar {nome}")
                         if st.button(label, key=f"tipo_{nome}"):
                             st.session_state.tipo_aplicacao = nome
+                        st.markdown("</div>", unsafe_allow_html=True)
 
         if "tipo_aplicacao" in st.session_state:
             selecionado = st.session_state.tipo_aplicacao
