@@ -182,13 +182,49 @@ if "efeito_escolhido" in st.session_state:
 
             tipos = {
                 "Fio a Fio": {
-                    "img": "https://i.imgur.com/VzlySv4.jpeg",
+                    "img": "https://images.unsplash.com/photo-1604335399104-98063e405a36?auto=format&fit=crop&w=800&q=80",
                     "desc": txt(
                         "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
                         "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
                     )
                 },
                 "Volume Brasileiro": {
-                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
+                    "img": "https://images.unsplash.com/photo-1603252102227-d9975869ce53?auto=format&fit=crop&w=800&q=80",
                     "desc": txt(
                         "Fios em formato Y. Traz volume leve e natural, respeitando a quantidade de fios naturais existentes.",
+                        "Fibras en forma de Y. Aporta volumen ligero y natural, respetando la cantidad de pestañas naturales."
+                    )
+                },
+                "Volume Russo 4D": {
+                    "img": "https://images.unsplash.com/photo-1605061288348-74e2513b1406?auto=format&fit=crop&w=800&q=80",
+                    "desc": txt(
+                        "Aplicação de 4 fios sintéticos por fio natural — resultado intenso, estruturado e glamouroso.",
+                        "Aplicación de 4 fibras sintéticas por pestaña natural — resultado intenso, estructurado y glamoroso."
+                    )
+                },
+                "Egípcio 3D": {
+                    "img": "https://images.unsplash.com/photo-1621766402680-857a5ef65d42?auto=format&fit=crop&w=800&q=80",
+                    "desc": txt(
+                        "Fios em leque 3D com geometria precisa — efeito artístico, definido e sofisticado.",
+                        "Fibras en abanico 3D con geometría precisa — efecto artístico, definido y sofisticado."
+                    )
+                }
+            }
+
+            for nome, tipo in tipos.items():
+                st.markdown(
+                    f"<img src='{tipo['img']}' alt='Imagem {nome}' style='height:260px; width:100%; object-fit:cover; border-radius:8px;'>",
+                    unsafe_allow_html=True
+                )
+                st.markdown("<div style='text-align:center; margin-top:6px;'>", unsafe_allow_html=True)
+                label = txt(f"Selecionar {nome}: {tipo['desc']}", f"Seleccionar {nome}: {tipo['desc']}")
+                if st.button(label, key=f"tipo_{nome}"):
+                    st.session_state.tipo_aplicacao = nome
+                st.markdown("</div>", unsafe_allow_html=True)
+
+            if "tipo_aplicacao" in st.session_state:
+                selecionado = st.session_state.tipo_aplicacao
+                st.success(txt(
+                    f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
+                    f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
+                ))
