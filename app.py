@@ -183,23 +183,38 @@ if "efeito_escolhido" in st.session_state:
             tipos = {
                 "Fio a Fio": {
                     "img": "https://i.imgur.com/0DRvMCw.png",
-                    "desc": txt("Aplicação clássica com fios individuais — visual natural e delicado", "Aplicación clásica con fibras individuales — aspecto natural y delicado")
+                    "desc": txt(
+                        "Aplicado 1 fio sintético sobre cada fio natural. Indicado para quem busca naturalidade com acabamento tipo rímel.",
+                        "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
+                    )
                 },
                 "Volume Brasileiro": {
                     "img": "https://i.imgur.com/Ddu8ZWE.png",
-                    "desc": txt("Feixes leves de 2 a 3 fios — destaque suave com volume discreto", "Racimos ligeros de 2 a 3 fibras — volumen suave y elegante")
+                    "desc": txt(
+                        "Feixes em formato Y. O volume depende da quantidade de fios naturais — traz efeito volumoso mas ainda natural.",
+                        "Racimos en forma de Y. El volumen varía según la cantidad de pestañas naturales — efecto voluminoso y natural."
+                    )
                 },
                 "Híbrido": {
                     "img": "https://i.imgur.com/GP2z4vY.png",
-                    "desc": txt("Combinação de técnicas — equilíbrio entre naturalidade e volume", "Combinación de técnicas — equilibrio entre naturalidad y volumen")
+                    "desc": txt(
+                        "Mistura entre Fio a Fio e Volume Brasileiro — proporciona densidade com leveza e naturalidade.",
+                        "Combinación entre Clásico y Volumen Brasileño — aporta densidad con ligereza y naturalidad."
+                    )
                 },
                 "Egípcio": {
                     "img": "https://i.imgur.com/meL9v9z.png",
-                    "desc": txt("Design angular e gráfico — cílios com personalidade marcante", "Diseño angular y gráfico — pestañas con personalidad marcada")
+                    "desc": txt(
+                        "Design gráfico e angulado — fios aplicados com geometria precisa para resultado ousado e artístico.",
+                        "Diseño gráfico y angular — fibras colocadas con geometría precisa para un resultado llamativo y artístico."
+                    )
                 },
                 "Volume Russo": {
                     "img": "https://i.imgur.com/MrNj0YQ.png",
-                    "desc": txt("Feixes densos de 4+ fios — olhar glamuroso e intenso", "Racimos densos de 4+ fibras — mirada glamorosa e intensa")
+                    "desc": txt(
+                        "Feixes densos de 4 a 6 fios por natural — proporciona olhar intenso, glamouroso e estruturado.",
+                        "Racimos densos de 4 a 6 fibras por pestaña — brinda una mirada intensa, glamorosa y estructurada."
+                    )
                 }
             }
 
@@ -224,3 +239,4 @@ if "efeito_escolhido" in st.session_state:
                     f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
                     f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
                 ))
+
