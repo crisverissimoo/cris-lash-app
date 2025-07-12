@@ -182,35 +182,35 @@ if "efeito_escolhido" in st.session_state:
 
             tipos = {
                 "Fio a Fio": {
-                    "img": "https://img.freepik.com/fotos-gratis/mulher-com-extensoes-de-cilios_144627-6621.jpg",
+                    "img": "https://i.imgur.com/8Xz3vJv.jpg",
                     "desc": txt(
                         "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
                         "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
                     )
                 },
                 "Volume Brasileiro": {
-                    "img": "https://img.freepik.com/fotos-premium/extensao-de-cilios-volume-brasileiro-close-em-olhos_241127-330.jpg",
+                    "img": "https://i.imgur.com/3Yz9bqK.jpg",
                     "desc": txt(
                         "Fios em formato Y. O volume depende da quantidade de fios naturais — traz volume e leveza com naturalidade.",
                         "Fibras en forma de Y. El volumen varía según la cantidad de pestañas naturales — aporta volumen y naturalidad."
                     )
                 },
                 "Híbrido": {
-                    "img": "https://img.freepik.com/fotos-premium/extensao-de-cilios-hibrido-close-em-olhos_241127-328.jpg",
+                    "img": "https://i.imgur.com/2ZQvZzG.jpg",
                     "desc": txt(
                         "Combina Fio a Fio com Volume — equilíbrio entre leveza e densidade para um olhar marcante e suave.",
                         "Combina Fio a Fio con Volumen — equilibrio entre ligereza y densidad para una mirada llamativa y suave."
                     )
                 },
                 "Egípcio": {
-                    "img": "https://img.freepik.com/fotos-premium/olhos-com-design-grafico-de-cilios-volume-egipcio_241127-225.jpg",
+                    "img": "https://i.imgur.com/4XgYgqP.jpg",
                     "desc": txt(
                         "Fios em formato W aplicados com geometria precisa — resultado artístico, gráfico e sofisticado.",
                         "Fibras en forma de W aplicadas con geometría precisa — resultado artístico, gráfico y sofisticado."
                     )
                 },
                 "Volume Russo": {
-                    "img": "https://img.freepik.com/fotos-premium/cilios-volume-russo-em-olhos-verdes-close-up_241127-217.jpg",
+                    "img": "https://i.imgur.com/5YwWwqR.jpg",
                     "desc": txt(
                         "Feixes densos de 4 a 6 fios por natural — proporciona olhar glamouroso, intenso e estruturado.",
                         "Racimos densos de 4 a 6 fibras por pestaña — proporciona una mirada glamorosa, intensa y estructurada."
