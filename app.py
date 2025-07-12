@@ -120,21 +120,31 @@ if autorizada:
                         st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
                         st.session_state.ficha_validada = True
                         
-with st.expander("Escolha o efeito"):
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        st.markdown("### Escolha visual")
+if st.session_state.ficha_validada:
+    with st.expander(txt("✨ Escolha do Efeito Lash", "✨ Elección del Efecto Lash")):
+        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+        with col_centro:
+            st.markdown(f"<h4 style='text-align:center;'>{txt('Selecione o estilo desejado','Seleccione el estilo deseado')}</h4>", unsafe_allow_html=True)
 
-        efeito = st.radio("Qual efeito deseja aplicar?", ["Clássica", "Boneca", "Gatinho", "Esquilo"], index=None)
+            efeitos = {
+                "Clássica": "https://i.imgur.com/Nqrwdcm.png",
+                "Boneca": "https://i.imgur.com/vJUuvsl.png",
+                "Gatinho": "https://i.imgur.com/zpBFK0e.png",
+                "Esquilo": "https://i.imgur.com/BY5eEsr.png"
+            }
 
-        st.image("https://i.imgur.com/Nqrwdcm.png", caption="Clássica", use_column_width=True)
-        st.image("https://i.imgur.com/vJUuvsl.png", caption="Boneca", use_column_width=True)
-        st.image("https://i.imgur.com/zpBFK0e.png", caption="Gatinho", use_column_width=True)
-        st.image("https://i.imgur.com/BY5eEsr.png", caption="Esquilo", use_column_width=True)
+            efeito_escolhido = None
+            for nome, link in efeitos.items():
+                with st.container():
+                    st.image(link, caption=txt(f"Efeito {nome}", f"Efecto {nome}"), use_container_width=True)
+                    escolher = st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}")
+                    if escolher:
+                        efeito_escolhido = nome
+                        st.session_state.efeito_escolhido = nome
 
-        if efeito:
-            st.success(f"✅ Efeito selecionado: {efeito}")
-            st.session_state.efeito = efeito
+            if efeito_escolhido:
+                st.success(txt(f"Efeito selecionado: {efeito_escolhido}", f"Efecto seleccionado: {efeito_escolhido}"))
+
 
 
 
