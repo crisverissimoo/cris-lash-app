@@ -45,9 +45,9 @@ if autorizada:
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
-            st.markdown("<h4 style='text-align:center;'>Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+            st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
-    with st.form("form_clinica"):
+            with st.form("form_clinica"):
                 perguntas = {
                     "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
                     "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
@@ -66,7 +66,9 @@ if autorizada:
 
                 respostas = {}
                 for chave, pergunta in perguntas.items():
-                    respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+                    col_a, col_b, col_c = st.columns([1, 4, 1])
+                    with col_b:
+                        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
                 enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
@@ -115,12 +117,10 @@ if autorizada:
                             st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:", "Condiciones que requieren evaluación profesional:") + "\n\n" +
                                        "\n".join([f"- {motivo}" for motivo in alertas_detectados]))
                         if info_detectados:
-                            st.info("📎 " + txt("Informações adicionais para registro:", "Información adicional para el registro:") + "\n\n" +
-                                    "\n".join([f"- {motivo}" for motivo in info_detectados]))
-                        st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
-                        st.session_state.ficha_validada = True
+                            st.info("📎 " + txt("Informações adicionais para registro:", "Información adicional para el registro:") + "\
                         
 if st.session_state.ficha_validada:
+    
     with st.expander(txt("✨ Escolha do Efeito Lash", "✨ Elección del Efecto Lash")):
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
