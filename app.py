@@ -86,7 +86,7 @@ if autorizada:
                         "irritacao": txt("Olhos irritados ou lacrimejando frequentemente", "Ojos irritados o llorosos frecuentemente"),
                         "gravida": txt("Gestante ou lactante — recomenda-se autorização médica", "Embarazada o lactante — se recomienda autorización médica"),
                         "acido": txt("Tratamento dermatológico com ácido", "Tratamiento dermatológico con ácido"),
-                        "sensibilidade": txt("Sensibilidade a produtos químicos ou cosméticos",
+                        "sensibilidade": txt("Sensibilidade a produtos químicos ou cosméticos",)
                         
 if st.session_state.ficha_validada:
     
