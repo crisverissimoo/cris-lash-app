@@ -186,18 +186,17 @@ if st.session_state.ficha_validada:
                 "Mega Volume": txt("Máximo impacto — mega volume para eventos ou estilo glam", "Máximo impacto — mega volumen para eventos o estilo glamuroso")
             }
 
-            tipo_escolhido = None
             for nome, descricao in tipos.items():
                 st.markdown(f"**{nome}** — {descricao}")
                 st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
                 if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                    tipo_escolhido = nome
                     st.session_state.tipo_aplicacao = nome
                 st.markdown("</div>", unsafe_allow_html=True)
                 st.markdown("---")
 
-            if tipo_escolhido:
+            if "tipo_aplicacao" in st.session_state:
+                selecionado = st.session_state.tipo_aplicacao
                 st.success(txt(
-                    f"✅ Tipo selecionado: {tipo_escolhido} — {tipos[tipo_escolhido]}",
-                    f"✅ Tipo seleccionado: {tipo_escolhido} — {tipos[tipo_escolhido]}"
+                    f"✅ Tipo selecionado: {selecionado} — {tipos[selecionado]}",
+                    f"✅ Tipo seleccionado: {selecionado} — {tipos[selecionado]}"
                 ))
