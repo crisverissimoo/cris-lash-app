@@ -182,66 +182,55 @@ if st.session_state.ficha_validada:
 if "efeito_escolhido" in st.session_state:
 
     with st.expander(txt("🎀 Escolha o Tipo de Aplicação", "🎀 Elige el Tipo de Aplicación")):
-        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-        with col_centro:
-            st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
-            tipos = {
-                "Egípcio 3D": {
-                    "img": "https://i.imgur.com/TOPRWFQ.jpeg",
-                    "desc": txt(
-                        "Fios em leque 3D com geometria precisa — efeito artístico, definido e sofisticado.",
-                        "Fibras en abanico 3D con geometría precisa — efecto artístico, definido y sofisticado."
-                    )
-                },
-                "Volume Russo 4D": {
-                    "img": "https://i.imgur.com/tBX2O8e.jpeg",
-                    "desc": txt(
-                        "Aplicação de 4 fios sintéticos por fio natural — resultado intenso, estruturado e glamouroso.",
-                        "Aplicación de 4 fibras sintéticas por pestaña natural — resultado intenso, estructurado y glamoroso."
-                    )
-                },
-                "Volume Brasileiro": {
-                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                    "desc": txt(
-                        "Fios em formato Y. Traz volume leve e natural, respeitando a quantidade de fios naturais existentes.",
-                        "Fibras en forma de Y. Aporta volumen ligero y natural, respetando la cantidad de pestañas naturales."
-                    )
-                },
-                "Fio a Fio": {
-                    "img": "https://i.imgur.com/VzlySv4.jpeg",
-                    "desc": txt(
-                        "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
-                        "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
-                    )
-                }
-            }
-
-            for nome, tipo in tipos.items():
-                st.markdown(
-                    f"<img src='{tipo['img']}' alt='Imagem {nome}' style='height:260px; width:100%; object-fit:cover; border-radius:8px;'>",
-                    unsafe_allow_html=True
+        tipos = {
+            "Egípcio 3D": {
+                "img": "https://i.imgur.com/TOPRWFQ.jpeg",
+                "desc": txt(
+                    "Fios em leque 3D com geometria precisa — efeito artístico, definido e sofisticado.",
+                    "Fibras en abanico 3D con geometría precisa — efecto artístico, definido y sofisticado."
                 )
-                st.markdown("<div style='text-align:center; margin-top:6px;'>", unsafe_allow_html=True)
-                label = txt(f"Selecionar {nome}: {tipo['desc']}", f"Seleccionar {nome}: {tipo['desc']}")
-                if st.button(label, key=f"tipo_{nome}"):
-                    st.session_state.tipo_aplicacao = nome
-                st.markdown("</div>", unsafe_allow_html=True)
+            },
+            "Volume Russo 4D": {
+                "img": "https://i.imgur.com/tBX2O8e.jpeg",
+                "desc": txt(
+                    "Aplicação de 4 fios sintéticos por fio natural — resultado intenso, estruturado e glamouroso.",
+                    "Aplicación de 4 fibras sintéticas por pestaña natural — resultado intenso, estructurado y glamoroso."
+                )
+            },
+            "Volume Brasileiro": {
+                "img": "https://i.imgur.com/11rw6Jv.jpeg",
+                "desc": txt(
+                    "Fios em formato Y. Traz volume leve e natural, respeitando a quantidade de fios naturais existentes.",
+                    "Fibras en forma de Y. Aporta volumen ligero y natural, respetando la cantidad de pestañas naturales."
+                )
+            },
+            "Fio a Fio": {
+                "img": "https://i.imgur.com/VzlySv4.jpeg",
+                "desc": txt(
+                    "É aplicado 1 fio sintético sobre cada fio natural. Ideal para quem busca naturalidade com acabamento tipo rímel.",
+                    "Se aplica 1 fibra sintética sobre cada pestaña natural. Ideal para quienes desean un acabado natural tipo máscara."
+                )
+            }
+        }
 
-            if "tipo_aplicacao" in st.session_state:
-                selecionado = st.session_state.tipo_aplicacao
-                st.success(txt(
-                    f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
-                    f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
-                ))
+        nomes = list(tipos.keys())
+        for i in range(0, len(nomes), 2):
+            col1, col2 = st.columns(2)
+            for idx, col in enumerate([col1, col2]):
+                if i + idx < len(nomes):
+                    nome = nomes[i + idx]
+                    tipo = tipos[nome]
+                    with col:
+                        st.image(tipo["img"], caption=nome, use_column_width=True)
+                        label = txt(f"Selecionar {nome}: {tipo['desc']}", f"Seleccionar {nome}: {tipo['desc']}")
+                        if st.button(label, key=f"tipo_{nome}"):
+                            st.session_state.tipo_aplicacao = nome
 
-# 🚧 Travamento das etapas seguintes
-if "tipo_aplicacao" in st.session_state:
-    st.write("🎯 Etapa liberada! Agora você pode escolher a curvatura ou seguir para o mix.")
-else:
-    st.warning("🔒 Esta etapa será liberada após a escolha do tipo de aplicação.")
-# Travamento para os blocos seguintes
-if "tipo_aplicacao" in st.session_state:
-    st.write("🎯 Etapa liberada! Agora você pode escolher a curvatura ou seguir para o mix.")
-else:
-    st.warning("🔒 Esta etapa será liberada após a escolha do tipo de aplicação.")
+        if "tipo_aplicacao" in st.session_state:
+            selecionado = st.session_state.tipo_aplicacao
+            st.success(txt(
+                f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
+                f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
+            ))
