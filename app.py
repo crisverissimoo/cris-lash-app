@@ -26,28 +26,29 @@ with col2:
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.write(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
 
-   with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
-    st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
+    with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
+        st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
-    nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
-    nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
-                               min_value=datetime(1920, 1, 1).date(), max_value=hoje, key="nascimento")
-    telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
-    email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
+        nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
+        nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
+                                   min_value=datetime(1920, 1, 1).date(), max_value=hoje, key="nascimento")
+        telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
+        email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
 
-    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-    menor = idade < 18
-    st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
+        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+        menor = idade < 18
+        st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
 
-    autorizada = True
-    if menor:
-        responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"), key="responsavel")
-        autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"),
-                               ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
-        if autorizacao != "Sim":
-            st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
-                         "❌ Cliente menor sin autorización — atención bloqueada."))
-            autorizada = False
+        autorizada = True
+        if menor:
+            responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"), key="responsavel")
+            autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"),
+                                   ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+            if autorizacao != "Sim":
+                st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
+                             "❌ Cliente menor sin autorización — atención bloqueada."))
+                autorizada = False
+
 
 
 
