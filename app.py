@@ -51,7 +51,6 @@ with col2:
 
 if autorizada:
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
-        # 🌸 Alinha tudo ao centro com coluna de proporção [1, 2, 1]
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
             st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
@@ -75,16 +74,63 @@ if autorizada:
 
                 respostas = {}
                 for chave, pergunta in perguntas.items():
-                    col = st.columns([1, 4, 1])[1]
-                    with col:
+                    col_c = st.columns([1, 4, 1])[1]
+                    with col_c:
                         respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
                 col_botao = st.columns([1, 2, 1])[1]
                 with col_botao:
                     enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-            if enviar:
-                # 💥 Detecção dos riscos — você já tem essa lógica pronta
-                # pode manter como está — essa parte não altera layout
-                # só garantir que as mensagens estejam fora do "with col_centro"
-                # para aparecerem em tela cheia abaixo
+    if enviar:
+        impeditivos = {
+            "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
+            "infeccao": txt("Infecção ocular (blefarite, terçol, etc)", "Infección ocular (blefaritis, orzuelos, etc)"),
+            "conjuntivite": txt("Conjuntivite recente (últimos 30 dias)", "Conjuntivitis reciente (últimos 30 días)"),
+            "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
+            "reacao": txt("Reação alérgica em procedimentos anteriores", "Reacción alérgica en procedimientos anteriores")
+        }
+
+        alerta = {
+            "alergia": txt("Histórico de alergias nos olhos ou pálpebras", "Historial de alergias en ojos o párpados"),
+            "irritacao": txt("Olhos irritados ou lacrimejando frequentemente", "Ojos irritados o llorosos frecuentemente"),
+            "gravida": txt("Gestante ou lactante — recomenda-se autorização médica", "Embarazada o lactante — se recomienda autorización médica"),
+            "acido": txt("Tratamento dermatológico com ácido", "Tratamiento dermatológico con ácido"),
+            "sensibilidade": txt("Sensibilidade a produtos químicos ou cosméticos", "Sensibilidad a productos químicos o cosméticos")
+        }
+
+        informativos = {
+            "colirio": txt("Uso de colírios frequente", "Uso frecuente de colirios"),
+            "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
+            "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
+        }
+
+        bloqueios_detectados = []
+        alertas_detectados = []
+        info_detectados = []
+
+        for chave, resposta in respostas.items():
+            if resposta == "Sim":
+                if chave in impeditivos:
+                    bloqueios_detectados.append(f"- {impeditivos[chave]}")
+                elif chave in alerta:
+                    alertas_detectados.append(f"- {alerta[chave]}")
+                elif chave in informativos:
+                    info_detectados.append(f"- {informativos[chave]}")
+
+        if bloqueios_detectados:
+            st.error("❌ " + txt("Cliente **não está apta para atendimento**.", "Cliente no apta para atención") + "\n\n" +
+                     "\n".join(bloqueios_detectados))
+            st.session_state.ficha_validada = False
+            st.session_state.cliente_apta = False
+        else:
+            if alertas_detectados:
+                st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:", "Condiciones que requieren evaluación profesional:") + "\n\n" +
+                           "\n".join(alertas_detectados))
+            if info_detectados:
+                st.info("📎 " + txt("Informações adicionais para registro:", "Información adicional para el registro:") + "\n\n" +
+                        "\n".join(info_detectados))
+            st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.",
+                                   "Cliente apta para continuar — ficha validada correctamente."))
+            st.session_state.ficha_validada = True
+            st.session_state.cliente_apta = True
