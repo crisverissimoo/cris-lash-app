@@ -224,4 +224,13 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
         with col_txt:
             st.subheader(nome)
             st.caption(tipo["desc"])
-            if st.button(txt(f"Selecion
+            if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                st.session_state.tipo_aplicacao = nome
+
+    if "tipo_aplicacao" in st.session_state:
+        selecionado = st.session_state.tipo_aplicacao
+        st.success(txt(
+            f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
+            f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
+        ))
+
