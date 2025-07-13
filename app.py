@@ -106,7 +106,7 @@ if autorizada:
             "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
         }
 
-    if enviar is not None and enviar:
+if enviar is not None and enviar:
     # 🔍 Avaliação das respostas
     bloqueios_detectados = []
     alertas_detectados = []
