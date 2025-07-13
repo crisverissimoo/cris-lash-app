@@ -228,6 +228,7 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             st.session_state.tipo_aplicacao = nome
 
 
+
     if "tipo_aplicacao" in st.session_state:
         selecionado = st.session_state.tipo_aplicacao
         st.success(txt(
