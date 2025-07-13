@@ -51,6 +51,7 @@ with col2:
 
 if autorizada:
     respostas = {}
+
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
@@ -82,14 +83,11 @@ if autorizada:
                 enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
             if enviar:
-                # ❌ Verifica se há alguma pergunta sem resposta
                 if any(resposta is None for resposta in respostas.values()):
-                    st.warning("⚠️ " + txt(
-                        "Você precisa responder todas as perguntas antes de finalizar.",
-                        "Debe responder todas las preguntas antes de continuar."
-                    ))
+                    st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
+                                            "Debe responder todas las preguntas antes de continuar."))
+                    st.session_state.ficha_validada = False
                 else:
-                    # ✅ Avaliação segura
                     impeditivos = {
                         "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
                         "infeccao": txt("Infecção ocular", "Infección ocular"),
@@ -97,7 +95,6 @@ if autorizada:
                         "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
                         "reacao": txt("Reação alérgica anterior", "Reacción alérgica anterior")
                     }
-
                     alerta = {
                         "alergia": txt("Histórico de alergias", "Historial de alergias"),
                         "irritacao": txt("Olhos irritados", "Ojos irritados"),
@@ -105,7 +102,6 @@ if autorizada:
                         "acido": txt("Tratamento com ácido", "Tratamiento con ácido"),
                         "sensibilidade": txt("Sensibilidade a químicos", "Sensibilidad química")
                     }
-
                     informativos = {
                         "colirio": txt("Uso frequente de colírios", "Uso frecuente de colirios"),
                         "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
@@ -126,46 +122,40 @@ if autorizada:
                                 info_detectados.append(f"- {informativos[chave]}")
 
                     if bloqueios_detectados:
-                        st.error("❌ " + txt(
-                            "Cliente não está apta para atendimento.",
-                            "Cliente no apta para atención"
-                        ) + "\n\n" + "\n".join(bloqueios_detectados))
+                        st.error("❌ " + txt("Cliente não está apta para atendimento.",
+                                            "Cliente no apta para atención") + "\n\n" +
+                                 "\n".join(bloqueios_detectados))
                         st.session_state.ficha_validada = False
                         st.session_state.cliente_apta = False
+                        st.stop()
                     else:
                         if alertas_detectados:
-                            st.warning("⚠️ " + txt(
-                                "Condições que requerem avaliação profissional:",
-                                "Condiciones que requieren evaluación profesional:"
-                            ) + "\n\n" + "\n".join(alertas_detectados))
+                            st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:",
+                                                   "Condiciones que requieren evaluación profesional:") + "\n\n" +
+                                       "\n".join(alertas_detectados))
                         if info_detectados:
-                            st.info("📎 " + txt(
-                                "Informações adicionais para registro:",
-                                "Información adicional para el registro:"
-                            ) + "\n\n" + "\n".join(info_detectados))
-                        st.success("✅ " + txt(
-                            "Cliente apta para continuar — ficha validada com sucesso.",
-                            "Cliente apta para continuar — ficha validada correctamente."
-                        ))
+                            st.info("📎 " + txt("Informações adicionais para registro:",
+                                               "Información adicional para el registro:") + "\n\n" +
+                                    "\n".join(info_detectados))
+                        st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.",
+                                               "Cliente apta para continuar — ficha validada correctamente."))
                         st.session_state.ficha_validada = True
                         st.session_state.cliente_apta = True
 
+# 🔓 Etapa 2 — Escolha de Efeito
 if st.session_state.get("ficha_validada"):
-    with st.expander(txt("🎯 Escolha do Efeito", "🎯 Elección del Estilo")):
-        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-        with col_centro:
-            st.markdown("<h4 style='text-align:center;'>🎯 Escolha o Efeito de Cílios</h4>", unsafe_allow_html=True)
-
-            efeito = st.radio(
-                txt("Qual estilo deseja aplicar?", "¿Qué estilo desea aplicar?"),
-                ["👁️ Clássico", "🪶 Híbrido", "🧨 Volume"],
-                index=None,
-                key="efeito"
-            )
-
-            if efeito:
-                st.info("✨ " + txt(
-                    f"Efeito selecionado: **{efeito}**",
-                    f"Estilo seleccionado: **{efeito}**"
-                ))
+    col_e1, col_e2, col_e3 = st.columns([1, 2, 1])
+    with col_e2:
+        st.markdown("<h4 style='text-align:center;'>🎯 Escolha o Efeito de Cílios</h4>", unsafe_allow_html=True)
+        efeito = st.radio(
+            txt("Qual estilo deseja aplicar?", "¿Qué estilo desea aplicar?"),
+            ["👁️ Clássico", "🪶 Híbrido", "🧨 Volume"],
+            index=None,
+            key="efeito"
+        )
+        if efeito:
+            st.info("✨ " + txt(
+                f"Efeito selecionado: **{efeito}**",
+                f"Estilo seleccionado: **{efeito}**"
+            ))
 
