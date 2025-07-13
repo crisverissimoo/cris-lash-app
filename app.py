@@ -183,20 +183,16 @@ if st.session_state.ficha_validada:
             }
         }
 
-        col1, col2 = st.columns(2)
-        lado_esq = list(efeitos.keys())[:2]
-        lado_dir = list(efeitos.keys())[2:]
-
-        for col, nomes in zip([col1, col2], [lado_esq, lado_dir]):
-            with col:
-                for nome in nomes:
-                    efeito = efeitos[nome]
-                    st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
-                    st.markdown(f"<div style='text-align:center; margin-top: -10px;'>", unsafe_allow_html=True)
-                    label = txt(f"Selecionar {nome}", f"Seleccionar {nome}")
-                    if st.button(f"{label} 🡺", key=f"btn_{nome}"):
-                        st.session_state.efeito_escolhido = nome
-                    st.markdown("</div>", unsafe_allow_html=True)
+        for nome, efeito in efeitos.items():
+            bloco_esq, bloco_dir = st.columns([1, 2])
+            with bloco_esq:
+                st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
+            with bloco_dir:
+                st.markdown(f"### {txt(f'Efeito {nome}', f'Efecto {nome}')}")
+                st.write(efeito["desc"])
+                if st.button(txt(f"Selecionar {nome} 🡺", f"Seleccionar {nome} 🡺"), key=f"btn_{nome}"):
+                    st.session_state.efeito_escolhido = nome
+            st.markdown("---")
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
