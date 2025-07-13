@@ -149,3 +149,23 @@ if autorizada:
                         ))
                         st.session_state.ficha_validada = True
                         st.session_state.cliente_apta = True
+
+if st.session_state.get("ficha_validada"):
+    with st.expander(txt("🎯 Escolha do Efeito", "🎯 Elección del Estilo")):
+        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+        with col_centro:
+            st.markdown("<h4 style='text-align:center;'>🎯 Escolha o Efeito de Cílios</h4>", unsafe_allow_html=True)
+
+            efeito = st.radio(
+                txt("Qual estilo deseja aplicar?", "¿Qué estilo desea aplicar?"),
+                ["👁️ Clássico", "🪶 Híbrido", "🧨 Volume"],
+                index=None,
+                key="efeito"
+            )
+
+            if efeito:
+                st.info("✨ " + txt(
+                    f"Efeito selecionado: **{efeito}**",
+                    f"Estilo seleccionado: **{efeito}**"
+                ))
+
