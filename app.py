@@ -106,29 +106,55 @@ if autorizada:
             "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
         }
 
-        bloqueios_detectados = []
-        alertas_detectados = []
-        info_detectados = []
+    if enviar is not None and enviar:
+    # 🔍 Avaliação das respostas
+    bloqueios_detectados = []
+    alertas_detectados = []
+    info_detectados = []
 
-        for chave, resposta in respostas.items():
-            if resposta == "Sim":
-                if chave in impeditivos:
-                    bloqueios_detectados.append(f"- {impeditivos[chave]}")
-                elif chave in alerta:
-                    alertas_detectados.append(f"- {alerta[chave]}")
-                elif chave in informativos:
-                    info_detectados.append(f"- {informativos[chave]}")
+    for chave, resposta in respostas.items():
+        if resposta == "Sim":
+            if chave in impeditivos:
+                bloqueios_detectados.append(f"- {impeditivos[chave]}")
+            elif chave in alerta:
+                alertas_detectados.append(f"- {alerta[chave]}")
+            elif chave in informativos:
+                info_detectados.append(f"- {informativos[chave]}")
 
-        if bloqueios_detectados:
-            col_erro = st.columns([1, 2, 1])[1]
-            with col_erro:
-                st.error("❌ " + txt("Cliente **não está apta para atendimento**.", "Cliente no apta para atención") + "\n\n" +
-                         "\n".join(bloqueios_detectados))
-            st.session_state.ficha_validada = False
-            st.session_state.cliente_apta = False
+    # ❌ Mensagem de bloqueio centralizada
+    if bloqueios_detectados:
+        col_erro = st.columns([1, 2, 1])[1]
+        with col_erro:
+            st.error("❌ " + txt(
+                "Cliente **não está apta para atendimento**.",
+                "Cliente no apta para atención"
+            ) + "\n\n" + "\n".join(bloqueios_detectados))
+        st.session_state.ficha_validada = False
+        st.session_state.cliente_apta = False
 
-        elif alertas_detectados or info_detectados:
-            if alertas_detectados:
-                col_alerta = st.columns([1, 2, 1])[1]
-                with col_alerta:
-                    st.warning("⚠️ " + txt("Condições que requer
+    # ⚠️ Alertas, 📎 Informações e ✅ Sucesso centralizados
+    elif alertas_detectados or info_detectados:
+        if alertas_detectados:
+            col_alerta = st.columns([1, 2, 1])[1]
+            with col_alerta:
+                st.warning("⚠️ " + txt(
+                    "Condições que requerem avaliação profissional:",
+                    "Condiciones que requieren evaluación profesional:"
+                ) + "\n\n" + "\n".join(alertas_detectados))
+
+        if info_detectados:
+            col_info = st.columns([1, 2, 1])[1]
+            with col_info:
+                st.info("📎 " + txt(
+                    "Informações adicionais para registro:",
+                    "Información adicional para el registro:"
+                ) + "\n\n" + "\n".join(info_detectados))
+
+        col_sucesso = st.columns([1, 2, 1])[1]
+        with col_sucesso:
+            st.success("✅ " + txt(
+                "Cliente apta para continuar — ficha validada com sucesso.",
+                "Cliente apta para continuar — ficha validada correctamente."
+            ))
+        st.session_state.ficha_validada = True
+        st.session_state.cliente_apta = True
