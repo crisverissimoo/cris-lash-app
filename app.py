@@ -159,3 +159,49 @@ if st.session_state.get("ficha_validada"):
                 f"Estilo seleccionado: **{efeito}**"
             ))
 
+if st.session_state.ficha_validada:
+    col_e1, col_e2, col_e3 = st.columns([1, 2, 1])
+    with col_e2:
+        st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito Lash</h4>", unsafe_allow_html=True)
+
+        efeitos = {
+            "Clássica": {
+                "img": "https://i.imgur.com/Nqrwdcm.png",
+                "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado")
+            },
+            "Boneca": {
+                "img": "https://i.imgur.com/vJUuvsl.png",
+                "desc": txt("Maior concentração no centro — abre e arredonda o olhar", "Mayor concentración en el centro — abre y redondea la mirada")
+            },
+            "Gatinho": {
+                "img": "https://i.imgur.com/zpBFK0e.png",
+                "desc": txt("Fios longos no canto externo — efeito sensual e alongado", "Fibras largas en la esquina externa — efecto sensual y alargado")
+            },
+            "Esquilo": {
+                "img": "https://i.imgur.com/BY5eEsr.png",
+                "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante", "Volumen acentuado entre el centro y la esquina externa — estilo llamativo")
+            }
+        }
+
+        col1, col2 = st.columns(2)
+        lado_esq = list(efeitos.keys())[:2]
+        lado_dir = list(efeitos.keys())[2:]
+
+        for col, nomes in zip([col1, col2], [lado_esq, lado_dir]):
+            with col:
+                for nome in nomes:
+                    efeito = efeitos[nome]
+                    st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
+                    st.markdown(f"<div style='text-align:center; margin-top: -10px;'>", unsafe_allow_html=True)
+                    label = txt(f"Selecionar {nome}", f"Seleccionar {nome}")
+                    if st.button(f"{label} 🡺", key=f"btn_{nome}"):
+                        st.session_state.efeito_escolhido = nome
+                    st.markdown("</div>", unsafe_allow_html=True)
+
+        if "efeito_escolhido" in st.session_state:
+            nome = st.session_state.efeito_escolhido
+            st.success("✅ " + txt(
+                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
+                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
+            ))
+
