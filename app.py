@@ -143,22 +143,7 @@ if autorizada:
                         st.session_state.cliente_apta = True
 
 # 🔓 Etapa 2 — Escolha de Efeito
-if st.session_state.get("ficha_validada"):
-    col_e1, col_e2, col_e3 = st.columns([1, 2, 1])
-    with col_e2:
-        st.markdown("<h4 style='text-align:center;'>🎯 Escolha o Efeito de Cílios</h4>", unsafe_allow_html=True)
-        efeito = st.radio(
-            txt("Qual estilo deseja aplicar?", "¿Qué estilo desea aplicar?"),
-            ["👁️ Clássico", "🪶 Híbrido", "🧨 Volume"],
-            index=None,
-            key="efeito"
-        )
-        if efeito:
-            st.info("✨ " + txt(
-                f"Efeito selecionado: **{efeito}**",
-                f"Estilo seleccionado: **{efeito}**"
-            ))
-
+ 
 if st.session_state.ficha_validada:
     col_e1, col_e2, col_e3 = st.columns([1, 2, 1])
     with col_e2:
