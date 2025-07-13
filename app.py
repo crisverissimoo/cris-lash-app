@@ -51,18 +51,40 @@ with col2:
 
 if autorizada:
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+        # 🌸 Alinha tudo ao centro com coluna de proporção [1, 2, 1]
+        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+        with col_centro:
+            st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
-        with st.form("form_clinica"):
-            perguntas = {
-                # ... suas perguntas
-            }
+            with st.form("form_clinica"):
+                perguntas = {
+                    "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
+                    "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
+                    "conjuntivite": txt("Já teve conjuntivite nos últimos 30 dias?", "¿Tuvo conjuntivitis en los últimos 30 días?"),
+                    "cirurgia": txt("Fez cirurgia ocular recentemente?", "¿Ha tenido cirugía ocular reciente?"),
+                    "alergia": txt("Tem histórico de alergias nos olhos ou pálpebras?", "¿Tiene alergias en los ojos o párpados?"),
+                    "irritacao": txt("Está com olhos irritados ou lacrimejando frequentemente?", "¿Tiene ojos irritados o llorosos frecuentemente?"),
+                    "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o amamantando?"),
+                    "acido": txt("Está em tratamento dermatológico com ácido?", "¿Está en tratamiento con ácidos dermatológicos?"),
+                    "sensibilidade": txt("Tem sensibilidade a produtos químicos ou cosméticos?", "¿Tiene sensibilidad a productos químicos o cosméticos?"),
+                    "colirio": txt("Faz uso de colírios com frequência?", "¿Usa colirios con frecuencia?"),
+                    "lentes": txt("Usa lentes de contato?", "¿Usa lentes de contacto?"),
+                    "extensao": txt("Já fez extensão de cílios antes?", "¿Ya se hizo extensiones de pestañas?"),
+                    "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
+                }
 
-            respostas = {}
-            for chave, pergunta in perguntas.items():
-                respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+                respostas = {}
+                for chave, pergunta in perguntas.items():
+                    col = st.columns([1, 4, 1])[1]
+                    with col:
+                        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-            st.markdown("<br>", unsafe_allow_html=True)
-            enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
+                col_botao = st.columns([1, 2, 1])[1]
+                with col_botao:
+                    enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
+
+            if enviar:
+                # 💥 Detecção dos riscos — você já tem essa lógica pronta
+                # pode manter como está — essa parte não altera layout
+                # só garantir que as mensagens estejam fora do "with col_centro"
+                # para aparecerem em tela cheia abaixo
