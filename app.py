@@ -169,17 +169,17 @@ if st.session_state.ficha_validada:
         }
 
         for nome, efeito in efeitos.items():
-            bloco_esq, bloco_dir = st.columns([1, 2])
-            with bloco_esq:
-                st.markdown("<div style='padding-top:20px;'>", unsafe_allow_html=True)
-                st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
-                st.markdown("</div>", unsafe_allow_html=True)
-
+            bloco_esq, bloco_dir = st.columns([1.2, 1.8])
             with bloco_dir:
                 st.markdown(f"<h5 style='margin-top:10px;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
                 st.write(efeito["desc"])
                 if st.button(txt(f"🡸 Selecionar {nome}", f"🡸 Seleccionar {nome}"), key=f"btn_{nome}"):
                     st.session_state.efeito_escolhido = nome
+
+            with bloco_esq:
+                st.markdown("<div style='padding-top:25px;'>", unsafe_allow_html=True)
+                st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), width=360)
+                st.markdown("</div>", unsafe_allow_html=True)
 
             st.markdown("<hr style='border-top: 1px solid #bbb;'>", unsafe_allow_html=True)
 
@@ -189,3 +189,4 @@ if st.session_state.ficha_validada:
                 f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
+
