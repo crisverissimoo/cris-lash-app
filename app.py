@@ -50,8 +50,7 @@ with col2:
                 autorizada = False
 
 if autorizada:
-    with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
-        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    
         with col_centro:
             st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
