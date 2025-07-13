@@ -27,31 +27,35 @@ with col2:
     st.write(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
 
     with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
-        nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
-        nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"), min_value=datetime(1920,1,1).date(), max_value=hoje, key="nascimento")
-        telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
-        email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
+    st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
-        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-        menor = idade < 18
-        st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
+    nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
+    nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
+                               min_value=datetime(1920, 1, 1).date(), max_value=hoje, key="nascimento")
+    telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
+    email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
 
-        autorizada = True
-        if menor:
-            responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"), key="responsavel")
-            autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"), ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
-            if autorizacao != "Sim":
-                st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
-                autorizada = False
+    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+    menor = idade < 18
+    st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
+
+    autorizada = True
+    if menor:
+        responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"), key="responsavel")
+        autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"),
+                               ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+        if autorizacao != "Sim":
+            st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
+                         "❌ Cliente menor sin autorización — atención bloqueada."))
+            autorizada = False
+
 
 if autorizada:
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
-        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-        with col_centro:
-            st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
-            with st.form("form_clinica"):
-                perguntas = {
+        with st.form("form_clinica"):
+            perguntas = {
                     "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
                     "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
                     "conjuntivite": txt("Já teve conjuntivite nos últimos 30 dias?", "¿Tuvo conjuntivitis en los últimos 30 días?"),
@@ -68,16 +72,16 @@ if autorizada:
                 }
 
                 respostas = {}
-                for chave, pergunta in perguntas.items():
-                    col_a, col_b, col_c = st.columns([1, 4, 1])
-                    with col_b:
-                        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+            for chave, pergunta in perguntas.items():
+                col_b = st.columns([1, 4, 1])[1]
+                with col_b:
+                    respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-                col_botao_esq, col_botao_centro, col_botao_dir = st.columns([1, 2, 1])
-                with col_botao_centro:
-                    enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
+            col_botao = st.columns([1, 2, 1])[1]
+            with col_botao:
+                enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-                if enviar:
+        if enviar:
                     impeditivos = {
                         "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
                         "infeccao": txt("Infecção ocular (blefarite, terçol, etc)", "Infección ocular (blefaritis, orzuelos, etc)"),
@@ -131,63 +135,61 @@ if autorizada:
 if "cliente_apta" in st.session_state and st.session_state.cliente_apta == False:
     st.error("❌ Cliente não está apta para atendimento. Reação alérgica ou condição contraindicada.")
     st.stop()
-                        
-# 🎯 Bloco 1 — Escolha do Efeito (liberado após ficha validada)
+
+# 1️⃣ Ficha de Anamnese
+with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Ficha Clínica")):
+    st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+    # seu conteúdo da ficha permanece aqui como já implementado
+
+# 2️⃣ Escolha do Efeito Lash
 if st.session_state.ficha_validada:
     with st.expander(txt("✨ Escolha do Efeito Lash", "✨ Elección del Efecto Lash")):
-        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-        with col_centro:
-            st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align:center;'>✨ Escolha do Efeito</h4>", unsafe_allow_html=True)
 
-            efeitos = {
-                "Clássica": {
-                    "img": "https://i.imgur.com/Nqrwdcm.png",
-                    "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado")
-                },
-                "Boneca": {
-                    "img": "https://i.imgur.com/vJUuvsl.png",
-                    "desc": txt("Maior concentração no centro — abre e arredonda o olhar", "Mayor concentración en el centro — abre y redondea la mirada")
-                },
-                "Gatinho": {
-                    "img": "https://i.imgur.com/zpBFK0e.png",
-                    "desc": txt("Fios longos no canto externo — efeito sensual e alongado", "Fibras largas en la esquina externa — efecto sensual y alargado")
-                },
-                "Esquilo": {
-                    "img": "https://i.imgur.com/BY5eEsr.png",
-                    "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante", "Volumen acentuado entre el centro y la esquina externa — estilo llamativo")
-                }
+        efeitos = {
+            "Clássica": {
+                "img": "https://i.imgur.com/Nqrwdcm.png",
+                "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado",
+                            "Fibras distribuidas uniformemente — efecto natural y delicado")
+            },
+            "Boneca": {
+                "img": "https://i.imgur.com/vJUuvsl.png",
+                "desc": txt("Maior concentração no centro — abre e arredonda o olhar",
+                            "Mayor concentración en el centro — abre y redondea la mirada")
+            },
+            "Gatinho": {
+                "img": "https://i.imgur.com/zpBFK0e.png",
+                "desc": txt("Fios longos no canto externo — efeito sensual e alongado",
+                            "Fibras largas en la esquina externa — efecto sensual y alargado")
+            },
+            "Esquilo": {
+                "img": "https://i.imgur.com/BY5eEsr.png",
+                "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante",
+                            "Volumen acentuado entre el centro y la esquina externa — estilo llamativo")
             }
+        }
 
-            col1, col2 = st.columns(2)
-            lado_esq = list(efeitos.keys())[:2]
-            lado_dir = list(efeitos.keys())[2:]
+        for nome, efeito in efeitos.items():
+            col_img, col_txt = st.columns([2, 4])
+            with col_img:
+                st.image(efeito["img"], width=160)
+            with col_txt:
+                st.markdown(
+                    f"<div style='text-align:center;'><h5>{nome}</h5><p>{efeito['desc']}</p></div>",
+                    unsafe_allow_html=True
+                )
+                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"efeito_{nome}"):
+                    st.session_state.efeito_escolhido = nome
+            st.divider()
 
-            for col, nomes in zip([col1, col2], [lado_esq, lado_dir]):
-                with col:
-                    for nome in nomes:
-                        efeito = efeitos[nome]
-                        st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), use_container_width=True)
-                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                        label = txt(f"Selecionar {nome}: {efeito['desc']}", f"Seleccionar {nome}: {efeito['desc']}")
-                        if st.button(label, key=f"btn_{nome}"):
-                            st.session_state.efeito_escolhido = nome
-                        st.markdown("</div>", unsafe_allow_html=True)
+        if "efeito_escolhido" in st.session_state:
+            selecionado = st.session_state.efeito_escolhido
+            st.success(txt(f"✅ Efeito selecionado: {selecionado}\n{efeitos[selecionado]['desc']}",
+                           f"✅ Efecto seleccionado: {selecionado}\n{efeitos[selecionado]['desc']}"))
 
-            if "efeito_escolhido" in st.session_state:
-                selecionado = st.session_state.efeito_escolhido
-                st.success(txt(
-                    f"✅ Efeito selecionado: {selecionado}\n{efeitos[selecionado]['desc']}",
-                    f"✅ Efecto seleccionado: {selecionado}\n{efeitos[selecionado]['desc']}"
-                ))
-
-# 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
-
-# Só exibe o bloco se efeito_escolhido estiver definido
-# Só exibe o bloco se efeito_escolhido estiver definido
+# 3️⃣ Tipo de Aplicação
 if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido is not None:
-
     with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Tipo de Aplicación")):
-
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
         tipos = {
@@ -217,18 +219,19 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             col_img, col_txt = st.columns([2, 4])
             with col_img:
                 st.markdown(
-                    f"""
-                    <div style='text-align:center;'>
-                        <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:6px;'>
-                    </div>
-                    """,
+                    f"<div style='text-align:center;'>"
+                    f"<img src='{tipo['img']}' style='height:120px; width:160px; object-fit:cover; border-radius:6px;'>"
+                    f"</div>",
                     unsafe_allow_html=True
                 )
             with col_txt:
-                st.subheader(nome)
-                st.caption(tipo["desc"])
+                st.markdown(
+                    f"<div style='text-align:center;'><h5>{nome}</h5><p>{tipo['desc']}</p></div>",
+                    unsafe_allow_html=True
+                )
                 if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
                     st.session_state.tipo_aplicacao = nome
+            st.divider()
 
         if "tipo_aplicacao" in st.session_state:
             selecionado = st.session_state.tipo_aplicacao
