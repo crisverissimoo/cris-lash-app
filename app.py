@@ -169,19 +169,20 @@ if st.session_state.ficha_validada:
         }
 
         for nome, efeito in efeitos.items():
-            bloco_esq, bloco_dir = st.columns([1.2, 1.8])
-            with bloco_dir:
+            st.markdown("""
+                <div style='border:1px solid #CCC; padding:15px; border-radius:8px; margin-bottom:20px; background-color:#f9f9f9;'>
+            """, unsafe_allow_html=True)
+
+            col_img, col_texto = st.columns([1.2, 1.8])
+            with col_img:
+                st.image(efeito["img"], width=400, caption=txt(f"Técnica {nome}", f"Técnica {nome}"))
+            with col_texto:
                 st.markdown(f"<h5 style='margin-top:10px;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
                 st.write(efeito["desc"])
                 if st.button(txt(f"🡸 Selecionar {nome}", f"🡸 Seleccionar {nome}"), key=f"btn_{nome}"):
                     st.session_state.efeito_escolhido = nome
 
-            with bloco_esq:
-                st.markdown("<div style='padding-top:25px;'>", unsafe_allow_html=True)
-                st.image(efeito["img"], caption=txt(f"Técnica {nome}", f"Técnica {nome}"), width=360)
-                st.markdown("</div>", unsafe_allow_html=True)
-
-            st.markdown("<hr style='border-top: 1px solid #bbb;'>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
