@@ -50,7 +50,8 @@ with col2:
                 autorizada = False
 
 if autorizada:
-    respostas = {}  # Inicializada fora do formulário pra garantir que existe
+    respostas = {}         # Garante que a variável existe
+    enviar = False         # Previne erro se botão não for exibido
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
@@ -82,7 +83,7 @@ if autorizada:
             with col_btn:
                 enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-# 🔍 Lógica de validação segura e alinhada
+# 🔎 Validação pós-formulário
 if enviar:
     impeditivos = {
         "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
@@ -119,40 +120,30 @@ if enviar:
             elif chave in informativos:
                 info_detectados.append(f"- {informativos[chave]}")
 
-    # ⛔ Erro centralizado
     if bloqueios_detectados:
         col_erro = st.columns([1, 2, 1])[1]
         with col_erro:
-            st.error("❌ " + txt(
-                "Cliente **não está apta para atendimento**.",
-                "Cliente no apta para atención"
-            ) + "\n\n" + "\n".join(bloqueios_detectados))
+            st.error("❌ " + txt("Cliente **não está apta para atendimento**.", "Cliente no apta para atención") + "\n\n" +
+                     "\n".join(bloqueios_detectados))
         st.session_state.ficha_validada = False
         st.session_state.cliente_apta = False
 
-    # ⚠️ Alertas, 📎 Informativos, ✅ Sucesso — todos alinhados
     elif alertas_detectados or info_detectados:
         if alertas_detectados:
             col_alerta = st.columns([1, 2, 1])[1]
             with col_alerta:
-                st.warning("⚠️ " + txt(
-                    "Condições que requerem avaliação profissional:",
-                    "Condiciones que requieren evaluación profesional:"
-                ) + "\n\n" + "\n".join(alertas_detectados))
+                st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:", "Condiciones que requieren evaluación profesional:") + "\n\n" +
+                           "\n".join(alertas_detectados))
 
         if info_detectados:
             col_info = st.columns([1, 2, 1])[1]
             with col_info:
-                st.info("📎 " + txt(
-                    "Informações adicionais para registro:",
-                    "Información adicional para el registro:"
-                ) + "\n\n" + "\n".join(info_detectados))
+                st.info("📎 " + txt("Informações adicionais para registro:", "Información adicional para el registro:") + "\n\n" +
+                        "\n".join(info_detectados))
 
         col_sucesso = st.columns([1, 2, 1])[1]
         with col_sucesso:
-            st.success("✅ " + txt(
-                "Cliente apta para continuar — ficha validada com sucesso.",
-                "Cliente apta para continuar — ficha validada correctamente."
-            ))
+            st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.",
+                                   "Cliente apta para continuar — ficha validada correctamente."))
         st.session_state.ficha_validada = True
         st.session_state.cliente_apta = True
