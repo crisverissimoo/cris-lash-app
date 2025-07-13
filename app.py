@@ -192,4 +192,14 @@ if st.session_state.ficha_validada:
                 st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
                 st.write(efeito["desc"])
                 st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
-                if st.button(txt(f"🡸 Selecionar {nome}", f"🡸 Sele
+                if st.button(txt(f"🡸 Selecionar {nome}", f"🡸 Seleccionar {nome}"), key=f"btn_{nome}"):
+                    st.session_state.efeito_escolhido = nome
+
+            st.markdown("</div>", unsafe_allow_html=True)
+
+        if "efeito_escolhido" in st.session_state:
+            nome = st.session_state.efeito_escolhido
+            st.success("✅ " + txt(
+                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
+                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
+            ))
