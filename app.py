@@ -175,16 +175,16 @@ if st.session_state.ficha_validada:
         for nome, efeito in efeitos.items():
             st.markdown("""
                 <div style='
-                    border:1px solid #DDD; 
-                    border-radius:12px; 
-                    padding:20px; 
-                    margin-bottom:25px; 
-                    background-color:#fff; 
-                    box-shadow:0 1px 4px rgba(0,0,0,0.04);
+                    border: 1px solid #DDD;
+                    border-radius: 12px;
+                    padding: 20px;
+                    margin-bottom: 20px;
+                    background-color: #fff;
+                    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
                 '>
             """, unsafe_allow_html=True)
 
-            col_img, col_txt = st.columns([1.8, 1.2])  # Foto mais larga, texto menor
+            col_img, col_txt = st.columns([1.8, 1.1])
             with col_img:
                 st.image(efeito["img"], width=480)
 
@@ -203,4 +203,3 @@ if st.session_state.ficha_validada:
                 f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
-
