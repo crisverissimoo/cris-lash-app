@@ -152,42 +152,44 @@ if st.session_state.ficha_validada:
         efeitos = {
             "Clássica": {
                 "img": "https://i.imgur.com/Nqrwdcm.png",
-                "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado")
+                "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado"),
+                "tipo_olho": txt("Olhos amendoado ou simétricos", "Ojos almendrados o simétricos")
             },
             "Boneca": {
                 "img": "https://i.imgur.com/vJUuvsl.png",
-                "desc": txt("Maior concentração no centro — abre e arredonda o olhar", "Mayor concentración en el centro — abre y redondea la mirada")
+                "desc": txt("Maior concentração no centro — abre e arredonda o olhar", "Mayor concentración en el centro — abre y redondea la mirada"),
+                "tipo_olho": txt("Olhos pequenos, fechados ou orientais", "Ojos pequeños, cerrados u orientales")
             },
             "Gatinho": {
                 "img": "https://i.imgur.com/zpBFK0e.png",
-                "desc": txt("Fios longos no canto externo — efeito sensual e alongado", "Fibras largas en la esquina externa — efecto sensual y alargado")
+                "desc": txt("Fios longos no canto externo — efeito sensual e alongado", "Fibras largas en la esquina externa — efecto sensual y alargado"),
+                "tipo_olho": txt("Olhos caídos ou arredondados", "Ojos caídos o redondeados")
             },
             "Esquilo": {
                 "img": "https://i.imgur.com/BY5eEsr.png",
-                "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante", "Volumen acentuado entre el centro y la esquina externa — estilo llamativo")
+                "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante", "Volumen acentuado entre el centro y la esquina externa — estilo llamativo"),
+                "tipo_olho": txt("Olhos puxados ou olhos grandes", "Ojos rasgados o grandes")
             }
         }
 
         for nome, efeito in efeitos.items():
             st.markdown("""
-                <div style='border:1px solid #CCC; padding:15px; border-radius:8px; margin-bottom:20px; background-color:#f9f9f9;'>
+                <div style='
+                    border:1px solid #DDD;
+                    padding:20px;
+                    border-radius:12px;
+                    background-color:#fff;
+                    margin-bottom:25px;
+                    box-shadow:0 1px 4px rgba(0,0,0,0.04);
+                '>
             """, unsafe_allow_html=True)
 
-            col_img, col_texto = st.columns([1.2, 1.8])
+            col_img, col_txt = st.columns([1.5, 2])
             with col_img:
-                st.image(efeito["img"], width=400, caption=txt(f"Técnica {nome}", f"Técnica {nome}"))
-            with col_texto:
-                st.markdown(f"<h5 style='margin-top:10px;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+                st.image(efeito["img"], width=420)
+
+            with col_txt:
+                st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
                 st.write(efeito["desc"])
-                if st.button(txt(f"🡸 Selecionar {nome}", f"🡸 Seleccionar {nome}"), key=f"btn_{nome}"):
-                    st.session_state.efeito_escolhido = nome
-
-            st.markdown("</div>", unsafe_allow_html=True)
-
-        if "efeito_escolhido" in st.session_state:
-            nome = st.session_state.efeito_escolhido
-            st.success("✅ " + txt(
-                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
-                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
-            ))
-
+                st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
+                if st.button(txt(f"🡸 Selecionar {nome}", f"🡸 Sele
