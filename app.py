@@ -26,7 +26,7 @@ with col2:
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.write(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
 
-    with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
+   with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
     st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
     nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
