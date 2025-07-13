@@ -172,30 +172,30 @@ if st.session_state.ficha_validada:
             }
         }
 
-       for nome, efeito in efeitos.items():
-    st.markdown("""
-        <div style='
-            border:1px solid #DDD; 
-            border-radius:12px; 
-            padding:20px; 
-            margin-bottom:25px; 
-            background-color:#fff; 
-            box-shadow:0 1px 4px rgba(0,0,0,0.04);
-        '>
-    """, unsafe_allow_html=True)
+        for nome, efeito in efeitos.items():
+            st.markdown("""
+                <div style='
+                    border:1px solid #DDD; 
+                    border-radius:12px; 
+                    padding:20px; 
+                    margin-bottom:25px; 
+                    background-color:#fff; 
+                    box-shadow:0 1px 4px rgba(0,0,0,0.04);
+                '>
+            """, unsafe_allow_html=True)
 
-    col_img, col_txt = st.columns([1.8, 1.2])  # Foto mais larga, texto menor
-    with col_img:
-        st.image(efeito["img"], width=480)  # Imagem maior e mais nítida
+            col_img, col_txt = st.columns([1.8, 1.2])  # Foto mais larga, texto menor
+            with col_img:
+                st.image(efeito["img"], width=480)
 
-    with col_txt:
-        st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
-        st.write(efeito["desc"])
-        st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
-        if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
-            st.session_state.efeito_escolhido = nome
+            with col_txt:
+                st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+                st.write(efeito["desc"])
+                st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
+                if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
+                    st.session_state.efeito_escolhido = nome
 
-    st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
@@ -203,3 +203,4 @@ if st.session_state.ficha_validada:
                 f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
+
