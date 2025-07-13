@@ -211,27 +211,17 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
     }
 
     for nome, tipo in tipos.items():
-    col_img, col_txt = st.columns([1, 3])
-    with col_img:
-        st.markdown(
-            f"""
-            <div style='text-align:center;'>
-                <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:6px;'>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-    with col_txt:
-        st.subheader(nome)
-        st.caption(tipo["desc"])
-        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-            st.session_state.tipo_aplicacao = nome
-
-
-
-    if "tipo_aplicacao" in st.session_state:
-        selecionado = st.session_state.tipo_aplicacao
-        st.success(txt(
-            f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
-            f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
-        ))
+        col_img, col_txt = st.columns([1, 3])
+        with col_img:
+            st.markdown(
+                f"""
+                <div style='text-align:center;'>
+                    <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:6px;'>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
+        with col_txt:
+            st.subheader(nome)
+            st.caption(tipo["desc"])
+            if st.button(txt(f"Selecion
