@@ -50,7 +50,8 @@ with col2:
                 autorizada = False
 
 if autorizada:
-    # Bloco centralizado com proporção [1, 2, 1]
+    respostas = {}  # Inicializada fora do formulário pra garantir que existe
+
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
@@ -72,19 +73,17 @@ if autorizada:
                 "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
             }
 
-            respostas = {}
             for chave, pergunta in perguntas.items():
-                col_pergunta = st.columns([1, 4, 1])[1]
-                with col_pergunta:
+                col_p = st.columns([1, 4, 1])[1]
+                with col_p:
                     respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-            st.markdown("<br>", unsafe_allow_html=True)
-            col_botao = st.columns([1, 2, 1])[1]
-            with col_botao:
+            col_btn = st.columns([1, 2, 1])[1]
+            with col_btn:
                 enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-# 💥 Validação lógica (fora da estrutura visual)
-if "respostas" in locals() and enviar:
+# 🔍 Lógica de validação segura e alinhada
+if enviar:
     impeditivos = {
         "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
         "infeccao": txt("Infecção ocular (blefarite, terçol, etc)", "Infección ocular (blefaritis, orzuelos, etc)"),
@@ -102,58 +101,58 @@ if "respostas" in locals() and enviar:
     }
 
     informativos = {
-    "colirio": txt("Uso de colírios frequente", "Uso frecuente de colirios"),
-    "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
-    "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
-}
+        "colirio": txt("Uso de colírios frequente", "Uso frecuente de colirios"),
+        "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
+        "extensao": txt("Já fez extensão de cílios antes", "Ya se hizo extensiones de pestañas")
+    }
 
-bloqueios_detectados = []
-alertas_detectados = []
-info_detectados = []
+    bloqueios_detectados = []
+    alertas_detectados = []
+    info_detectados = []
 
-for chave, resposta in respostas.items():
-    if resposta == "Sim":
-        if chave in impeditivos:
-            bloqueios_detectados.append(f"- {impeditivos[chave]}")
-        elif chave in alerta:
-            alertas_detectados.append(f"- {alerta[chave]}")
-        elif chave in informativos:
-            info_detectados.append(f"- {informativos[chave]}")
+    for chave, resposta in respostas.items():
+        if resposta == "Sim":
+            if chave in impeditivos:
+                bloqueios_detectados.append(f"- {impeditivos[chave]}")
+            elif chave in alerta:
+                alertas_detectados.append(f"- {alerta[chave]}")
+            elif chave in informativos:
+                info_detectados.append(f"- {informativos[chave]}")
 
-# 💥 Mensagem de erro
-if bloqueios_detectados:
-    col_erro = st.columns([1, 2, 1])[1]
-    with col_erro:
-        st.error("❌ " + txt(
-            "Cliente **não está apta para atendimento**.",
-            "Cliente no apta para atención"
-        ) + "\n\n" + "\n".join(bloqueios_detectados))
-    st.session_state.ficha_validada = False
-    st.session_state.cliente_apta = False
+    # ⛔ Erro centralizado
+    if bloqueios_detectados:
+        col_erro = st.columns([1, 2, 1])[1]
+        with col_erro:
+            st.error("❌ " + txt(
+                "Cliente **não está apta para atendimento**.",
+                "Cliente no apta para atención"
+            ) + "\n\n" + "\n".join(bloqueios_detectados))
+        st.session_state.ficha_validada = False
+        st.session_state.cliente_apta = False
 
-# ✅ Mensagens de alerta / info / sucesso
-elif alertas_detectados or info_detectados:
-    if alertas_detectados:
-        col_alerta = st.columns([1, 2, 1])[1]
-        with col_alerta:
-            st.warning("⚠️ " + txt(
-                "Condições que requerem avaliação profissional:",
-                "Condiciones que requieren evaluación profesional:"
-            ) + "\n\n" + "\n".join(alertas_detectados))
+    # ⚠️ Alertas, 📎 Informativos, ✅ Sucesso — todos alinhados
+    elif alertas_detectados or info_detectados:
+        if alertas_detectados:
+            col_alerta = st.columns([1, 2, 1])[1]
+            with col_alerta:
+                st.warning("⚠️ " + txt(
+                    "Condições que requerem avaliação profissional:",
+                    "Condiciones que requieren evaluación profesional:"
+                ) + "\n\n" + "\n".join(alertas_detectados))
 
-    if info_detectados:
-        col_info = st.columns([1, 2, 1])[1]
-        with col_info:
-            st.info("📎 " + txt(
-                "Informações adicionais para registro:",
-                "Información adicional para el registro:"
-            ) + "\n\n" + "\n".join(info_detectados))
+        if info_detectados:
+            col_info = st.columns([1, 2, 1])[1]
+            with col_info:
+                st.info("📎 " + txt(
+                    "Informações adicionais para registro:",
+                    "Información adicional para el registro:"
+                ) + "\n\n" + "\n".join(info_detectados))
 
-    col_sucesso = st.columns([1, 2, 1])[1]
-    with col_sucesso:
-        st.success("✅ " + txt(
-            "Cliente apta para continuar — ficha validada com sucesso.",
-            "Cliente apta para continuar — ficha validada correctamente."
-        ))
-    st.session_state.ficha_validada = True
-    st.session_state.cliente_apta = True
+        col_sucesso = st.columns([1, 2, 1])[1]
+        with col_sucesso:
+            st.success("✅ " + txt(
+                "Cliente apta para continuar — ficha validada com sucesso.",
+                "Cliente apta para continuar — ficha validada correctamente."
+            ))
+        st.session_state.ficha_validada = True
+        st.session_state.cliente_apta = True
