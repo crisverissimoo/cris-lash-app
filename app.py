@@ -80,7 +80,6 @@ if autorizada:
     respostas = {}
 
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
-
         with st.form("form_clinica"):
                 perguntas = {
                     "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
