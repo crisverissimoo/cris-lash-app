@@ -175,8 +175,6 @@ if st.session_state.ficha_validada:
         for nome, efeito in efeitos.items():
             st.markdown("""
                 <div style='
-                    border: 2px solid #e09b8e;
-                    border-radius: 12px;
                     padding: 20px;
                     margin-bottom: 30px;
                 '>
