@@ -292,7 +292,12 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
 
 import datetime
 
-# 🎯 Etapa de Agendamento — liberado após serviço escolhido
+import datetime
+
+# Hoje
+hoje = datetime.date.today()
+
+# 🎯 Etapa de Agendamento — liberado após escolha de tipo de aplicação
 if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicacao"):
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
@@ -310,11 +315,18 @@ if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicac
 
         st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
 
-        # 🕐 Seleção de Data e Horário
-        dias_disponiveis = [hoje + datetime.timedelta(days=i) for i in range(1, 8)]
-        data = st.selectbox(txt("📅 Escolha a data", "📅 Elija la fecha"), dias_disponiveis, format_func=lambda d: d.strftime('%d/%m/%Y'))
+        # 📅 Calendário para escolher a data
+        data = st.date_input(
+            txt("📅 Escolha a data", "📅 Elija la fecha"),
+            min_value=hoje,
+            value=hoje + datetime.timedelta(days=1),
+            max_value=hoje + datetime.timedelta(days=30)
+        )
 
-        horarios_disponiveis = ["09:00", "10:30", "13:00", "14:30", "16:00", "17:30"]
+        # 🕐 Horários com intervalo de 2h30 — entre 09:00 e 17:30
+        base_hora = datetime.datetime.strptime("09:00", "%H:%M")
+        horarios_disponiveis = [(base_hora + datetime.timedelta(minutes=150 * i)).strftime("%H:%M") for i in range(5)]
+
         horario = st.selectbox(txt("🕐 Escolha o horário", "🕐 Elija la hora"), horarios_disponiveis)
 
         # 💖 Resumo do serviço
@@ -341,14 +353,4 @@ if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicac
                 '>
                     <h5>📌 Cuidados antes e depois da aplicação</h5>
                     <ul>
-                        <li>🚫 Compareça sem maquiagem nos olhos</li>
-                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                    </ul>
-                </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("</div>", unsafe_allow_html=True)
-
+                        <li>🚫 Compareça sem maquiagem nos
