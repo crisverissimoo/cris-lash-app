@@ -183,6 +183,8 @@ if st.session_state.ficha_validada:
         }
 
         for nome, efeito in efeitos.items():
+            st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
+
             col_img, col_txt = st.columns([1.6, 1.4])
 
             with col_img:
