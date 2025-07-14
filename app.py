@@ -177,7 +177,13 @@ if st.session_state.ficha_validada:
 
             with col_img:
                 st.markdown("""
-                    <div style='display:flex; align-items:center; height:100%; justify-content:center;'>
+                    <div style='
+                        display: flex;
+                        align-items: flex-end;
+                        justify-content: center;
+                        height: 100%;
+                        padding-bottom: 25px;
+                    '>
                 """, unsafe_allow_html=True)
                 st.image(efeito["img"], width=460)
                 st.markdown("</div>", unsafe_allow_html=True)
@@ -200,4 +206,3 @@ if st.session_state.ficha_validada:
                 f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
-
