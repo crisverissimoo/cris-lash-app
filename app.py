@@ -265,6 +265,7 @@ if "historico_ocupados" not in st.session_state:
 
 # ⏳ só exibe agendamento se tipo_aplicacao foi escolhido
 # ✅ Defina a função txt() no topo do app, se ainda não tiver
+# ✅ Defina a função txt() no topo do app, se ainda não tiver
 def txt(pt, es):
     idioma = st.session_state.get("idioma", "pt")
     return pt if idioma == "pt" else es
@@ -335,4 +336,3 @@ if st.session_state.get("tipo_aplicacao"):
                         </ul>
                     </div>
                 """, unsafe_allow_html=True)
-
