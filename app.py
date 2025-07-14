@@ -198,8 +198,7 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
  # 💅 Escolha do Tipo de Aplicação
 # 💅 Escolha do Tipo de Aplicação
 # 💅 Tipo de Aplicação — em duas colunas
-c# 💅 Escolha do Tipo de Aplicação
-col_esq, col_centro, col_dir = st.columns([1, 2, 1])  # corrigido nome da coluna esquerda
+col_esq, col_centro, col_dir = st.columns([1, 2, 1])
 with col_centro:
     st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
@@ -239,7 +238,7 @@ with col_centro:
                 tipo = tipos[nome]
                 with col:
                     st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                    st.image(tipo["img"], width=220)  # 📸 padronizado para todas
+                    st.image(tipo["img"], width=220)  # 📸 todas com tamanho padronizado
                     st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
                     st.caption(tipo["desc"])
                     if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
@@ -247,7 +246,6 @@ with col_centro:
                         st.session_state.valor = tipo["valor"]
                     st.markdown("</div>", unsafe_allow_html=True)
 
-    # ✅ Bloqueia próxima etapa até que escolha seja feita
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         if st.session_state.get("tipo_aplicacao"):
@@ -255,6 +253,7 @@ with col_centro:
             st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
         else:
             st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
+
 
 
 
