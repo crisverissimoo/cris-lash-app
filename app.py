@@ -15,10 +15,12 @@ for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicaca
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# 🎀 Boas-vindas + idioma
+# 🎀 Boas-vindas + idioma + cadastro centralizado
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
+
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
+
     st.markdown("""
     <div style='background-color:#fff2f2; padding:15px; border-radius:10px; border-left:5px solid #e09b8e; color:#333'>
     👋 <strong>Bem-vinda ao Cris Lash!</strong><br>
@@ -26,26 +28,26 @@ with col2:
     💶 Valor promocional de lançamento: <strong>10€</strong> por aplicação!
     </div>
     """, unsafe_allow_html=True)
+
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.write(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
 
-# 👤 Ficha da cliente
-with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
-    nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
-    nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
-                               min_value=date(1920, 1, 1), max_value=hoje, key="nascimento")
-    telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
-    email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
-    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-    st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
+    with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
+        nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
+        nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
+                                   min_value=date(1920, 1, 1), max_value=hoje, key="nascimento")
+        telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
+        email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
+        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+        st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
 
-    autorizada = True
-    if idade < 18:
-        responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
-        autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"), ["Sim", "Não", "Pendente"])
-        if autorizacao != "Sim":
-            st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
-            autorizada = False
+        autorizada = True
+        if idade < 18:
+            responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
+            autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"), ["Sim", "Não", "Pendente"])
+            if autorizacao != "Sim":
+                st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
+                autorizada = False
 
 # 🧾 Ficha clínica
 if autorizada:
