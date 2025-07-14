@@ -1,39 +1,43 @@
-# ✅ Imports
 import streamlit as st
-from datetime import datetime
+from datetime import datetime, date, timedelta
 import pytz
 
-# ✅ Fuso + data atual
+# 🌍 Fuso horário e data atual
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 
-# ✅ Config da página
+# 🪞 Configuração de página
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 
-# ✅ Inicializações
-for var in ["historico", "formato_escolhido", "ficha_validada", "cliente_apta", "cadastro_completo"]:
-    if var not in st.session_state:
-        st.session_state[var] = False if "bool" in str(type(var)) else []
+# 🌐 Função de idioma
+def txt(pt, es): return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
-# 🔒 Bloqueio se cliente não apta
-if st.session_state.cliente_apta == False:
-    st.error("❌ Cliente não está apta para atendimento. Reação alérgica ou condição contraindicada.")
-    st.stop()
+# 🔁 Estados iniciais
+for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado"]:
+    if key not in st.session_state:
+        st.session_state[key] = None
+if "historico_ocupados" not in st.session_state:
+    st.session_state.historico_ocupados = []
 
-# 👋 Saudação elegante
-col_top1, col_top2, col_top3 = st.columns([1, 2, 1])
-with col_top2:
-    st.markdown("<h2 style='text-align:center;'>💖 Seja bem-vinda à consultoria Cris Lash</h2>", unsafe_allow_html=True)
-    st.markdown("<h4 style='text-align:center;'>✨ Atendimento técnico, visual alinhado e cuidado com sua beleza ✨</h4>", unsafe_allow_html=True)
-    st.caption("Preencha os dados abaixo para liberar sua ficha clínica")
-
-# 🌐 Idioma
+# 🎀 Boas-vindas + idioma centralizado
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    idioma = st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
-    def txt(pt, es): return pt if idioma == "Português" else es
+    st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-    st.markdown(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
+    st.markdown("""
+        <div style='background-color:#fff2f2; padding:15px; border-radius:10px;
+                    border-left:5px solid #e09b8e; color:#333; font-size:16px'>
+            👋 <strong>Bem-vinda ao Cris Lash!</strong><br>
+            ✨ Atendimento profissional com técnica em formação.<br>
+            💶 Valor promocional de lançamento: <strong>10€</strong> por aplicação!
+        </div>
+    """, unsafe_allow_html=True)
+
+    st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
+
+# 🔜 Continuação esperada: Ficha da Cliente com travamento por idade + autorização (Etapa 1.2)
+
 
 # 🗂️ Cadastro da Cliente
 col_cad1, col_cad2, col_cad3 = st.columns([1, 2, 1])
