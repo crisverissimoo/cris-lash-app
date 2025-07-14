@@ -173,19 +173,21 @@ if st.session_state.ficha_validada:
         }
 
         for nome, efeito in efeitos.items():
-            col_img, col_txt = st.columns([1.8, 1.1])  # Imagem maior, coluna de texto compacta
+    col_img, col_txt = st.columns([1.6, 1.4])  # Equilíbrio entre imagem e texto
 
-            with col_img:
-                st.image(efeito["img"], width=480)  # Amplo e nítido
+    with col_img:
+        st.image(efeito["img"], width=460)
 
-            with col_txt:
-                st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
-                st.write(efeito["desc"])
-                st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
-                if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
-                    st.session_state.efeito_escolhido = nome
+    with col_txt:
+        st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+        st.write(efeito["desc"])
+        st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
+        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+        if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
+            st.session_state.efeito_escolhido = nome
+        st.markdown("</div>", unsafe_allow_html=True)
 
-            st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
+    st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
