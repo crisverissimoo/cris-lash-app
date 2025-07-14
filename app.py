@@ -389,12 +389,11 @@ if "protocolo" not in st.session_state:
 
 horarios_ocupados = st.session_state.historico_ocupados
 
-# 🎯 Função para gerar horários disponíveis
+# 🎯 Funções
 def gerar_horarios():
     base = datetime.strptime("08:00", "%H:%M")
     return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
 
-# 🎯 Função para verificar se horário está livre
 def esta_livre(data, horario):
     inicio = datetime.strptime(horario, "%H:%M")
     fim = inicio + timedelta(hours=2)
@@ -410,7 +409,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
 
-        # 📛 BLOQUEIO manual de horários
+        # 📛 BLOQUEIO manual
         with st.expander("📛 Bloquear horários manualmente", expanded=False):
             data_bloqueio = st.date_input("📅 Data para bloquear", min_value=datetime.today().date(), key="data_bloqueio")
             livres_para_bloqueio = [h for h in gerar_horarios() if esta_livre(data_bloqueio, h)]
@@ -420,7 +419,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     st.session_state.historico_ocupados.append((data_bloqueio, h))
                 st.success(f"✅ {len(horarios_a_bloquear)} horário(s) bloqueado(s) em {data_bloqueio.strftime('%d/%m/%Y')}")
 
-        # 📅 AGENDAMENTO normal do atendimento
+        # 📅 AGENDAMENTO
         with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
 
@@ -464,9 +463,8 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         "mensagem": mensagem
                     })
 
-            if st.session_state.get("agendamento_confirmado"):
-                st.success("✅ Atendimento agendado com sucesso!")
-
+            # ✅ RESUMO final do agendamento
+            if st.session_state.get("agendamento_confirmado") and st.session_state.historico_clientes:
                 cliente = st.session_state.historico_clientes[-1]
                 resumo = f"""
 📌 Protocolo: #{cliente['protocolo']}
@@ -475,6 +473,8 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 📅 Data: {cliente['data']} — 🕐 {cliente['horario']}
 💬 Obs: {cliente['mensagem'] or '—'}
                 """
+
+                st.success("✅ Atendimento agendado com sucesso!")
 
                 st.markdown("""
                     <div style='
@@ -504,4 +504,3 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     texto = resumo.replace("\n", "%0A").replace("—", "")
                     link = f"https://wa.me/{telefone.strip()}?text={texto}"
                     st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
-
