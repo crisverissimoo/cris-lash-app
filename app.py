@@ -187,7 +187,12 @@ if st.session_state.ficha_validada:
                 st.markdown("</div>", unsafe_allow_html=True)
 
             with col_txt:
-                st.markdown(f"<h5 style='margin-top:0; text-align:center;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+                st.markdown(f"""
+                    <h5 style='
+                        margin-top:0;
+                        text-align:center;
+                    '>{txt(f"Efeito {nome}", f"Efecto {nome}")}</h5>
+                """, unsafe_allow_html=True)
                 st.write(efeito["desc"])
                 st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
 
