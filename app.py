@@ -62,16 +62,15 @@ with col2:
                              "❌ Cliente menor sin autorización — atención bloqueada."))
                 autorizada = False
 
-# Validação de ficha
+# Continuação da validação após ficha pessoal
 if autorizada:
     st.session_state.ficha_validada = True
     st.session_state.cliente_apta = True
-
     respostas = {}
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
-        st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align:center;'>🧾 " + txt("Ficha de Anamnese Clínica", "Ficha Clínica") + "</h4>", unsafe_allow_html=True)
 
         with st.form("form_clinica"):
             perguntas = {
@@ -99,65 +98,40 @@ if autorizada:
             with col_btn:
                 enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-            if enviar:
-                if any(resposta is None for resposta in respostas.values()):
-                    st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
-                                            "Debe responder todas las preguntas antes de continuar."))
+        if enviar:
+            if any(r is None for r in respostas.values()):
+                st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.", "Debe responder todas las preguntas antes de continuar."))
+                st.session_state.ficha_validada = False
+            else:
+                impeditivos = {"glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"}
+                alertas = {"alergia", "irritacao", "gravida", "acido", "sensibilidade"}
+                informativos = {"colirio", "lentes", "extensao"}
+
+                bloqueios, avisos, infos = [], [], []
+
+                for chave, resposta in respostas.items():
+                    if resposta == "Sim":
+                        if chave in impeditivos:
+                            bloqueios.append(f"- {perguntas[chave]}")
+                        elif chave in alertas:
+                            avisos.append(f"- {perguntas[chave]}")
+                        elif chave in informativos:
+                            infos.append(f"- {perguntas[chave]}")
+
+                if bloqueios:
+                    st.error("❌ " + txt("Cliente não está apta para atendimento.", "Cliente no apta para atención") + "\n\n" + "\n".join(bloqueios))
                     st.session_state.ficha_validada = False
+                    st.session_state.cliente_apta = False
+                    st.stop()
                 else:
-                    impeditivos = {
-                        "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
-                        "infeccao": txt("Infecção ocular", "Infección ocular"),
-                        "conjuntivite": txt("Conjuntivite recente", "Conjuntivitis reciente"),
-                        "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
-                        "reacao": txt("Reação alérgica anterior", "Reacción alérgica anterior")
-                    }
-                    alerta = {
-                        "alergia": txt("Histórico de alergias", "Historial de alergias"),
-                        "irritacao": txt("Olhos irritados", "Ojos irritados"),
-                        "gravida": txt("Gestante ou lactante", "Embarazada o lactante"),
-                        "acido": txt("Tratamento com ácido", "Tratamiento con ácido"),
-                        "sensibilidade": txt("Sensibilidade a químicos", "Sensibilidad química")
-                    }
-                    informativos = {
-                        "colirio": txt("Uso frequente de colírios", "Uso frecuente de colirios"),
-                        "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
-                        "extensao": txt("Já fez extensão antes", "Ya se hizo extensiones")
-                    }
+                    if avisos:
+                        st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:", "Condiciones que requieren evaluación profesional:") + "\n\n" + "\n".join(avisos))
+                    if infos:
+                        st.info("📎 " + txt("Informações adicionais para registro:", "Información adicional para el registro:") + "\n\n" + "\n".join(infos))
+                    st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.", "Cliente apta para continuar — ficha validada correctamente."))
+                    st.session_state.ficha_validada = True
+                    st.session_state.cliente_apta = True
 
-                    bloqueios_detectados = []
-                    alertas_detectados = []
-                    info_detectados = []
-
-                    for chave, resposta in respostas.items():
-                        if resposta == "Sim":
-                            if chave in impeditivos:
-                                bloqueios_detectados.append(f"- {impeditivos[chave]}")
-                            elif chave in alerta:
-                                alertas_detectados.append(f"- {alerta[chave]}")
-                            elif chave in informativos:
-                                info_detectados.append(f"- {informativos[chave]}")
-
-                    if bloqueios_detectados:
-                        st.error("❌ " + txt("Cliente não está apta para atendimento.",
-                                            "Cliente no apta para atención") + "\n\n" +
-                                 "\n".join(bloqueios_detectados))
-                        st.session_state.ficha_validada = False
-                        st.session_state.cliente_apta = False
-                        st.stop()
-                    else:
-                        if alertas_detectados:
-                            st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:",
-                                                   "Condiciones que requieren evaluación profesional:") + "\n\n" +
-                                       "\n".join(alertas_detectados))
-                        if info_detectados:
-                            st.info("📎 " + txt("Informações adicionais para registro:",
-                                               "Información adicional para el registro:") + "\n\n" +
-                                    "\n".join(info_detectados))
-                        st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.",
-                                               "Cliente apta para continuar — ficha validada correctamente."))
-                        st.session_state.ficha_validada = True
-                        st.session_state.cliente_apta = True
 
 # 🔓 Etapa 2 — Escolha de Efeito
  
