@@ -266,23 +266,24 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
         }
 
         for nome, tipo in tipos.items():
-            st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+            if st.button("", key=f"card_{nome}"):
+                st.session_state.tipo_aplicacao = nome
 
-            col_img, col_txt = st.columns([1.4, 1.6])
-            with col_img:
-                st.markdown(f"""
+            st.markdown(f"""
+                <div style='
+                    border: 2px solid #e09b8e;
+                    border-radius: 12px;
+                    padding: 20px;
+                    margin-bottom: 30px;
+                    cursor: pointer;
+                ' onclick="document.querySelector('[data-testid=\\'stButton\\'][key=\\'card_{nome}\\'] button').click()">
                     <div style='text-align:center;'>
-                        <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:6px;'>
+                        <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:10px;'>
+                        <h5>{nome}</h5>
+                        <p style='font-size:14px;'>{tipo['desc']}</p>
                     </div>
-                """, unsafe_allow_html=True)
-
-            with col_txt:
-                st.markdown(f"<h5 style='text-align:center;'>{nome}</h5>", unsafe_allow_html=True)
-                st.caption(tipo["desc"])
-                col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
-                with col_b2:
-                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                        st.session_state.tipo_aplicacao = nome
+                </div>
+            """, unsafe_allow_html=True)
 
         if "tipo_aplicacao" in st.session_state:
             selecionado = st.session_state.tipo_aplicacao
@@ -292,3 +293,4 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             ))
 
         st.markdown("</div>", unsafe_allow_html=True)
+
