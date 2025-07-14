@@ -138,6 +138,7 @@ with col_centro:
 
 # ✅ Função txt (se ainda não definida)
 # ✅ Função txt
+# ✅ Função txt
 def txt(pt, es):
     idioma = st.session_state.get("idioma", "pt")
     return pt if idioma == "pt" else es
@@ -148,14 +149,13 @@ from datetime import datetime, timedelta, date
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# 💅 Etapa 1 — Ficha Clínica (2 colunas organizadas)
+# 📝 Etapa 1 — Ficha Clínica com 2 colunas
 st.markdown("<h4 style='text-align:center;'>📝 Ficha Clínica</h4>", unsafe_allow_html=True)
-
 col_esq, col_dir = st.columns(2)
 
 with col_esq:
     glaucoma = st.radio("👁️ Possui glaucoma?", ["Sim", "Não"], index=1)
-    infeccoes = st.radio("🦠 Tem infecções oculares?", ["Sim", "Não"], index=1)
+    infeccoes = st.radio("🦠 Infecções oculares?", ["Sim", "Não"], index=1)
     conjuntivite = st.radio("👀 Conjuntivite recente?", ["Sim", "Não"], index=1)
 
 with col_dir:
@@ -170,7 +170,7 @@ with col2:
         st.session_state.cliente_apta = True
         st.success("✅ Cliente apta — ficha validada!")
 
-# ✨ Etapa 2 — Efeito Lash
+# ✨ Etapa 2 — Escolha do Efeito Lash
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
     st.markdown("<h4 style='text-align:center;'>✨ Efeito Lash</h4>", unsafe_allow_html=True)
 
@@ -228,11 +228,11 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
         if st.session_state.get("tipo_aplicacao"):
             tipo = st.session_state.tipo_aplicacao
             valor = st.session_state.valor
+            efeito = st.session_state.efeito_escolhido
             hoje = date.today()
 
             st.success(f"✅ Tipo selecionado: {tipo}")
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
-
             data = st.date_input("📆 Escolha a data", min_value=hoje)
 
             def gerar_horarios():
@@ -257,7 +257,6 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
             else:
                 horario = st.selectbox("🕐 Horário disponível", horarios_disponiveis)
                 hora_fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
-                efeito = st.session_state.efeito_escolhido
 
                 st.markdown(f"💖 Serviço: **{efeito} + {tipo}** — 💶 {valor}")
                 st.markdown(f"📅 Data: `{data.strftime('%d/%m/%Y')}` — ⏰ `{horario} às {hora_fim}`")
@@ -267,7 +266,6 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                     st.session_state.agendamento_confirmado = True
                     st.session_state.historico_ocupados.append((data, horario))
                     st.success("✅ Atendimento agendado com sucesso!")
-
                     st.markdown("""
                         <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
                             <h5>📌 Cuidados antes e depois da aplicação</h5>
@@ -280,3 +278,4 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                             </ul>
                         </div>
                     """, unsafe_allow_html=True)
+
