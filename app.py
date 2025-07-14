@@ -59,46 +59,83 @@ cadastro_ok = (
     (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
 )
 
-# 🔒 Só mostra ficha de anamnese se cadastro estiver completo
-cadastro_ok = (
-    nome and nascimento and telefone and
-    (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
-)
+# 🎀 Cadastro da cliente centralizado
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.markdown("<h4 style='text-align:center;'>🧍 Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
+    nome = st.text_input("🧍 Nome completo")
+    nascimento = st.date_input("📅 Data de nascimento", min_value=date(1920, 1, 1), max_value=hoje)
+    telefone = st.text_input("📞 Telefone")
+    email = st.text_input("📧 Email (opcional)")
+    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+    st.write(f"📌 Idade: **{idade} anos**")
+
+    autorizacao = "Sim"
+    if idade < 18:
+        responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
+        autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"])
+
+    cadastro_ok = (
+        nome and nascimento and telefone and
+        (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
+    )
+
+# 📌 Ficha só aparece se cadastro estiver completo
 col_esq, col_centro, col_dir = st.columns([1, 2, 1])
 with col_centro:
     if cadastro_ok:
         respostas = {}
         st.markdown("---")
-        st.markdown("<h4 style='text-align:center;'>🧾 " + txt("Ficha de Anamnese Clínica", "Ficha Clínica") + "</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align:center;'>🧾 Ficha Clínica</h4>", unsafe_allow_html=True)
         with st.form("form_clinica"):
             perguntas = {
-                "glaucoma": txt("Possui glaucoma?", "¿Tiene glaucoma?"),
-                "infeccao": txt("Tem infecções oculares?", "¿Tiene infecciones oculares?"),
-                "conjuntivite": txt("Conjuntivite recente?", "¿Conjuntivitis reciente?"),
-                "cirurgia": txt("Cirurgia ocular recente?", "¿Cirugía ocular reciente?"),
-                "reacao": txt("Reação alérgica anterior?", "¿Reacción alérgica previa?"),
-                "alergia": txt("Histórico de alergias?", "¿Historial de alergias?"),
-                "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o lactante?"),
-                "acido": txt("Tratamento com ácido?", "¿Tratamiento con ácidos?"),
-                "irritacao": txt("Olhos irritados?", "¿Ojos irritados?"),
-                "sensibilidade": txt("Sensibilidade a químicos?", "¿Sensibilidad a químicos?"),
-                "colirio": txt("Uso frequente de colírios?", "¿Uso frecuente de colirios?"),
-                "lentes": txt("Usa lentes de contato?", "¿Usa lentes de contacto?"),
-                "extensao": txt("Já fez extensão antes?", "¿Ya se hizo extensiones?")
+                "glaucoma": "Possui glaucoma?",
+                "infeccao": "Tem infecções oculares?",
+                "conjuntivite": "Conjuntivite recente?",
+                "cirurgia": "Cirurgia ocular recente?",
+                "reacao": "Reação alérgica anterior?",
+                "alergia": "Histórico de alergias?",
+                "gravida": "Está grávida ou amamentando?",
+                "acido": "Tratamento com ácido?",
+                "irritacao": "Olhos irritados?",
+                "sensibilidade": "Sensibilidade a químicos?",
+                "colirio": "Uso frequente de colírios?",
+                "lentes": "Usa lentes de contato?",
+                "extensao": "Já fez extensão antes?"
             }
 
             for chave, pergunta in perguntas.items():
                 respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-            enviar = st.form_submit_button("📨 " + txt("Finalizar ficha", "Finalizar formulario"))
+            enviar = st.form_submit_button("📨 Finalizar ficha")
 
         if enviar:
             if any(r is None for r in respostas.values()):
-                st.warning(txt("⚠️ Responda todas as perguntas.", "⚠️ Responda todas las preguntas."))
+                st.warning("⚠️ Responda todas as perguntas.")
             else:
-                # lógica da ficha validada continua aqui...
-                ...
+                impeditivos = {"glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"}
+                alertas = {"alergia", "gravida", "acido", "sensibilidade", "irritacao"}
+                infos = {"colirio", "lentes", "extensao"}
+                bloc, avis, inf = [], [], []
+
+                for chave, resposta in respostas.items():
+                    if resposta == "Sim":
+                        if chave in impeditivos: bloc.append(f"- {perguntas[chave]}")
+                        elif chave in alertas: avis.append(f"- {perguntas[chave]}")
+                        elif chave in infos: inf.append(f"- {perguntas[chave]}")
+
+                if bloc:
+                    st.error("❌ Cliente não está apta para atendimento.\n\n" + "\n".join(bloc))
+                    st.session_state.ficha_validada = False
+                    st.session_state.cliente_apta = False
+                    st.stop()
+                else:
+                    if avis: st.warning("⚠️ Requer atenção:\n\n" + "\n".join(avis))
+                    if inf: st.info("📎 Informações adicionais:\n\n" + "\n".join(inf))
+                    st.success("✅ Cliente apta — ficha validada!")
+                    st.session_state.ficha_validada = True
+                    st.session_state.cliente_apta = True
     else:
         st.markdown("""
         <div style='
@@ -109,10 +146,13 @@ with col_centro:
             color:#222;
             text-align:center;
             font-size:15px;
+            max-width:400px;
+            margin:auto;
         '>
         📌 <strong>Complete o cadastro corretamente para liberar a ficha clínica.</strong>
         </div>
         """, unsafe_allow_html=True)
+
 
 # 🔓 Etapas seguintes — liberadas após ficha validada
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
