@@ -256,21 +256,17 @@ with col_centro:
                         st.session_state.valor = tipo["valor"]
                     st.markdown("</div>", unsafe_allow_html=True)
 
-# 💬 Confirmação visual
+# 💬 Confirmação visual (antes da agenda)
 col_esq, col_centro, col_dir = st.columns([1, 2, 1])
 with col_centro:
     if st.session_state.get("tipo_aplicacao"):
         selecionado = st.session_state.tipo_aplicacao
         st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {selecionado}"))
-    else:
-        st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
 
-# 🔒 Só exibe agendamento SE tipo_aplicacao foi escolhido
-if st.session_state.get("tipo_aplicacao"):
-    col_e, col_centro, col_d = st.columns([1, 2, 1])
-    with col_centro:
-        st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
+        # ✅ Agenda aparece só depois da escolha
         hoje = date.today()
+        st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
+
         data = st.date_input(txt("📆 Escolha a data", "📆 Selecciona la fecha"), min_value=hoje)
 
         def gerar_horarios():
@@ -320,5 +316,6 @@ if st.session_state.get("tipo_aplicacao"):
                         </ul>
                     </div>
                 """, unsafe_allow_html=True)
-
+    else:
+        st.warning(txt("👀 Selecione uma aplicação para liberar o agendamento.", "👀 Selecciona un tipo para desbloquear la cita."))
 
