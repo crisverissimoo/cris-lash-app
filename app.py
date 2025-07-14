@@ -199,48 +199,55 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
 
         # 💅 Escolha do Tipo de Aplicação vem aqui em seguida...
 
-        st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
-        tipos = {
-            "Egípcio 3D": {
-                "img": "https://i.imgur.com/TOPRWFQ.jpeg",
-                "desc": txt("Fios em leque 3D com geometria precisa — efeito artístico e sofisticado.",
-                            "Fibras en abanico 3D con geometría precisa — efecto artístico y sofisticado."),
-                "valor": "10€"
-            },
-            "Volume Russo 4D": {
-                "img": "https://i.imgur.com/tBX2O8e.jpeg",
-                "desc": txt("4 fios por cílio — resultado glamouroso e intenso.",
-                            "4 fibras por pestaña — resultado glamoroso e intenso."),
-                "valor": "10€"
-            },
-            "Volume Brasileiro": {
-                "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                "desc": txt("Fios Y — volume leve e natural.",
-                            "Fibras en Y — volumen ligero y natural."),
-                "valor": "10€"
-            },
-            "Fio a Fio": {
-                "img": "https://i.imgur.com/VzlySv4.jpeg",
-                "desc": txt("1 fio por cílio — acabamento natural tipo rímel.",
-                            "1 fibra por pestaña — acabado natural tipo máscara."),
-                "valor": "10€"
-            }
+  # 💅 Escolha do Tipo de Aplicação
+col_e, col_c, col_d = st.columns([1, 2, 1])
+with col_c:
+    st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
+
+    tipos = {
+        "Egípcio 3D": {
+            "img": "https://i.imgur.com/TOPRWFQ.jpeg",
+            "desc": txt("Fios em leque 3D com geometria precisa — efeito artístico e sofisticado.",
+                        "Fibras en abanico 3D con geometría precisa — efecto artístico y sofisticado."),
+            "valor": "10€"
+        },
+        "Volume Russo 4D": {
+            "img": "https://i.imgur.com/tBX2O8e.jpeg",
+            "desc": txt("4 fios por cílio — resultado glamouroso e intenso.",
+                        "4 fibras por pestaña — resultado glamoroso e intenso."),
+            "valor": "10€"
+        },
+        "Volume Brasileiro": {
+            "img": "https://i.imgur.com/11rw6Jv.jpeg",
+            "desc": txt("Fios Y — volume leve e natural.",
+                        "Fibras en Y — volumen ligero y natural."),
+            "valor": "10€"
+        },
+        "Fio a Fio": {
+            "img": "https://i.imgur.com/VzlySv4.jpeg",
+            "desc": txt("1 fio por cílio — acabamento natural tipo rímel.",
+                        "1 fibra por pestaña — acabado natural tipo máscara."),
+            "valor": "10€"
         }
+    }
 
-        for nome, tipo in tipos.items():
-            col_img, col_txt = st.columns([1.4, 1.6])
-            with col_img:
-                st.image(tipo["img"], width=160)
-            with col_txt:
-                st.markdown(f"**{nome}** — 💶 {tipo['valor']}")
-                st.caption(tipo["desc"])
-                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                    st.session_state.tipo_aplicacao = nome
-                    st.session_state.valor = tipo["valor"]
+    for nome, tipo in tipos.items():
+        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+        st.image(tipo["img"], width=400)
+        st.markdown(f"<h5>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+        st.markdown(f"<p style='margin-top:-8px;'>{tipo['desc']}</p>", unsafe_allow_html=True)
 
-        if st.session_state.get("tipo_aplicacao"):
-            selecionado = st.session_state.tipo_aplicacao
-            st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {selecionado}"))
+        # 🔘 botão simples e centralizado
+        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+            st.session_state.tipo_aplicacao = nome
+            st.session_state.valor = tipo["valor"]
+        st.markdown("</div><br>", unsafe_allow_html=True)
+
+    # ✅ confirmação final
+    if st.session_state.get("tipo_aplicacao"):
+        selecionado = st.session_state.tipo_aplicacao
+        st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
+
 
             # 📅 Agendamento
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
