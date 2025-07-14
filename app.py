@@ -164,19 +164,33 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
     }
 
     for nome, efeito in efeitos.items():
-        col_esq, col_card, col_dir = st.columns([1, 2, 1])
-        with col_card:
-            st.image(efeito["img"], width=400)
+        # bloco centralizado por coluna
+        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+        with col_centro:
+            st.image(efeito["img"], width=420)
             st.markdown(f"<h5 style='text-align:center;'>🎀 {txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
             st.markdown(f"<div style='text-align:center;'>{efeito['desc']}</div>", unsafe_allow_html=True)
-            st.caption(f"👁️ {txt('Indicado para:', 'Indicado para:')} {efeito['tipo_olho']}")
+            st.markdown(f"<div style='text-align:center;'><em>👁️ {txt('Indicado para:', 'Indicado para:')} {efeito['tipo_olho']}</em></div>", unsafe_allow_html=True)
+
             # botão centralizado
-            col_b1, col_b2, col_b3 = st.columns([1, 1, 1])
-            with col_b2:
-                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
-                    st.session_state.efeito_escolhido = nome
+            st.markdown(f"""
+                <div style='text-align:center; margin-top:10px;'>
+                    <form action='#' method='get'>
+                        <button style='background-color:#f9e0f0; border:none; padding:8px 20px; border-radius:6px; cursor:pointer;'>
+                            {txt(f"Selecionar {nome}", f"Seleccionar {nome}")}
+                        </button>
+                    </form>
+                </div>
+            """, unsafe_allow_html=True)
+
+            # captura do clique no botão real
+            if st.button(txt(f"Confirmar {nome}", f"Confirmar {nome}"), key=f"btn_{nome}"):
+                st.session_state.efeito_escolhido = nome
+
+        # espaçamento entre cards
         st.markdown("<br>", unsafe_allow_html=True)
 
+    # confirmação final
     if st.session_state.get("efeito_escolhido"):
         nome = st.session_state.efeito_escolhido
         col_e, col_c, col_d = st.columns([1, 2, 1])
@@ -186,6 +200,7 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
 
+        
         # 👇 Aqui você pode adicionar o bloco do tipo de aplicação (Egípcio, Fio a Fio...)
 
         # 💅 Escolha do Tipo de Aplicação vem aqui em seguida...
