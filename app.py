@@ -297,13 +297,36 @@ if st.session_state.get("efeito_escolhido"):
 
 
 # Função para gerar horários disponíveis
+# 🎯 Função para gerar horários disponíveis
+def gerar_horarios():
+    base = datetime.strptime("08:00", "%H:%M")
+    horarios = [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
+    return horarios
+
+# 🎯 Função para verificar se horário está livre
+def esta_livre(data, horario):
+    inicio = datetime.strptime(horario, "%H:%M")
+    fim = inicio + timedelta(hours=2)
+
+    for ag_data, ag_hora in horarios_ocupados:
+        ag_inicio = datetime.strptime(ag_hora, "%H:%M")
+        ag_fim = ag_inicio + timedelta(hours=2)
+
+        if data == ag_data and (
+            (inicio >= ag_inicio and inicio < ag_fim) or
+            (fim > ag_inicio and fim <= ag_fim)
+        ):
+            return False
+    return True
+
+# 🗓️ Etapa de Agendamento
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
 
-            hoje = datetime.today().date()  # ✅ Correção aplicada
+            hoje = datetime.today().date()
             data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje)
 
             horarios = gerar_horarios()
@@ -334,7 +357,8 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 st.success("✅ Atendimento agendado com sucesso!")
 
                 st.markdown("""
-                    <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
+                    <div style='border: 2px dashed #e09b8e; background-color: #fffaf8;
+                                border-radius: 10px; padding: 20px; margin-top: 20px;'>
                         <h5>📌 Cuidados antes e depois da aplicação</h5>
                         <ul>
                             <li>🚫 Compareça sem maquiagem nos olhos</li>
