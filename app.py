@@ -264,6 +264,19 @@ if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
 # ⏳ só exibe agendamento se tipo_aplicacao foi escolhido
+# ✅ Defina a função txt() no topo do app, se ainda não tiver
+def txt(pt, es):
+    idioma = st.session_state.get("idioma", "pt")
+    return pt if idioma == "pt" else es
+
+# ✅ Garantir importações corretas
+from datetime import datetime, timedelta, date
+
+# ✅ Inicializar histórico se necessário
+if "historico_ocupados" not in st.session_state:
+    st.session_state.historico_ocupados = []
+
+# ✅ Só exibe agendamento se tipo_aplicacao tiver sido escolhido
 if st.session_state.get("tipo_aplicacao"):
     hoje = date.today()
 
@@ -307,9 +320,9 @@ if st.session_state.get("tipo_aplicacao"):
             if st.button("✅ Confirmar atendimento"):
                 st.session_state.agendamento_confirmado = True
                 st.session_state.historico_ocupados.append((data, horario))
-                st.success("✅ Atendimento agendado com sucesso!")
+                st.success(txt("✅ Atendimento agendado com sucesso!", "✅ Atención programada con éxito!"))
 
-                # Cuidados pós aplicação
+                # 💅 Cuidados pós atendimento
                 st.markdown("""
                     <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
                         <h5>📌 Cuidados antes e depois da aplicação</h5>
@@ -322,3 +335,4 @@ if st.session_state.get("tipo_aplicacao"):
                         </ul>
                     </div>
                 """, unsafe_allow_html=True)
+
