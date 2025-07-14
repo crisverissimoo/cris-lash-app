@@ -149,8 +149,6 @@ if st.session_state.ficha_validada:
     with col_centro:
         st.markdown("""
             <div style='
-                border: 1px solid #ccc;
-                border-radius: 10px;
                 padding: 25px;
                 margin-top: 20px;
                 margin-bottom: 40px;
