@@ -117,7 +117,12 @@ if cadastro_ok:
                     st.session_state.ficha_validada = True
                     st.session_state.cliente_apta = True
 else:
-    st.info("📌 Complete corretamente o cadastro para liberar a ficha clínica.")
+    st.markdown("""
+<div style='text-align:center; background-color:#e8f4fc; padding:15px; border-radius:8px; border-left:5px solid #539dcd; color:#222'>
+📌 <strong>Complete corretamente o cadastro para liberar a ficha clínica.</strong>
+</div>
+""", unsafe_allow_html=True)
+
 
 
 # 🔓 Etapas seguintes — liberadas após ficha validada
