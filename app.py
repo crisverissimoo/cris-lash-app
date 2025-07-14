@@ -303,7 +303,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
         with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
 
-            hoje = datetime.date.today()
+            hoje = datetime.today().date()  # ✅ Correção aplicada
             data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje)
 
             horarios = gerar_horarios()
@@ -317,8 +317,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 efeito = st.session_state.efeito_escolhido
                 tipo = st.session_state.tipo_aplicacao
                 valor = st.session_state.get("valor", "10€")
-
-                fim = (datetime.datetime.strptime(horario, "%H:%M") + datetime.timedelta(hours=2)).strftime("%H:%M")
+                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
 
                 st.markdown(f"💖 Serviço escolhido:")
                 st.markdown(f"- ✨ Efeito: **{efeito}**")
