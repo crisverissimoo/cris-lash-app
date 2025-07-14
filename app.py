@@ -223,10 +223,7 @@ if st.session_state.ficha_validada:
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 
 # Só exibe o bloco se efeito_escolhido estiver definido
-# 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 
-# Só exibe o bloco se efeito_escolhido estiver definido
-# 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido is not None:
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
