@@ -144,61 +144,142 @@ def txt(pt, es):
 # ✅ Imports
 from datetime import datetime, timedelta, date
 
-# ✅ Histórico seguro
+# ✅ Inicialização de histórico
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# ✅ Etapa 1: Verifica se o efeito foi escolhido
-if st.session_state.get("efeito_escolhido"):
+# ✅ ETAPA 0 — Ficha validada e cliente apta
+if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
 
-    # 🎀 Etapa 2: Tipo de Aplicação (duas colunas)
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    # ✨ ETAPA 1 — Escolha do Efeito Lash
+    col_e, col_centro, col_d = st.columns([1, 2, 1])
     with col_centro:
-        st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
+        st.markdown("<h4 style='text-align:center;'>✨ Efeito Lash</h4>", unsafe_allow_html=True)
 
-        tipos = {
-            "Egípcio 3D": {
-                "img": "https://i.imgur.com/TOPRWFQ.jpeg",
-                "desc": txt("Fios em leque 3D com geometria precisa — efeito artístico e sofisticado.",
-                            "Fibras en abanico 3D con geometría precisa — efecto artístico y sofisticado."),
-                "valor": "10€"
-            },
-            "Volume Russo 4D": {
-                "img": "https://i.imgur.com/tBX2O8e.jpeg",
-                "desc": txt("4 fios por cílio — resultado glamouroso e intenso.",
-                            "4 fibras por pestaña — resultado glamoroso e intenso."),
-                "valor": "10€"
-            },
-            "Volume Brasileiro": {
-                "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                "desc": txt("Fios Y — volume leve e natural.",
-                            "Fibras en Y — volumen ligero y natural."),
-                "valor": "10€"
-            },
-            "Fio a Fio": {
-                "img": "https://i.imgur.com/VzlySv4.jpeg",
-                "desc": txt("1 fio por cílio — acabamento natural tipo rímel.",
-                            "1 fibra por pestaña — acabado natural tipo máscara."),
-                "valor": "10€"
-            }
-        }
+        efeitos = ["Bone", "Esquilo", "Gato", "Natural", "Doll", "Foxy"]
+        efeito_escolhido = st.radio(txt("Escolha o efeito desejado:", "Selecciona el efecto deseado:"), efeitos)
 
-        nomes = list(tipos.keys())
-        for i in range(0, len(nomes), 2):
-            col1, col2 = st.columns(2)
-            for j, col in enumerate([col1, col2]):
-                if i + j < len(nomes):
-                    nome = nomes[i + j]
-                    tipo = tipos[nome]
-                    with col:
-                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                        st.markdown(f"<img src='{tipo['img']}' width='220' height='160' style='object-fit: cover;'>", unsafe_allow_html=True)
-                        st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-                        st.caption(tipo["desc"])
-                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                            st.session_state.tipo_aplicacao = nome
-                            st.session_state.valor = tipo["valor"]
-                        st.markdown("</div>", unsafe_allow_html=True)
+        if efeito_escolhido:
+            st.session_state.efeito_escolhido = efeito_escolhido
+            st.success(txt(f"✅ Efeito escolhido: {efeito_escolhido}", f"✅ Efecto seleccionado: {efeito_escolhido}"))
+
+            # 🎀 ETAPA 2 — Tipo de Aplicação (2 colunas)
+            col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+            with col_centro:
+                st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
+
+                tipos = {
+                    "Egípcio 3D": {
+                        "img": "https://i.imgur.com/TOPRWFQ.jpeg",
+                        "desc": txt("Fios em leque 3D com geometria precisa — efeito artístico e sofisticado.",
+                                    "Fibras en abanico 3D con geometría precisa — efecto artístico y sofisticado."),
+                        "valor": "10€"
+                    },
+                    "Volume Russo 4D": {
+                        "img": "https://i.imgur.com/tBX2O8e.jpeg",
+                        "desc": txt("4 fios por cílio — resultado glamouroso e intenso.",
+                                    "4 fibras por pestaña — resultado glamoroso e intenso."),
+                        "valor": "10€"
+                    },
+                    "Volume Brasileiro": {
+                        "img": "https://i.imgur.com/11rw6Jv.jpeg",
+                        "desc": txt("Fios Y — volume leve e natural.",
+                                    "Fibras en Y — volumen ligero y natural."),
+                        "valor": "10€"
+                    },
+                    "Fio a Fio": {
+                        "img": "https://i.imgur.com/VzlySv4.jpeg",
+                        "desc": txt("1 fio por cílio — acabamento natural tipo rímel.",
+                                    "1 fibra por pestaña — acabado natural tipo máscara."),
+                        "valor": "10€"
+                    }
+                }
+
+                nomes = list(tipos.keys())
+                for i in range(0, len(nomes), 2):
+                    col1, col2 = st.columns(2)
+                    for j, col in enumerate([col1, col2]):
+                        if i + j < len(nomes):
+                            nome = nomes[i + j]
+                            tipo = tipos[nome]
+                            with col:
+                                st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                                st.markdown(f"<img src='{tipo['img']}' width='220' height='160' style='object-fit: cover;'>", unsafe_allow_html=True)
+                                st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+                                st.caption(tipo["desc"])
+                                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                                    st.session_state.tipo_aplicacao = nome
+                                    st.session_state.valor = tipo["valor"]
+                                st.markdown("</div>", unsafe_allow_html=True)
+
+            # ✅ ETAPA 3 — Agendamento só após tipo selecionado
+            if st.session_state.get("tipo_aplicacao"):
+                col_e, col_centro, col_d = st.columns([1, 2, 1])
+                with col_centro:
+                    tipo = st.session_state.get("tipo_aplicacao", "")
+                    st.success(txt(f"✅ Tipo selecionado: {tipo}", f"✅ Tipo seleccionado: {tipo}"))
+
+                    st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
+                    hoje = date.today()
+                    data = st.date_input(txt("📆 Escolha a data", "📆 Selecciona la fecha"), min_value=hoje)
+
+                    def gerar_horarios():
+                        base = datetime.strptime("08:00", "%H:%M")
+                        return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
+
+                    def esta_livre(data, horario):
+                        inicio = datetime.strptime(horario, "%H:%M")
+                        fim = inicio + timedelta(hours=2)
+                        for ag_data, ag_hora in st.session_state.historico_ocupados:
+                            if data == ag_data:
+                                ag_inicio = datetime.strptime(ag_hora, "%H:%M")
+                                ag_fim = ag_inicio + timedelta(hours=2)
+                                if inicio < ag_fim and fim > ag_inicio:
+                                    return False
+                        return True
+
+                    horarios_disponiveis = [h for h in gerar_horarios() if esta_livre(data, h)]
+
+                    if not horarios_disponiveis:
+                        st.warning("⛔ Nenhum horário disponível neste dia.")
+                    else:
+                        horario = st.selectbox(txt("🕐 Horário", "🕐 Horario"), horarios_disponiveis)
+                        hora_fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
+                        efeito = st.session_state.get("efeito_escolhido", "")
+                        valor = st.session_state.get("valor", "—")
+
+                        st.markdown(f"💖 Serviço: **{efeito} + {tipo}** — 💶 {valor}")
+                        st.markdown(f"📅 Data: `{data.strftime('%d/%m/%Y')}` — ⏰ `{horario} às {hora_fim}`")
+
+                        mensagem = st.text_area("📩 Mensagem para Cris (opcional)", placeholder="Ex: tenho alergia, favor confirmar")
+
+                        if st.button("✅ Confirmar atendimento"):
+                            st.session_state.agendamento_confirmado = True
+                            st.session_state.historico_ocupados.append((data, horario))
+                            st.success(txt("✅ Atendimento agendado com sucesso!", "✅ Atención programada con éxito!"))
+
+                            st.markdown("""
+                                <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
+                                    <h5>📌 Cuidados antes e depois da aplicação</h5>
+                                    <ul style='text-align:left;'>
+                                        <li>🚫 Compareça sem maquiagem nos olhos</li>
+                                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                                    </ul>
+                                </div>
+                            """, unsafe_allow_html=True)
+            else:
+                st.warning(txt("👁️ Escolha o tipo de aplicação para liberar o agendamento.",
+                               "👁️ Selecciona el tipo de aplicación para desbloquear la cita."))
+        else:
+            st.warning(txt("👁️ Escolha o efeito para liberar os estilos.",
+                           "👁️ Selecciona el efecto para desbloquear los estilos."))
+else:
+    st.warning(txt("⚠️ Ficha não validada ou cliente inapta. Verifique os dados antes de avançar.",
+                   "⚠️ Ficha no validada o cliente no apto. Verifica los datos antes de continuar."))
+
 
     # ✅ Etapa 3: Verifica se o tipo foi escolhido
     if st.session_state.get("tipo_aplicacao"):
