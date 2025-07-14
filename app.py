@@ -137,8 +137,9 @@ with col_centro:
 # 🔓 Etapas seguintes — liberadas após ficha validada
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
 
-    # ✨ Escolha de Efeito
+    st.markdown("---")
     st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito Lash</h4>", unsafe_allow_html=True)
+
     efeitos = {
         "Clássica": {
             "img": "https://i.imgur.com/Nqrwdcm.png",
@@ -163,15 +164,15 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
     }
 
     for nome, efeito in efeitos.items():
-        col_img, col_txt = st.columns([1.6, 1.4])
-        with col_img:
-            st.image(efeito["img"], width=460)
-        with col_txt:
-            st.markdown(f"**{txt(f'Efeito {nome}', f'Efecto {nome}')}**")
+        col_e, col_c, col_d = st.columns([1, 2, 1])
+        with col_c:
+            st.image(efeito["img"], width=420)
+            st.markdown(f"**{txt(f'Efeito {nome}', f'Efecto {nome}')}**", unsafe_allow_html=True)
             st.write(efeito["desc"])
-            st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
+            st.caption("👁️ " + txt("Indicado para:", "Indicado para:") + f" {efeito['tipo_olho']}")
             if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
                 st.session_state.efeito_escolhido = nome
+        st.markdown("<br>", unsafe_allow_html=True)  # espaçamento entre cards
 
     if st.session_state.get("efeito_escolhido"):
         nome = st.session_state.efeito_escolhido
@@ -180,7 +181,8 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
             f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
         ))
 
-        # 💅 Escolha do Tipo de Aplicação
+        # 💅 Escolha do Tipo de Aplicação vem aqui em seguida...
+
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
         tipos = {
             "Egípcio 3D": {
