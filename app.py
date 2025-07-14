@@ -134,7 +134,7 @@ with col_centro:
         </div>
         """, unsafe_allow_html=True)
 
-if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
+
 
 # ✅ Função txt
 def txt(pt, es):
