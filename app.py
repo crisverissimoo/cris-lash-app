@@ -136,85 +136,54 @@ with col_centro:
 
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
 
+    # 💫 Título
     col_e, col_c, col_d = st.columns([1, 2, 1])
     with col_c:
-        st.markdown("<hr style='margin-top:30px; margin-bottom:20px;'>", unsafe_allow_html=True)
         st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito Lash</h4>", unsafe_allow_html=True)
 
-        efeitos = {
-            "Clássica": {
-                "img": "https://i.imgur.com/Nqrwdcm.png",
-                "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado"),
-                "tipo_olho": txt("Olhos amendoados ou simétricos", "Ojos almendrados o simétricos")
-            },
-            "Boneca": {
-                "img": "https://i.imgur.com/vJUuvsl.png",
-                "desc": txt("Maior concentração no centro — arredonda o olhar", "Mayor concentración en el centro — redondea la mirada"),
-                "tipo_olho": txt("Olhos pequenos, fechados ou orientais", "Ojos pequeños, cerrados u orientales")
-            },
-            "Gatinho": {
-                "img": "https://i.imgur.com/zpBFK0e.png",
-                "desc": txt("Fios longos no canto externo — efeito sensual", "Fibras largas en la esquina externa — efecto sensual"),
-                "tipo_olho": txt("Olhos caídos ou arredondados", "Ojos caídos o redondeados")
-            },
-            "Esquilo": {
-                "img": "https://i.imgur.com/BY5eEsr.png",
-                "desc": txt("Volume acentuado entre centro e canto externo — estilo marcante", "Volumen entre centro y esquina externa — estilo llamativo"),
-                "tipo_olho": txt("Olhos puxados ou olhos grandes", "Ojos rasgados o grandes")
-            }
+    # 🌟 Lista de efeitos
+    efeitos = {
+        "Clássica": {
+            "img": "https://i.imgur.com/Nqrwdcm.png",
+            "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado"),
+            "tipo_olho": txt("Olhos amendoados ou simétricos", "Ojos almendrados o simétricos")
+        },
+        "Boneca": {
+            "img": "https://i.imgur.com/vJUuvsl.png",
+            "desc": txt("Maior concentração no centro — arredonda o olhar", "Mayor concentración en el centro — redondea la mirada"),
+            "tipo_olho": txt("Olhos pequenos, fechados ou orientais", "Ojos pequeños, cerrados u orientales")
+        },
+        "Gatinho": {
+            "img": "https://i.imgur.com/zpBFK0e.png",
+            "desc": txt("Fios longos no canto externo — efeito sensual", "Fibras largas en la esquina externa — efecto sensual"),
+            "tipo_olho": txt("Olhos caídos ou arredondados", "Ojos caídos o redondeados")
+        },
+        "Esquilo": {
+            "img": "https://i.imgur.com/BY5eEsr.png",
+            "desc": txt("Volume acentuado entre centro e canto externo — estilo marcante", "Volumen entre centro y esquina externa — estilo llamativo"),
+            "tipo_olho": txt("Olhos puxados ou olhos grandes", "Ojos rasgados o grandes")
         }
+    }
 
-        for nome, efeito in efeitos.items():
-            st.image(efeito["img"], width=400)
-            st.markdown(f"<h5 style='text-align:center;'>🎀 {txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
-            st.markdown(f"<div style='text-align:center;'>{efeito['desc']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='text-align:center;'><em>👁️ {txt('Indicado para:', 'Indicado para:')} {efeito['tipo_olho']}</em></div>", unsafe_allow_html=True)
-
-            # botão simples e centralizado
-            col_b1, col_b2, col_b3 = st.columns([1, 1, 1])
-            with col_b2:
-                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
-                    st.session_state.efeito_escolhido = nome
-
-            st.markdown("<br>", unsafe_allow_html=True)
-
-        # Confirmação visual do efeito escolhido
-        if st.session_state.get("efeito_escolhido"):
-            nome = st.session_state.efeito_escolhido
-            st.success("✅ " + txt(
-                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
-                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
-            ))
-
-   
     for nome, efeito in efeitos.items():
-        # bloco centralizado por coluna
-        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-        with col_centro:
-            st.image(efeito["img"], width=420)
-            st.markdown(f"<h5 style='text-align:center;'>🎀 {txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
-            st.markdown(f"<div style='text-align:center;'>{efeito['desc']}</div>", unsafe_allow_html=True)
-            st.markdown(f"<div style='text-align:center;'><em>👁️ {txt('Indicado para:', 'Indicado para:')} {efeito['tipo_olho']}</em></div>", unsafe_allow_html=True)
+        col_e, col_c, col_d = st.columns([1, 2, 1])
+        with col_c:
+            # 🔲 Card centralizado
+            st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+            st.image(efeito["img"], width=400)
+            st.markdown(f"<h5>🎀 {txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+            st.write(efeito["desc"])
+            st.caption(f"👁️ {txt('Indicado para:', 'Indicado para:')} {efeito['tipo_olho']}")
 
-            # botão centralizado
-            st.markdown(f"""
-                <div style='text-align:center; margin-top:10px;'>
-                    <form action='#' method='get'>
-                        <button style='background-color:#f9e0f0; border:none; padding:8px 20px; border-radius:6px; cursor:pointer;'>
-                            {txt(f"Selecionar {nome}", f"Seleccionar {nome}")}
-                        </button>
-                    </form>
-                </div>
-            """, unsafe_allow_html=True)
-
-            # captura do clique no botão real
-            if st.button(txt(f"Confirmar {nome}", f"Confirmar {nome}"), key=f"btn_{nome}"):
+            # 🔘 Botão simples
+            if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
                 st.session_state.efeito_escolhido = nome
+            st.markdown("</div>", unsafe_allow_html=True)
 
-        # espaçamento entre cards
+        # 🌬️ Espaço entre cards
         st.markdown("<br>", unsafe_allow_html=True)
 
-    # confirmação final
+    # ✅ Confirmação
     if st.session_state.get("efeito_escolhido"):
         nome = st.session_state.efeito_escolhido
         col_e, col_c, col_d = st.columns([1, 2, 1])
@@ -223,6 +192,7 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                 f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
+
 
         
         # 👇 Aqui você pode adicionar o bloco do tipo de aplicação (Egípcio, Fio a Fio...)
