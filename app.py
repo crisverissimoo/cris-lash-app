@@ -17,7 +17,7 @@ for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicaca
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# 🎀 Idioma + boas-vindas + cadastro (centralizado)
+# 🎀 Boas-vindas + idioma
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
@@ -33,6 +33,9 @@ with col2:
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.write(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
 
+# 👤 Cadastro da cliente
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
     st.markdown("---")
     st.markdown("<h4 style='text-align:center;'>🧍 Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
@@ -45,7 +48,6 @@ with col2:
     idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
     st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
 
-    # 🔒 Autorização (se menor)
     autorizacao = "Sim"
     if idade < 18:
         responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
@@ -53,44 +55,45 @@ with col2:
         if autorizacao != "Sim":
             st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
 
-    # ✅ Validação do cadastro completo
-    cadastro_ok = (
-        nome and nascimento and telefone and
-        (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
-    )
+# 🎯 Validação do cadastro
+cadastro_ok = (
+    nome.strip() != "" and telefone.strip() != "" and
+    (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
+)
 
-# 📌 Ficha só aparece se cadastro estiver completo
+# 🧾 Ficha clínica só aparece se cadastro estiver completo e válido
 col_esq, col_centro, col_dir = st.columns([1, 2, 1])
 with col_centro:
     if cadastro_ok:
-        respostas = {}
         st.markdown("---")
         st.markdown("<h4 style='text-align:center;'>🧾 Ficha Clínica</h4>", unsafe_allow_html=True)
+        
         with st.form("form_clinica"):
             perguntas = {
-                "glaucoma": "Possui glaucoma?",
-                "infeccao": "Tem infecções oculares?",
-                "conjuntivite": "Conjuntivite recente?",
-                "cirurgia": "Cirurgia ocular recente?",
-                "reacao": "Reação alérgica anterior?",
-                "alergia": "Histórico de alergias?",
-                "gravida": "Está grávida ou amamentando?",
-                "acido": "Tratamento com ácido?",
-                "irritacao": "Olhos irritados?",
-                "sensibilidade": "Sensibilidade a químicos?",
-                "colirio": "Uso frequente de colírios?",
-                "lentes": "Usa lentes de contato?",
-                "extensao": "Já fez extensão antes?"
+                "glaucoma": txt("Possui glaucoma?", "¿Tiene glaucoma?"),
+                "infeccao": txt("Tem infecções oculares?", "¿Tiene infecciones oculares?"),
+                "conjuntivite": txt("Conjuntivite recente?", "¿Conjuntivitis reciente?"),
+                "cirurgia": txt("Cirurgia ocular recente?", "¿Cirugía ocular reciente?"),
+                "reacao": txt("Reação alérgica anterior?", "¿Reacción alérgica previa?"),
+                "alergia": txt("Histórico de alergias?", "¿Historial de alergias?"),
+                "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o lactante?"),
+                "acido": txt("Tratamento com ácido?", "¿Tratamiento con ácidos?"),
+                "irritacao": txt("Olhos irritados?", "¿Ojos irritados?"),
+                "sensibilidade": txt("Sensibilidade a químicos?", "¿Sensibilidad a químicos?"),
+                "colirio": txt("Uso frequente de colírios?", "¿Uso frecuente de colirios?"),
+                "lentes": txt("Usa lentes de contato?", "¿Usa lentes de contacto?"),
+                "extensao": txt("Já fez extensão antes?", "¿Ya se hizo extensiones?")
             }
 
+            respostas = {}
             for chave, pergunta in perguntas.items():
                 respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-            enviar = st.form_submit_button("📨 Finalizar ficha")
+            enviar = st.form_submit_button("📨 " + txt("Finalizar ficha", "Finalizar formulario"))
 
         if enviar:
             if any(r is None for r in respostas.values()):
-                st.warning("⚠️ Responda todas as perguntas.")
+                st.warning(txt("⚠️ Responda todas as perguntas.", "⚠️ Responda todas las preguntas."))
             else:
                 impeditivos = {"glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"}
                 alertas = {"alergia", "gravida", "acido", "sensibilidade", "irritacao"}
@@ -104,14 +107,14 @@ with col_centro:
                         elif chave in infos: inf.append(f"- {perguntas[chave]}")
 
                 if bloc:
-                    st.error("❌ Cliente não está apta para atendimento.\n\n" + "\n".join(bloc))
+                    st.error("❌ " + txt("Cliente não está apta para atendimento.", "Cliente no apta para atención") + "\n\n" + "\n".join(bloc))
                     st.session_state.ficha_validada = False
                     st.session_state.cliente_apta = False
                     st.stop()
                 else:
-                    if avis: st.warning("⚠️ Requer atenção:\n\n" + "\n".join(avis))
-                    if inf: st.info("📎 Informações adicionais:\n\n" + "\n".join(inf))
-                    st.success("✅ Cliente apta — ficha validada!")
+                    if avis: st.warning("⚠️ " + txt("Requer atenção:", "Requiere atención:") + "\n\n" + "\n".join(avis))
+                    if inf: st.info("📎 " + txt("Informações adicionais:", "Información adicional:") + "\n\n" + "\n".join(inf))
+                    st.success("✅ " + txt("Cliente apta — ficha validada!", "Cliente apta — ficha validada!"))
                     st.session_state.ficha_validada = True
                     st.session_state.cliente_apta = True
     else:
@@ -130,7 +133,6 @@ with col_centro:
         📌 <strong>Complete o cadastro corretamente para liberar a ficha clínica.</strong>
         </div>
         """, unsafe_allow_html=True)
-
 
 # 🔓 Etapas seguintes — liberadas após ficha validada
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
