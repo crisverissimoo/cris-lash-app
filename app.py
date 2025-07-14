@@ -238,7 +238,8 @@ with col_centro:
                 tipo = tipos[nome]
                 with col:
                     st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                    st.image(tipo["img"], width=220)  # 📸 todas iguais
+                    # 📸 imagem padronizada com largura e altura fixa
+                    st.markdown(f"<img src='{tipo['img']}' width='220' height='160' style='object-fit: cover;'>", unsafe_allow_html=True)
                     st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
                     st.caption(tipo["desc"])
                     if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
@@ -254,7 +255,6 @@ with col_centro:
             st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
         else:
             st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
-
 
 
         # 💅 Selecionei o tipo — agora libera o agendamento
