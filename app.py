@@ -145,8 +145,8 @@ if autorizada:
 # 🔓 Etapa 2 — Escolha de Efeito
  
 if st.session_state.ficha_validada:
-    col_e1, col_e2, col_e3 = st.columns([1, 2, 1])
-    with col_e2:
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
         st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito Lash</h4>", unsafe_allow_html=True)
 
         efeitos = {
@@ -172,30 +172,29 @@ if st.session_state.ficha_validada:
             }
         }
 
-for nome, efeito in efeitos.items():
-    col_img, col_txt = st.columns([1.6, 1.4])  # Equilíbrio entre imagem e texto
+        for nome, efeito in efeitos.items():
+            col_img, col_txt = st.columns([1.6, 1.4])
 
-    with col_img:
-        st.image(efeito["img"], width=460)
+            with col_img:
+                st.image(efeito["img"], width=460)
 
-    with col_txt:
-    st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
-    st.write(efeito["desc"])
-    st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
+            with col_txt:
+                st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+                st.write(efeito["desc"])
+                st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
 
-    # Criar 3 colunas e colocar o botão na do meio
-    col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
-    with col_b2:
-        if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
-            st.session_state.efeito_escolhido = nome
+                # Botão centralizado via colunas invisíveis
+                col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
+                with col_b2:
+                    if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
+                        st.session_state.efeito_escolhido = nome
 
+            st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
 
-    st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
+        if "efeito_escolhido" in st.session_state:
+            nome = st.session_state.efeito_escolhido
+            st.success("✅ " + txt(
+                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
+                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
+            ))
 
-# ✅ Correto: fora do laço 'for', com identação alinhada
-if "efeito_escolhido" in st.session_state:
-    nome = st.session_state.efeito_escolhido
-    st.success("✅ " + txt(
-        f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
-        f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
-    ))
