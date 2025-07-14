@@ -189,10 +189,10 @@ for nome, efeito in efeitos.items():
 
     st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
 
-
-        if "efeito_escolhido" in st.session_state:
-            nome = st.session_state.efeito_escolhido
-            st.success("✅ " + txt(
-                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
-                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
-            ))
+# ✅ Correto: fora do laço 'for', com identação alinhada
+if "efeito_escolhido" in st.session_state:
+    nome = st.session_state.efeito_escolhido
+    st.success("✅ " + txt(
+        f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
+        f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
+    ))
