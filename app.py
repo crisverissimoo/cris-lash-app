@@ -15,7 +15,7 @@ for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicaca
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# 🎀 Boas-vindas + idioma + cadastro (sem expander)
+# 🎀 Idioma + boas-vindas + cadastro
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
@@ -43,6 +43,8 @@ with col2:
     idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
     st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
 
+    # 🔒 Autorização (se menor)
+    autorizacao = "Sim"
     autorizada = True
     if idade < 18:
         responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
@@ -51,8 +53,14 @@ with col2:
             st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
             autorizada = False
 
-# 🧾 Ficha clínica — só aparece se autorizada
-if autorizada:
+# ✅ Validação do cadastro completo
+cadastro_ok = (
+    nome and nascimento and telefone and
+    (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
+)
+
+# 🧾 Ficha clínica — só aparece se cadastro estiver ok
+if cadastro_ok:
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         respostas = {}
@@ -109,7 +117,8 @@ if autorizada:
                     st.session_state.ficha_validada = True
                     st.session_state.cliente_apta = True
 else:
-    st.info("📌 Cadastro não autorizado — ficha bloqueada.")
+    st.info("📌 Complete corretamente o cadastro para liberar a ficha clínica.")
+
 
 # 🔓 Etapas seguintes — liberadas após ficha validada
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
