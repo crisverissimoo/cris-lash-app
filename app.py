@@ -139,6 +139,8 @@ if autorizada:
                     st.session_state.ficha_validada = True
                     st.session_state.cliente_apta = True
 
+if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
+
 
 # 🔓 Etapa 2 — Escolha de Efeito
  
@@ -275,6 +277,9 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {selecionado}"))
 
         st.markdown("</div>", unsafe_allow_html=True)
+
+else:
+    st.info("📌 Complete a ficha clínica para prosseguir com o agendamento.")
 
 # 🎯 Agenda (exibe se técnica foi definida)
 if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicacao"):
