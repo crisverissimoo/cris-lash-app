@@ -136,7 +136,6 @@ with col_centro:
 
 # 🔓 Etapas seguintes — liberadas após ficha validada
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
-
     st.markdown("---")
     st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito Lash</h4>", unsafe_allow_html=True)
 
@@ -164,23 +163,26 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
     }
 
     for nome, efeito in efeitos.items():
+        # Card centralizado
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
         with col_centro:
+            st.markdown(f"<h5 style='text-align:center;'>🎀 {txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
             st.image(efeito["img"], width=420)
-            st.markdown(f"**{txt(f'Efeito {nome}', f'Efecto {nome}')}**")
-            st.write(efeito["desc"])
+            st.markdown(f"<div style='text-align:center;'>{efeito['desc']}</div>", unsafe_allow_html=True)
             st.caption(f"👁️ {txt('Indicado para:', 'Indicado para:')} {efeito['tipo_olho']}")
             if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
                 st.session_state.efeito_escolhido = nome
-        st.markdown("<br>", unsafe_allow_html=True)
+        st.markdown("<br>", unsafe_allow_html=True)  # espaçamento entre cards
 
     # 💖 Confirmação do efeito escolhido
     if st.session_state.get("efeito_escolhido"):
         nome = st.session_state.efeito_escolhido
-        st.success("✅ " + txt(
-            f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
-            f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
-        ))
+        col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+        with col_centro:
+            st.success("✅ " + txt(
+                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
+                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
+            ))
 
         # 👇 Aqui você pode adicionar o bloco do tipo de aplicação (Egípcio, Fio a Fio...)
 
