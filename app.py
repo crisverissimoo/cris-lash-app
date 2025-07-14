@@ -226,8 +226,7 @@ if st.session_state.ficha_validada:
 # Só exibe o bloco se efeito_escolhido estiver definido
 if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido is not None:
 
-    with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Tipo de Aplicación")):
-
+    with 
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
         tipos = {
