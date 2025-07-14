@@ -172,7 +172,7 @@ if st.session_state.ficha_validada:
             }
         }
 
-        for nome, efeito in efeitos.items():
+for nome, efeito in efeitos.items():
     col_img, col_txt = st.columns([1.6, 1.4])  # Equilíbrio entre imagem e texto
 
     with col_img:
@@ -188,6 +188,7 @@ if st.session_state.ficha_validada:
         st.markdown("</div>", unsafe_allow_html=True)
 
     st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
+
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
