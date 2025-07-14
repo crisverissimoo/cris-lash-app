@@ -137,40 +137,45 @@ with col_centro:
 
 
 # ✅ Função txt (se ainda não definida)
-# ✅ Função txt
-# ✅ Função txt
+# ✅ Função de tradução (se usar multilíngue)
 def txt(pt, es):
     idioma = st.session_state.get("idioma", "pt")
     return pt if idioma == "pt" else es
 
-# ✅ Imports
+# ✅ Imports essenciais
 from datetime import datetime, timedelta, date
 
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# 📝 Etapa 1 — Ficha Clínica com 2 colunas
-st.markdown("<h4 style='text-align:center;'>📝 Ficha Clínica</h4>", unsafe_allow_html=True)
-col_esq, col_dir = st.columns(2)
+# 👁️ Ficha Clínica só aparece após cadastro completo
+if st.session_state.get("cadastro_completo"):
 
-with col_esq:
-    glaucoma = st.radio("👁️ Possui glaucoma?", ["Sim", "Não"], index=1)
-    infeccoes = st.radio("🦠 Infecções oculares?", ["Sim", "Não"], index=1)
-    conjuntivite = st.radio("👀 Conjuntivite recente?", ["Sim", "Não"], index=1)
+    st.markdown("<h4 style='text-align:center;'>📝 Ficha Clínica</h4>", unsafe_allow_html=True)
 
-with col_dir:
-    cirurgia = st.radio("🩺 Cirurgia ocular recente?", ["Sim", "Não"], index=1)
-    reacao_alergica = st.radio("⚠️ Reação alérgica anterior?", ["Sim", "Não"], index=1)
-    historico_alergia = st.radio("🌿 Histórico de alergias?", ["Sim", "Não"], index=1)
+    col_esq, col_dir = st.columns(2)
 
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    if st.button("✅ Finalizar ficha"):
-        st.session_state.ficha_validada = True
-        st.session_state.cliente_apta = True
-        st.success("✅ Cliente apta — ficha validada!")
+    with col_esq:
+        glaucoma = st.radio("👁️ Possui glaucoma?", ["Sim", "Não"], index=1)
+        infeccoes = st.radio("🦠 Infecções oculares?", ["Sim", "Não"], index=1)
+        conjuntivite = st.radio("👀 Conjuntivite recente?", ["Sim", "Não"], index=1)
 
-# ✨ Etapa 2 — Escolha do Efeito Lash
+    with col_dir:
+        cirurgia = st.radio("🩺 Cirurgia ocular recente?", ["Sim", "Não"], index=1)
+        reacao_alergica = st.radio("⚠️ Reação alérgica anterior?", ["Sim", "Não"], index=1)
+        historico_alergia = st.radio("🌿 Histórico de alergias?", ["Sim", "Não"], index=1)
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        if st.button("✅ Finalizar ficha"):
+            st.session_state.ficha_validada = True
+            st.session_state.cliente_apta = True
+            st.success("✅ Cliente apta — ficha validada!")
+
+else:
+    st.warning("🛑 Complete o cadastro corretamente para liberar a ficha clínica.")
+
+# ✨ Etapa 2 — Efeito Lash
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
     st.markdown("<h4 style='text-align:center;'>✨ Efeito Lash</h4>", unsafe_allow_html=True)
 
@@ -181,7 +186,7 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
         st.session_state.efeito_escolhido = efeito
         st.success(f"✅ Efeito escolhido: {efeito}")
 
-        # 🎀 Etapa 3 — Tipo de Aplicação
+        # 🎀 Tipo de Aplicação
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
         tipos = {
@@ -224,15 +229,14 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                             st.session_state.valor = tipo["valor"]
                         st.markdown("</div>", unsafe_allow_html=True)
 
-        # 📅 Etapa 4 — Agendamento
+        # 📅 Agendamento
         if st.session_state.get("tipo_aplicacao"):
             tipo = st.session_state.tipo_aplicacao
             valor = st.session_state.valor
-            efeito = st.session_state.efeito_escolhido
             hoje = date.today()
-
             st.success(f"✅ Tipo selecionado: {tipo}")
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
+
             data = st.date_input("📆 Escolha a data", min_value=hoje)
 
             def gerar_horarios():
@@ -257,6 +261,7 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
             else:
                 horario = st.selectbox("🕐 Horário disponível", horarios_disponiveis)
                 hora_fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
+                efeito = st.session_state.efeito_escolhido
 
                 st.markdown(f"💖 Serviço: **{efeito} + {tipo}** — 💶 {valor}")
                 st.markdown(f"📅 Data: `{data.strftime('%d/%m/%Y')}` — ⏰ `{horario} às {hora_fim}`")
