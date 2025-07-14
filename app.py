@@ -200,6 +200,7 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
         # 💅 Escolha do Tipo de Aplicação vem aqui em seguida...
 
   # 💅 Escolha do Tipo de Aplicação
+# 💅 Escolha do Tipo de Aplicação
 col_e, col_c, col_d = st.columns([1, 2, 1])
 with col_c:
     st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
@@ -247,6 +248,7 @@ with col_c:
     if st.session_state.get("tipo_aplicacao"):
         selecionado = st.session_state.tipo_aplicacao
         st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
+
 
 
             # 📅 Agendamento
