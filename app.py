@@ -267,18 +267,7 @@ if "historico_ocupados" not in st.session_state:
 # ✅ Defina a função txt() no topo do app, se ainda não tiver
 # ✅ Defina a função txt() no topo do app, se ainda não tiver
 # ✅ Função txt deve vir no topo
-def txt(pt, es):
-    idioma = st.session_state.get("idioma", "pt")
-    return pt if idioma == "pt" else es
-
-# ✅ Importações no topo também
-from datetime import datetime, timedelta, date
-
-# ✅ Inicializar histórico se necessário
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
-
-# 💬 Confirmação do tipo de aplicação
+# 💬 Confirmação ou bloqueio do próximo passo
 col_esq, col_centro, col_dir = st.columns([1, 2, 1])
 with col_centro:
     if st.session_state.get("tipo_aplicacao"):
@@ -287,14 +276,15 @@ with col_centro:
     else:
         st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
 
-# ✅ Só exibe agendamento se tipo_aplicacao foi escolhido
+# ✅ Só exibe agendamento se tipo_aplicacao foi definido
 if st.session_state.get("tipo_aplicacao"):
-    hoje = date.today()
 
+    # 🗓️ Bloco de agendamento centralizado
     col_e, col_centro, col_d = st.columns([1, 2, 1])
     with col_centro:
         st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
 
+        hoje = date.today()
         data = st.date_input(txt("📆 Escolha a data", "📆 Selecciona la fecha"), min_value=hoje)
 
         def gerar_horarios():
@@ -333,6 +323,7 @@ if st.session_state.get("tipo_aplicacao"):
                 st.session_state.historico_ocupados.append((data, horario))
                 st.success(txt("✅ Atendimento agendado com sucesso!", "✅ Atención programada con éxito!"))
 
+                # Cuidados pós aplicação
                 st.markdown("""
                     <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
                         <h5>📌 Cuidados antes e depois da aplicação</h5>
@@ -345,3 +336,4 @@ if st.session_state.get("tipo_aplicacao"):
                         </ul>
                     </div>
                 """, unsafe_allow_html=True)
+
