@@ -230,21 +230,22 @@ with col_centro:
     }
 
     nomes = list(tipos.keys())
-    for i in range(0, len(nomes), 2):
-        col1, col2 = st.columns(2)
-        for j, col in enumerate([col1, col2]):
-            if i + j < len(nomes):
-                nome = nomes[i + j]
-                tipo = tipos[nome]
-                with col:
-                    st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                    st.image(tipo["img"], width=220)
-                    st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-                    st.caption(tipo["desc"])
-                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                        st.session_state.tipo_aplicacao = nome
-                        st.session_state.valor = tipo["valor"]
-                    st.markdown("</div>", unsafe_allow_html=True)
+for i in range(0, len(nomes), 2):
+    col1, col2 = st.columns(2)
+    for j, col in enumerate([col1, col2]):
+        if i + j < len(nomes):
+            nome = nomes[i + j]
+            tipo = tipos[nome]
+            with col:
+                st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                st.image(tipo["img"], width=220)  # 🔧 padronizado para todas
+                st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+                st.caption(tipo["desc"])
+                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                    st.session_state.tipo_aplicacao = nome
+                    st.session_state.valor = tipo["valor"]
+                st.markdown("</div>", unsafe_allow_html=True)
+
 
     # ✅ Bloqueia próxima etapa até que escolha seja feita
     if st.session_state.get("tipo_aplicacao"):
