@@ -260,10 +260,10 @@ if st.session_state.get("efeito_escolhido"):
             for nome, tipo in tipos.items():
                 st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
 
-                col_img, col_txt = st.columns([1.6, 1.4])  # imagem com mais destaque
+                col_img, col_txt = st.columns([1.6, 1.4])
 
                 with col_img:
-                    st.image(tipo["img"], width=460)
+                    st.image(tipo["img"], width=380)  # 🔥 imagem suavemente ajustada
 
                 with col_txt:
                     st.markdown(f"<h5 style='text-align:center;'>{nome}</h5>", unsafe_allow_html=True)
@@ -281,14 +281,6 @@ if st.session_state.get("efeito_escolhido"):
                     f"✅ Técnica seleccionada: {selecionado}"
                 ))
 
-
-import datetime
-
-# Simulação de horários ocupados no formato (data, hora_inicio)
-horarios_ocupados = [
-    (datetime.date(2024, 7, 17), "09:00"),
-    (datetime.date(2024, 7, 18), "13:00")
-]
 
 # Função para gerar horários disponíveis
 def gerar_horarios():
