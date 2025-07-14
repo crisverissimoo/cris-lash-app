@@ -412,9 +412,9 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
         # 📛 BLOQUEIO manual de horários
         with st.expander("📛 Bloquear horários manualmente", expanded=False):
-            data_bloqueio = st.date_input("📅 Data para bloquear", min_value=datetime.today().date(), key="bloqueio_data")
+            data_bloqueio = st.date_input("📅 Data para bloquear", min_value=datetime.today().date(), key="data_bloqueio")
             livres_para_bloqueio = [h for h in gerar_horarios() if esta_livre(data_bloqueio, h)]
-            horarios_a_bloquear = st.multiselect("⛔ Selecione os horários a bloquear", livres_para_bloqueio)
+            horarios_a_bloquear = st.multiselect("⛔ Selecione os horários a bloquear", livres_para_bloqueio, key="horarios_bloqueio")
             if st.button("🚫 Bloquear horários"):
                 for h in horarios_a_bloquear:
                     st.session_state.historico_ocupados.append((data_bloqueio, h))
@@ -425,7 +425,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
 
             hoje = datetime.today().date()
-            data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje)
+            data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje, key="data_agendamento")
 
             horarios = gerar_horarios()
             horarios_livres = [h for h in horarios if esta_livre(data, h)]
@@ -433,7 +433,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
             if not horarios_livres:
                 st.warning("⛔ Nenhum horário disponível neste dia.")
             else:
-                horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
+                horario = st.selectbox("🕐 Escolha o horário", horarios_livres, key="horario_agendamento")
 
                 efeito = st.session_state.efeito_escolhido
                 tipo = st.session_state.tipo_aplicacao
@@ -445,9 +445,9 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
                 st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
 
-                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas, preferências...")
+                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas, preferências...", key="mensagem_cliente")
 
-                if st.button("✅ Confirmar atendimento"):
+                if st.button("✅ Confirmar atendimento", key="confirmar_agendamento"):
                     st.session_state.agendamento_confirmado = True
                     st.session_state.historico_ocupados.append((data, horario))
 
@@ -499,7 +499,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 # 📲 Compartilhar por WhatsApp
                 st.markdown("---")
                 st.markdown("📲 Compartilhar atendimento via WhatsApp")
-                telefone = st.text_input("📞 Número (com DDI, ex: +34...)", "")
+                telefone = st.text_input("📞 Número (com DDI, ex: +34...)", key="telefone_whatsapp")
                 if telefone:
                     texto = resumo.replace("\n", "%0A").replace("—", "")
                     link = f"https://wa.me/{telefone.strip()}?text={texto}"
