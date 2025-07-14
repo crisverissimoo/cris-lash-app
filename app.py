@@ -186,8 +186,7 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
 
-    }
-
+   
     for nome, efeito in efeitos.items():
         # bloco centralizado por coluna
         col_esq, col_centro, col_dir = st.columns([1, 2, 1])
