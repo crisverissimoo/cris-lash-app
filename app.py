@@ -241,19 +241,23 @@ if st.session_state.get("efeito_escolhido"):
             tipos = {
                 "Egípcio 3D": {
                     "img": "https://i.imgur.com/TOPRWFQ.jpeg",
-                    "desc": txt("Leque 3D artístico — acabamento definido e sofisticado.", "Abanico 3D artístico — acabado definido y sofisticado.")
+                    "desc": txt("Leque 3D artístico — acabamento definido e sofisticado.", "Abanico 3D artístico — acabado definido y sofisticado."),
+                    "valor": "10€"
                 },
                 "Volume Russo 4D": {
                     "img": "https://i.imgur.com/tBX2O8e.jpeg",
-                    "desc": txt("4 fios por cílio — volume intenso e estruturado.", "4 fibras por pestaña — volumen intenso y estructurado.")
+                    "desc": txt("4 fios por cílio — volume intenso e estruturado.", "4 fibras por pestaña — volumen intenso y estructurado."),
+                    "valor": "10€"
                 },
                 "Volume Brasileiro": {
                     "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                    "desc": txt("Formato Y — volumoso e natural.", "Formato Y — voluminoso y natural.")
+                    "desc": txt("Formato Y — volumoso e natural.", "Formato Y — voluminoso y natural."),
+                    "valor": "10€"
                 },
                 "Fio a Fio": {
                     "img": "https://i.imgur.com/VzlySv4.jpeg",
-                    "desc": txt("1 fio por cílio — efeito rímel natural.", "1 fibra por pestaña — efecto natural tipo máscara.")
+                    "desc": txt("1 fio por cílio — efeito rímel natural.", "1 fibra por pestaña — efecto natural tipo máscara."),
+                    "valor": "10€"
                 }
             }
 
@@ -261,7 +265,6 @@ if st.session_state.get("efeito_escolhido"):
                 st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
 
                 col_img, col_txt = st.columns([1.6, 1.4])
-
                 with col_img:
                     st.markdown(f"""
                         <div style='text-align:center;'>
@@ -275,20 +278,22 @@ if st.session_state.get("efeito_escolhido"):
                     """, unsafe_allow_html=True)
 
                 with col_txt:
-                    st.markdown(f"<h5 style='text-align:center;'>{nome}</h5>", unsafe_allow_html=True)
+                    st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
                     st.caption(tipo["desc"])
 
                     col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
                     with col_b2:
                         if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
                             st.session_state.tipo_aplicacao = nome
+                            st.session_state.valor = tipo["valor"]
 
             if st.session_state.get("tipo_aplicacao"):
                 selecionado = st.session_state.tipo_aplicacao
                 st.success(txt(
-                    f"✅ Tipo selecionado: {selecionado}",
-                    f"✅ Técnica seleccionada: {selecionado}"
+                    f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
+                    f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
                 ))
+
 
 
 # Função para gerar horários disponíveis
