@@ -226,10 +226,19 @@ if st.session_state.ficha_validada:
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 
 # Só exibe o bloco se efeito_escolhido estiver definido
-# Só exibe o bloco se efeito_escolhido estiver definido
+# 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido is not None:
-
-    with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Tipo de Aplicación")):
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        st.markdown("""
+            <div style='
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 25px;
+                margin-top: 20px;
+                margin-bottom: 40px;
+            '>
+        """, unsafe_allow_html=True)
 
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
@@ -257,21 +266,23 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
         }
 
         for nome, tipo in tipos.items():
-            col_img, col_txt = st.columns([2, 4])
+            st.markdown("<div style='margin-top: 30px;'></div>", unsafe_allow_html=True)
+
+            col_img, col_txt = st.columns([1.4, 1.6])
             with col_img:
-                st.markdown(
-                    f"""
+                st.markdown(f"""
                     <div style='text-align:center;'>
                         <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:6px;'>
                     </div>
-                    """,
-                    unsafe_allow_html=True
-                )
+                """, unsafe_allow_html=True)
+
             with col_txt:
-                st.subheader(nome)
+                st.markdown(f"<h5 style='text-align:center;'>{nome}</h5>", unsafe_allow_html=True)
                 st.caption(tipo["desc"])
-                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                    st.session_state.tipo_aplicacao = nome
+                col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
+                with col_b2:
+                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                        st.session_state.tipo_aplicacao = nome
 
         if "tipo_aplicacao" in st.session_state:
             selecionado = st.session_state.tipo_aplicacao
@@ -279,3 +290,5 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
                 f"✅ Tipo selecionado: {selecionado}\n{tipos[selecionado]['desc']}",
                 f"✅ Tipo seleccionado: {selecionado}\n{tipos[selecionado]['desc']}"
             ))
+
+        st.markdown("</div>", unsafe_allow_html=True)
