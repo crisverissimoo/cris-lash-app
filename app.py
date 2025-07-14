@@ -118,8 +118,16 @@ if cadastro_ok:
                     st.session_state.cliente_apta = True
 else:
     st.markdown("""
-<div style='text-align:center; background-color:#e8f4fc; padding:15px; border-radius:8px; border-left:5px solid #539dcd; color:#222'>
-📌 <strong>Complete corretamente o cadastro para liberar a ficha clínica.</strong>
+<div style='
+    background-color:#e8f4fc;
+    padding:8px 12px;
+    border-radius:6px;
+    border-left:4px solid #539dcd;
+    color:#222;
+    text-align:center;
+    font-size:15px;
+'>
+📌 <strong>Complete o cadastro corretamente para liberar a ficha clínica.</strong>
 </div>
 """, unsafe_allow_html=True)
 
