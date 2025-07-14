@@ -62,115 +62,176 @@ cadastro_ok = (
 )
 
 # 🧾 Ficha clínica só aparece se cadastro estiver completo e válido
-col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-with col_centro:
-    if cadastro_ok:
-        st.markdown("---")
-        st.markdown("<h4 style='text-align:center;'>🧾 Ficha Clínica</h4>", unsafe_allow_html=True)
-        
+if autorizada:
+    respostas = {}
+
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+
         with st.form("form_clinica"):
             perguntas = {
-                "glaucoma": txt("Possui glaucoma?", "¿Tiene glaucoma?"),
-                "infeccao": txt("Tem infecções oculares?", "¿Tiene infecciones oculares?"),
-                "conjuntivite": txt("Conjuntivite recente?", "¿Conjuntivitis reciente?"),
-                "cirurgia": txt("Cirurgia ocular recente?", "¿Cirugía ocular reciente?"),
-                "reacao": txt("Reação alérgica anterior?", "¿Reacción alérgica previa?"),
-                "alergia": txt("Histórico de alergias?", "¿Historial de alergias?"),
-                "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o lactante?"),
-                "acido": txt("Tratamento com ácido?", "¿Tratamiento con ácidos?"),
-                "irritacao": txt("Olhos irritados?", "¿Ojos irritados?"),
-                "sensibilidade": txt("Sensibilidade a químicos?", "¿Sensibilidad a químicos?"),
-                "colirio": txt("Uso frequente de colírios?", "¿Uso frecuente de colirios?"),
+                "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
+                "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
+                "conjuntivite": txt("Já teve conjuntivite nos últimos 30 dias?", "¿Tuvo conjuntivitis en los últimos 30 días?"),
+                "cirurgia": txt("Fez cirurgia ocular recentemente?", "¿Ha tenido cirugía ocular reciente?"),
+                "alergia": txt("Tem histórico de alergias nos olhos ou pálpebras?", "¿Tiene alergias en los ojos o párpados?"),
+                "irritacao": txt("Está com olhos irritados ou lacrimejando frequentemente?", "¿Tiene ojos irritados o llorosos frecuentemente?"),
+                "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o amamantando?"),
+                "acido": txt("Está em tratamento dermatológico com ácido?", "¿Está en tratamiento con ácidos dermatológicos?"),
+                "sensibilidade": txt("Tem sensibilidade a produtos químicos ou cosméticos?", "¿Tiene sensibilidad a productos químicos o cosméticos?"),
+                "colirio": txt("Faz uso de colírios com frequência?", "¿Usa colirios con frecuencia?"),
                 "lentes": txt("Usa lentes de contato?", "¿Usa lentes de contacto?"),
-                "extensao": txt("Já fez extensão antes?", "¿Ya se hizo extensiones?")
+                "extensao": txt("Já fez extensão de cílios antes?", "¿Ya se hizo extensiones de pestañas?"),
+                "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
             }
 
-            respostas = {}
             for chave, pergunta in perguntas.items():
-                respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+                col_p = st.columns([1, 4, 1])[1]
+                with col_p:
+                    respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-            enviar = st.form_submit_button("📨 " + txt("Finalizar ficha", "Finalizar formulario"))
+            col_btn = st.columns([1, 2, 1])[1]
+            with col_btn:
+                enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-        if enviar:
-            if any(r is None for r in respostas.values()):
-                st.warning(txt("⚠️ Responda todas as perguntas.", "⚠️ Responda todas las preguntas."))
-            else:
-                impeditivos = {"glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"}
-                alertas = {"alergia", "gravida", "acido", "sensibilidade", "irritacao"}
-                infos = {"colirio", "lentes", "extensao"}
-                bloc, avis, inf = [], [], []
-
-                for chave, resposta in respostas.items():
-                    if resposta == "Sim":
-                        if chave in impeditivos: bloc.append(f"- {perguntas[chave]}")
-                        elif chave in alertas: avis.append(f"- {perguntas[chave]}")
-                        elif chave in infos: inf.append(f"- {perguntas[chave]}")
-
-                if bloc:
-                    st.error("❌ " + txt("Cliente não está apta para atendimento.", "Cliente no apta para atención") + "\n\n" + "\n".join(bloc))
+            if enviar:
+                if any(resposta is None for resposta in respostas.values()):
+                    st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
+                                            "Debe responder todas las preguntas antes de continuar."))
                     st.session_state.ficha_validada = False
-                    st.session_state.cliente_apta = False
-                    st.stop()
                 else:
-                    if avis: st.warning("⚠️ " + txt("Requer atenção:", "Requiere atención:") + "\n\n" + "\n".join(avis))
-                    if inf: st.info("📎 " + txt("Informações adicionais:", "Información adicional:") + "\n\n" + "\n".join(inf))
-                    st.success("✅ " + txt("Cliente apta — ficha validada!", "Cliente apta — ficha validada!"))
-                    st.session_state.ficha_validada = True
-                    st.session_state.cliente_apta = True
-    else:
+                    impeditivos = {
+                        "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
+                        "infeccao": txt("Infecção ocular", "Infección ocular"),
+                        "conjuntivite": txt("Conjuntivite recente", "Conjuntivitis reciente"),
+                        "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
+                        "reacao": txt("Reação alérgica anterior", "Reacción alérgica anterior")
+                    }
+                    alerta = {
+                        "alergia": txt("Histórico de alergias", "Historial de alergias"),
+                        "irritacao": txt("Olhos irritados", "Ojos irritados"),
+                        "gravida": txt("Gestante ou lactante", "Embarazada o lactante"),
+                        "acido": txt("Tratamento com ácido", "Tratamiento con ácido"),
+                        "sensibilidade": txt("Sensibilidade a químicos", "Sensibilidad química")
+                    }
+                    informativos = {
+                        "colirio": txt("Uso frequente de colírios", "Uso frecuente de colirios"),
+                        "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
+                        "extensao": txt("Já fez extensão antes", "Ya se hizo extensiones")
+                    }
+
+                    bloqueios_detectados = []
+                    alertas_detectados = []
+                    info_detectados = []
+
+                    for chave, resposta in respostas.items():
+                        if resposta == "Sim":
+                            if chave in impeditivos:
+                                bloqueios_detectados.append(f"- {impeditivos[chave]}")
+                            elif chave in alerta:
+                                alertas_detectados.append(f"- {alerta[chave]}")
+                            elif chave in informativos:
+                                info_detectados.append(f"- {informativos[chave]}")
+
+                    if bloqueios_detectados:
+                        st.error("❌ " + txt("Cliente não está apta para atendimento.",
+                                            "Cliente no apta para atención") + "\n\n" +
+                                 "\n".join(bloqueios_detectados))
+                        st.session_state.ficha_validada = False
+                        st.session_state.cliente_apta = False
+                        st.stop()
+                    else:
+                        if alertas_detectados:
+                            st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:",
+                                                   "Condiciones que requieren evaluación profesional:") + "\n\n" +
+                                       "\n".join(alertas_detectados))
+                        if info_detectados:
+                            st.info("📎 " + txt("Informações adicionais para registro:",
+                                               "Información adicional para el registro:") + "\n\n" +
+                                    "\n".join(info_detectados))
+                        st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.",
+                                               "Cliente apta para continuar — ficha validada correctamente."))
+                        st.session_state.ficha_validada = True
+                        st.session_state.cliente_apta = True
+
+# 🔓 Etapa 2 — Escolha de Efeito
+ 
+if st.session_state.ficha_validada:
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
         st.markdown("""
-        <div style='
-            background-color:#e8f4fc;
-            padding:8px 12px;
-            border-radius:6px;
-            border-left:4px solid #539dcd;
-            color:#222;
-            text-align:center;
-            font-size:15px;
-            max-width:400px;
-            margin:auto;
-        '>
-        📌 <strong>Complete o cadastro corretamente para liberar a ficha clínica.</strong>
-        </div>
+            <div style='
+                padding: 25px;
+                margin-top: 20px;
+                margin-bottom: 40px;
+            '>
         """, unsafe_allow_html=True)
 
+        st.markdown("<h4 style='text-align:center;'>✨ Escolha o Efeito Lash</h4>", unsafe_allow_html=True)
 
+        efeitos = {
+            "Clássica": {
+                "img": "https://i.imgur.com/Nqrwdcm.png",
+                "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado"),
+                "tipo_olho": txt("Olhos amendoado ou simétricos", "Ojos almendrados o simétricos")
+            },
+            "Boneca": {
+                "img": "https://i.imgur.com/vJUuvsl.png",
+                "desc": txt("Maior concentração no centro — abre e arredonda o olhar", "Mayor concentración en el centro — abre y redondea la mirada"),
+                "tipo_olho": txt("Olhos pequenos, fechados ou orientais", "Ojos pequeños, cerrados u orientales")
+            },
+            "Gatinho": {
+                "img": "https://i.imgur.com/zpBFK0e.png",
+                "desc": txt("Fios longos no canto externo — efeito sensual e alongado", "Fibras largas en la esquina externa — efecto sensual y alargado"),
+                "tipo_olho": txt("Olhos caídos ou arredondados", "Ojos caídos o redondeados")
+            },
+            "Esquilo": {
+                "img": "https://i.imgur.com/BY5eEsr.png",
+                "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante", "Volumen acentuado entre el centro y la esquina externa — estilo llamativo"),
+                "tipo_olho": txt("Olhos puxados ou olhos grandes", "Ojos rasgados o grandes")
+            }
+        }
 
-# ✅ Função txt (se ainda não definida)
-# ✅ Função de tradução (se usar multilíngue)
-def txt(pt, es):
-    idioma = st.session_state.get("idioma", "pt")
-    return pt if idioma == "pt" else es
+        for nome, efeito in efeitos.items():
+            st.markdown("<div style='margin-top: 40px;'></div>", unsafe_allow_html=True)
 
-# ✅ Imports essenciais
-from datetime import datetime, timedelta, date
+            col_img, col_txt = st.columns([1.6, 1.4])
 
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
+            with col_img:
+                st.markdown("""
+                    <div style='
+                        display: flex;
+                        justify-content: center;
+                        padding-top: 120px;
+                    '>
+                """, unsafe_allow_html=True)
+                st.image(efeito["img"], width=460)
+                st.markdown("</div>", unsafe_allow_html=True)
 
-# 👁️ Ficha Clínica só aparece após cadastro completo
-if st.session_state.get("cadastro_completo"):
+            with col_txt:
+                st.markdown(f"""
+                    <h5 style='
+                        margin-top:0;
+                        text-align:center;
+                    '>{txt(f"Efeito {nome}", f"Efecto {nome}")}</h5>
+                """, unsafe_allow_html=True)
+                st.write(efeito["desc"])
+                st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
 
-    st.markdown("<h4 style='text-align:center;'>📝 Ficha Clínica</h4>", unsafe_allow_html=True)
+                col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
+                with col_b2:
+                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
+                        st.session_state.efeito_escolhido = nome
 
-    col_esq, col_dir = st.columns(2)
+        if "efeito_escolhido" in st.session_state:
+            nome = st.session_state.efeito_escolhido
+            st.success("✅ " + txt(
+                f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
+                f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
+            ))
 
-    with col_esq:
-        glaucoma = st.radio("👁️ Possui glaucoma?", ["Sim", "Não"], index=1)
-        infeccoes = st.radio("🦠 Infecções oculares?", ["Sim", "Não"], index=1)
-        conjuntivite = st.radio("👀 Conjuntivite recente?", ["Sim", "Não"], index=1)
-
-    with col_dir:
-        cirurgia = st.radio("🩺 Cirurgia ocular recente?", ["Sim", "Não"], index=1)
-        reacao_alergica = st.radio("⚠️ Reação alérgica anterior?", ["Sim", "Não"], index=1)
-        historico_alergia = st.radio("🌿 Histórico de alergias?", ["Sim", "Não"], index=1)
-
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        if st.button("✅ Finalizar ficha"):
-            st.session_state.ficha_validada = True
-            st.session_state.cliente_apta = True
-            st.success("✅ Cliente apta — ficha validada!")
+        st.markdown("</div>", unsafe_allow_html=True)
 
 else:
     st.warning("🛑 Complete o cadastro corretamente para liberar a ficha clínica.")
