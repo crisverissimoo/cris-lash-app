@@ -179,13 +179,16 @@ for nome, efeito in efeitos.items():
         st.image(efeito["img"], width=460)
 
     with col_txt:
-        st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
-        st.write(efeito["desc"])
-        st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
-        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+    st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+    st.write(efeito["desc"])
+    st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
+
+    # Criar 3 colunas e colocar o botão na do meio
+    col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
+    with col_b2:
         if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
             st.session_state.efeito_escolhido = nome
-        st.markdown("</div>", unsafe_allow_html=True)
+
 
     st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
 
