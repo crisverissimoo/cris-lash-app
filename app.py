@@ -1,21 +1,31 @@
+# ✅ Imports
 import streamlit as st
 from datetime import datetime
 import pytz
 
+# ✅ Fuso + data atual
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 
+# ✅ Config da página
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 
-if "historico" not in st.session_state:
-    st.session_state.historico = []
-if "formato_escolhido" not in st.session_state:
-    st.session_state.formato_escolhido = None
-if "ficha_validada" not in st.session_state:
-    st.session_state.ficha_validada = False
-if "cliente_apta" in st.session_state and st.session_state.cliente_apta == False:
+# ✅ Inicializações
+for var in ["historico", "formato_escolhido", "ficha_validada", "cliente_apta", "cadastro_completo"]:
+    if var not in st.session_state:
+        st.session_state[var] = False if "bool" in str(type(var)) else []
+
+# 🔒 Bloqueio se cliente não apta
+if st.session_state.cliente_apta == False:
     st.error("❌ Cliente não está apta para atendimento. Reação alérgica ou condição contraindicada.")
     st.stop()
+
+# 👋 Saudação elegante
+col_top1, col_top2, col_top3 = st.columns([1, 2, 1])
+with col_top2:
+    st.markdown("<h2 style='text-align:center;'>💖 Seja bem-vinda à consultoria Cris Lash</h2>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align:center;'>✨ Atendimento técnico, visual alinhado e cuidado com sua beleza ✨</h4>", unsafe_allow_html=True)
+    st.caption("Preencha os dados abaixo para liberar sua ficha clínica")
 
 # 🌐 Idioma
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -23,10 +33,12 @@ with col2:
     idioma = st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
     def txt(pt, es): return pt if idioma == "Português" else es
 
-    st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
-    st.write(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
+    st.markdown(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
 
-    with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
+# 🗂️ Cadastro da Cliente
+col_cad1, col_cad2, col_cad3 = st.columns([1, 2, 1])
+with col_cad2:
+    with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente"), expanded=True):
         st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
         nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
@@ -37,17 +49,28 @@ with col2:
 
         idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
         menor = idade < 18
-        st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
+        st.info(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
 
         autorizada = True
         if menor:
             responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"), key="responsavel")
             autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"),
                                    ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+
             if autorizacao != "Sim":
                 st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
                              "❌ Cliente menor sin autorización — atención bloqueada."))
                 autorizada = False
+
+        if st.button(txt("✅ Confirmar cadastro", "✅ Confirmar registro")):
+            if not nome or not telefone or idade < 0 or (menor and not autorizada):
+                st.warning(txt("⚠️ Preencha os dados corretamente para prosseguir.",
+                               "⚠️ Rellena correctamente para continuar."))
+            else:
+                st.session_state.cadastro_completo = True
+                st.success(txt("✅ Cadastro finalizado com sucesso!",
+                               "✅ Registro completado con éxito!"))
+
 
 if autorizada:
     respostas = {}
