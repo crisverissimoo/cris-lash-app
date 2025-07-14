@@ -198,7 +198,8 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
  # 💅 Escolha do Tipo de Aplicação
 # 💅 Escolha do Tipo de Aplicação
 # 💅 Tipo de Aplicação — em duas colunas
-col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+c# 💅 Escolha do Tipo de Aplicação
+col_esq, col_centro, col_dir = st.columns([1, 2, 1])  # corrigido nome da coluna esquerda
 with col_centro:
     st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
@@ -230,29 +231,31 @@ with col_centro:
     }
 
     nomes = list(tipos.keys())
-for i in range(0, len(nomes), 2):
-    col1, col2 = st.columns(2)
-    for j, col in enumerate([col1, col2]):
-        if i + j < len(nomes):
-            nome = nomes[i + j]
-            tipo = tipos[nome]
-            with col:
-                st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                st.image(tipo["img"], width=220)  # 🔧 padronizado para todas
-                st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-                st.caption(tipo["desc"])
-                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                    st.session_state.tipo_aplicacao = nome
-                    st.session_state.valor = tipo["valor"]
-                st.markdown("</div>", unsafe_allow_html=True)
-
+    for i in range(0, len(nomes), 2):
+        col1, col2 = st.columns(2)
+        for j, col in enumerate([col1, col2]):
+            if i + j < len(nomes):
+                nome = nomes[i + j]
+                tipo = tipos[nome]
+                with col:
+                    st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                    st.image(tipo["img"], width=220)  # 📸 padronizado para todas
+                    st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+                    st.caption(tipo["desc"])
+                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                        st.session_state.tipo_aplicacao = nome
+                        st.session_state.valor = tipo["valor"]
+                    st.markdown("</div>", unsafe_allow_html=True)
 
     # ✅ Bloqueia próxima etapa até que escolha seja feita
-    if st.session_state.get("tipo_aplicacao"):
-        selecionado = st.session_state.tipo_aplicacao
-        st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
-    else:
-        st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        if st.session_state.get("tipo_aplicacao"):
+            selecionado = st.session_state.tipo_aplicacao
+            st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
+        else:
+            st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
+
 
 
         # 💅 Selecionei o tipo — agora libera o agendamento
