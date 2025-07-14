@@ -298,6 +298,10 @@ if st.session_state.get("efeito_escolhido"):
 
 # Função para gerar horários disponíveis
 # 🎯 Função para gerar horários disponíveis
+# ✅ Alias para lista de horários ocupados no estado
+horarios_ocupados = st.session_state.historico_ocupados
+
+# 🎯 Função para gerar horários disponíveis
 def gerar_horarios():
     base = datetime.strptime("08:00", "%H:%M")
     horarios = [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
@@ -342,7 +346,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 valor = st.session_state.get("valor", "10€")
                 fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
 
-                st.markdown(f"💖 Serviço escolhido:")
+                st.markdown("💖 Serviço escolhido:")
                 st.markdown(f"- ✨ Efeito: **{efeito}**")
                 st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
                 st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
@@ -351,7 +355,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                 if st.button("✅ Confirmar atendimento"):
                     st.session_state.agendamento_confirmado = True
-                    horarios_ocupados.append((data, horario))
+                    st.session_state.historico_ocupados.append((data, horario))
 
             if st.session_state.get("agendamento_confirmado"):
                 st.success("✅ Atendimento agendado com sucesso!")
@@ -369,3 +373,4 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         </ul>
                     </div>
                 """, unsafe_allow_html=True)
+
