@@ -26,12 +26,19 @@ with col2:
 
     # 🎀 Mensagem de boas-vindas
     st.markdown(f"""
-    <div style='background-color:#fff5f5; padding:15px; border-radius:10px; border-left:5px solid #e09b8e;'>
-    👋 <strong>{txt('Bem-vinda ao Cris Lash!', 'Bienvenida a Cris Lash!')}</strong><br>
-    ✨ {txt('Atendimento profissional com técnica em formação.', 'Atención profesional en formación.') }<br>
-    💶 {txt('Valor promocional de lançamento: 10€ por aplicação!', 'Precio de lanzamiento: ¡10€ por aplicación!')}
-    </div>
-    """, unsafe_allow_html=True)
+    <div style='
+    background-color:#fff2f2;
+    padding:20px;
+    border-radius:10px;
+    border-left:5px solid #e09b8e;
+    color:#333;
+    font-size:16px;
+'>
+👋 <strong>Bem-vinda ao Cris Lash!</strong><br>
+✨ Atendimento profissional com técnica em formação.<br>
+💶 Valor promocional de lançamento: <strong>10€</strong> por aplicação!
+</div>
+""", unsafe_allow_html=True)
 
     # Título + data
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
