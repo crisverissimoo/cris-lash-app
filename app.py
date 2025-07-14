@@ -292,63 +292,79 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
 
 import datetime
 
-# Hoje
-hoje = datetime.date.today()
+# Simulação de horários ocupados no formato (data, hora_inicio)
+horarios_ocupados = [
+    (datetime.date(2024, 7, 17), "09:00"),
+    (datetime.date(2024, 7, 18), "13:00")
+]
 
-# 🎯 Etapa de Agendamento — liberado após escolha de tipo de aplicação
+# Função para gerar horários disponíveis
+def gerar_horarios():
+    base = datetime.datetime.strptime("08:00", "%H:%M")
+    horarios = [(base + datetime.timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
+    return horarios
+
+# Função para verificar se horário está livre
+def esta_livre(data, horario):
+    inicio = datetime.datetime.strptime(horario, "%H:%M")
+    fim = inicio + datetime.timedelta(hours=2)
+
+    for ag_data, ag_hora in horarios_ocupados:
+        ag_inicio = datetime.datetime.strptime(ag_hora, "%H:%M")
+        ag_fim = ag_inicio + datetime.timedelta(hours=2)
+
+        if data == ag_data and (
+            (inicio >= ag_inicio and inicio < ag_fim) or
+            (fim > ag_inicio and fim <= ag_fim)
+        ):
+            return False
+    return True
+
+# 🎯 Etapa Agenda
 if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicacao"):
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
 
         st.markdown("""
-            <div style='
-                border: 1px solid #ccc;
-                border-radius: 10px;
-                padding: 25px;
-                margin-top: 20px;
-                margin-bottom: 40px;
-            '>
+            <div style='border: 1px solid #ccc; border-radius: 10px; padding: 25px; margin-top: 20px; margin-bottom: 40px;'>
         """, unsafe_allow_html=True)
 
         st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
 
-        # 📅 Calendário para escolher a data
-        data = st.date_input(
-            txt("📅 Escolha a data", "📅 Elija la fecha"),
-            min_value=hoje,
-            value=hoje + datetime.timedelta(days=1),
-            max_value=hoje + datetime.timedelta(days=30)
-        )
+        # 📅 Calendário
+        hoje = datetime.date.today()
+        data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje)
 
-        # 🕐 Horários com intervalo de 2h30 — entre 09:00 e 17:30
-        base_hora = datetime.datetime.strptime("09:00", "%H:%M")
-        horarios_disponiveis = [(base_hora + datetime.timedelta(minutes=150 * i)).strftime("%H:%M") for i in range(5)]
+        # 🕐 Horários livres
+        horarios = gerar_horarios()
+        horarios_livres = [h for h in horarios if esta_livre(data, h)]
 
-        horario = st.selectbox(txt("🕐 Escolha o horário", "🕐 Elija la hora"), horarios_disponiveis)
+        if not horarios_livres:
+            st.warning("⛔ Nenhum horário disponível neste dia.")
+        else:
+            horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
 
-        # 💖 Resumo do serviço
-        efeito = st.session_state.efeito_escolhido
-        tipo = st.session_state.tipo_aplicacao
-        st.markdown(f"💖 {txt('Serviço escolhido:', 'Servicio seleccionado')} **{efeito} + {tipo}**")
-        st.markdown(f"📅 {txt('Data:', 'Fecha')} `{data.strftime('%d/%m/%Y')}` — 🕐 `{horario}`")
+            efeito = st.session_state.efeito_escolhido
+            tipo = st.session_state.tipo_aplicacao
 
-        # ✅ Botão de confirmação
-        if st.button(txt("✅ Confirmar atendimento", "✅ Confirmar atención"), key="confirmar_agenda"):
-            st.session_state.agendamento_confirmado = True
+            st.markdown(f"💖 Serviço escolhido: **{efeito} + {tipo}**")
+            st.markdown(f"📅 Dia: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` até `{(datetime.datetime.strptime(horario, '%H:%M') + datetime.timedelta(hours=2)).strftime('%H:%M')}`")
 
-        # ✅ Mensagem após confirmação
+            # 💬 Mensagem personalizada
+            mensagem = st.text_area("📩 Deixe uma mensagem (opcional)", placeholder="Ex: tenho alergia, preciso de confirmação, etc.")
+
+            # ✅ Confirmação
+            if st.button("✅ Confirmar atendimento"):
+                st.session_state.agendamento_confirmado = True
+                horarios_ocupados.append((data, horario))
+
+        # 📌 Mensagem pós confirmação
         if st.session_state.get("agendamento_confirmado"):
-            st.success(txt("✅ Atendimento agendado com sucesso!", "✅ Atención agendada correctamente"))
+            st.success("✅ Atendimento agendado com sucesso!")
 
             st.markdown("""
-                <div style='
-                    border: 2px dashed #e09b8e;
-                    background-color: #fffaf8;
-                    border-radius: 10px;
-                    padding: 20px;
-                    margin-top: 20px;
-                '>
+                <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
                     <h5>📌 Cuidados antes e depois da aplicação</h5>
                     <ul>
                         <li>🚫 Compareça sem maquiagem nos olhos</li>
