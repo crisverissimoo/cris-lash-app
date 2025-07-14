@@ -358,19 +358,24 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     st.session_state.historico_ocupados.append((data, horario))
 
             if st.session_state.get("agendamento_confirmado"):
-                st.success("✅ Atendimento agendado com sucesso!")
+    st.success("✅ Atendimento agendado com sucesso!")
 
-                st.markdown("""
-                    <div style='border: 2px dashed #e09b8e; background-color: #fffaf8;
-                                border-radius: 10px; padding: 20px; margin-top: 20px;'>
-                        <h5>📌 Cuidados antes e depois da aplicação</h5>
-                        <ul>
-                            <li>🚫 Compareça sem maquiagem nos olhos</li>
-                            <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                            <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                            <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                            <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                        </ul>
-                    </div>
-                """, unsafe_allow_html=True)
+    st.markdown("""
+        <div style='
+            border: 2px dashed #e09b8e;
+            background-color: #f8d5d0;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+        '>
+            <h5>📌 Cuidados antes e depois da aplicação</h5>
+            <ul>
+                <li>🚫 Compareça sem maquiagem nos olhos</li>
+                <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
