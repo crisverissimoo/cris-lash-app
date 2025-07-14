@@ -173,20 +173,10 @@ if st.session_state.ficha_validada:
         }
 
         for nome, efeito in efeitos.items():
-            st.markdown("""
-                <div style='
-                    border: 1px solid #DDD;
-                    border-radius: 12px;
-                    padding: 20px;
-                    margin-bottom: 20px;
-                    background-color: #fff;
-                    box-shadow: 0 1px 3px rgba(0,0,0,0.05);
-                '>
-            """, unsafe_allow_html=True)
+            col_img, col_txt = st.columns([1.8, 1.1])  # Imagem maior, coluna de texto compacta
 
-            col_img, col_txt = st.columns([1.8, 1.1])
             with col_img:
-                st.image(efeito["img"], width=480)
+                st.image(efeito["img"], width=480)  # Amplo e nítido
 
             with col_txt:
                 st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
@@ -195,7 +185,7 @@ if st.session_state.ficha_validada:
                 if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
                     st.session_state.efeito_escolhido = nome
 
-            st.markdown("</div>", unsafe_allow_html=True)
+            st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
