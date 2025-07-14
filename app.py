@@ -363,7 +363,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 st.markdown("""
                     <div style='
                         border: 2px dashed #e09b8e;
-                        background-color: #f8d5d0;
+                        background-color: #c08081;
                         border-radius: 10px;
                         padding: 20px;
                         margin-top: 20px;
