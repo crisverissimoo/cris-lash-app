@@ -262,33 +262,30 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             }
         }
 
-        selecionado = st.radio(
-            label="",
-            options=list(tipos.keys()),
-            format_func=lambda nome: f"{nome}",
-            key="tipo_aplicacao"
-        )
-
         for nome, tipo in tipos.items():
-            if nome == st.session_state.tipo_aplicacao:
-                borda = "#e09b8e"
-            else:
-                borda = "#ccc"
+            borda = "#e09b8e" if st.session_state.get("tipo_aplicacao") == nome else "#ccc"
 
-            st.markdown(f"""
-                <div style='
-                    border: 2px solid {borda};
-                    border-radius: 12px;
-                    padding: 20px;
-                    margin-bottom: 30px;
-                '>
-                    <div style='text-align:center;'>
-                        <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:10px;'>
-                        <h5>{nome}</h5>
-                        <p style='font-size:14px;'>{tipo['desc']}</p>
+            col_card = st.columns([1])[0]
+            with col_card:
+                # Botão invisível que registra seleção
+                if st.button("⠀", key=f"btn_{nome}"):  # caractere invisível
+                    st.session_state.tipo_aplicacao = nome
+
+                st.markdown(f"""
+                    <div style='
+                        border: 2px solid {borda};
+                        border-radius: 12px;
+                        padding: 20px;
+                        margin-bottom: 30px;
+                        cursor: pointer;
+                    ' onclick="document.querySelector('[data-testid=\\'stButton\\'][key=\\'btn_{nome}\\'] button').click()">
+                        <div style='text-align:center;'>
+                            <img src='{tipo['img']}' alt='{nome}' style='height:120px; width:160px; object-fit:cover; border-radius:6px; margin-bottom:10px;'>
+                            <h5>{nome}</h5>
+                            <p style='font-size:14px;'>{tipo['desc']}</p>
+                        </div>
                     </div>
-                </div>
-            """, unsafe_allow_html=True)
+                """, unsafe_allow_html=True)
 
         if "tipo_aplicacao" in st.session_state:
             nome = st.session_state.tipo_aplicacao
