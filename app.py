@@ -79,10 +79,11 @@ with col_cad2:
 if autorizada:
     respostas = {}
 
+          
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
-
+             st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
             with st.form("form_clinica"):
                 perguntas = {
                     "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
