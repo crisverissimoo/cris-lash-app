@@ -133,9 +133,6 @@ else:
         </div>
         """, unsafe_allow_html=True)
 
-# 🔓 Etapas seguintes — liberadas após ficha validada
-if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
-
 
 
 # 🔓 Etapas seguintes — liberadas após ficha validada
