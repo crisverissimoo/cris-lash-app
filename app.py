@@ -195,14 +195,9 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
 
 
         
-        # 👇 Aqui você pode adicionar o bloco do tipo de aplicação (Egípcio, Fio a Fio...)
-
-        # 💅 Escolha do Tipo de Aplicação vem aqui em seguida...
-
-  # 💅 Escolha do Tipo de Aplicação
-# 💅 Escolha do Tipo de Aplicação
-col_e, col_c, col_d = st.columns([1, 2, 1])
-with col_c:
+ # 💅 Escolha do Tipo de Aplicação
+col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+with col_centro:
     st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
     tipos = {
@@ -235,23 +230,21 @@ with col_c:
     for nome, tipo in tipos.items():
         st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
         st.image(tipo["img"], width=400)
-        st.markdown(f"<h5>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-        st.markdown(f"<p style='margin-top:-8px;'>{tipo['desc']}</p>", unsafe_allow_html=True)
+        st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+        st.markdown(f"<div style='margin-top:-5px;'>{tipo['desc']}</div>", unsafe_allow_html=True)
 
-        # 🔘 botão simples e centralizado
+        # botão centralizado e simples
         if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
             st.session_state.tipo_aplicacao = nome
             st.session_state.valor = tipo["valor"]
+
         st.markdown("</div><br>", unsafe_allow_html=True)
 
-    # ✅ confirmação final
+    # ✅ Confirmação final
     if st.session_state.get("tipo_aplicacao"):
         selecionado = st.session_state.tipo_aplicacao
         st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
 
-
-
-            # 📅 Agendamento
             st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
             data = st.date_input("📆 Escolha a data", min_value=date.today())
 
