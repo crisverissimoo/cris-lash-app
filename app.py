@@ -144,26 +144,25 @@ def txt(pt, es):
 # ✅ Imports
 from datetime import datetime, timedelta, date
 
-# ✅ Inicialização de histórico
+# ✅ Histórico
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# ✅ ETAPA 0 — Ficha validada e cliente apta
+# 💅 Etapa 0 — Ficha validada
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
 
-    # ✨ ETAPA 1 — Escolha do Efeito Lash
+    # ✨ Etapa 1 — Escolha de Efeito Lash
     col_e, col_centro, col_d = st.columns([1, 2, 1])
     with col_centro:
         st.markdown("<h4 style='text-align:center;'>✨ Efeito Lash</h4>", unsafe_allow_html=True)
-
         efeitos = ["Bone", "Esquilo", "Gato", "Natural", "Doll", "Foxy"]
-        efeito_escolhido = st.radio(txt("Escolha o efeito desejado:", "Selecciona el efecto deseado:"), efeitos)
+        efeito = st.radio(txt("Escolha o efeito desejado:", "Selecciona el efecto deseado:"), efeitos)
 
-        if efeito_escolhido:
-            st.session_state.efeito_escolhido = efeito_escolhido
-            st.success(txt(f"✅ Efeito escolhido: {efeito_escolhido}", f"✅ Efecto seleccionado: {efeito_escolhido}"))
+        if efeito:
+            st.session_state.efeito_escolhido = efeito
+            st.success(txt(f"✅ Efeito escolhido: {efeito}", f"✅ Efecto seleccionado: {efeito}"))
 
-            # 🎀 ETAPA 2 — Tipo de Aplicação (2 colunas)
+            # 🎀 Etapa 2 — Tipo de Aplicação
             col_esq, col_centro, col_dir = st.columns([1, 2, 1])
             with col_centro:
                 st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
@@ -212,15 +211,15 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                                     st.session_state.valor = tipo["valor"]
                                 st.markdown("</div>", unsafe_allow_html=True)
 
-            # ✅ ETAPA 3 — Agendamento só após tipo selecionado
+            # 📅 Etapa 3 — Agendamento só se tipo foi escolhido
             if st.session_state.get("tipo_aplicacao"):
                 col_e, col_centro, col_d = st.columns([1, 2, 1])
                 with col_centro:
-                    tipo = st.session_state.get("tipo_aplicacao", "")
+                    tipo = st.session_state.tipo_aplicacao
                     st.success(txt(f"✅ Tipo selecionado: {tipo}", f"✅ Tipo seleccionado: {tipo}"))
 
-                    st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
                     hoje = date.today()
+                    st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
                     data = st.date_input(txt("📆 Escolha a data", "📆 Selecciona la fecha"), min_value=hoje)
 
                     def gerar_horarios():
@@ -245,7 +244,6 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                     else:
                         horario = st.selectbox(txt("🕐 Horário", "🕐 Horario"), horarios_disponiveis)
                         hora_fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
-                        efeito = st.session_state.get("efeito_escolhido", "")
                         valor = st.session_state.get("valor", "—")
 
                         st.markdown(f"💖 Serviço: **{efeito} + {tipo}** — 💶 {valor}")
@@ -271,12 +269,12 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
                                 </div>
                             """, unsafe_allow_html=True)
             else:
-                st.warning(txt("👁️ Escolha o tipo de aplicação para liberar o agendamento.",
+                st.warning(txt("👁️ Escolha o tipo de aplicação para liberar a agenda.",
                                "👁️ Selecciona el tipo de aplicación para desbloquear la cita."))
         else:
             st.warning(txt("👁️ Escolha o efeito para liberar os estilos.",
                            "👁️ Selecciona el efecto para desbloquear los estilos."))
 else:
-    st.warning(txt("⚠️ Ficha não validada ou cliente inapta. Verifique os dados antes de avançar.",
-                   "⚠️ Ficha no validada o cliente no apto. Verifica los datos antes de continuar."))
+    st.warning(txt("⚠️ Ficha não validada ou cliente inapta. Verifique os dados.",
+                   "⚠️ Ficha no validada o cliente no apto. Verifica los datos."))
 
