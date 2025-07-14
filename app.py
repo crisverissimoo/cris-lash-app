@@ -196,14 +196,11 @@ if st.session_state.ficha_validada:
 
 # Só exibe o bloco se efeito_escolhido estiver definido
 
-# 🎯 Escolha do Tipo de Aplicação (exibe só após definir efeito)
-if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido is not None:
+# 🎯 Escolha de Aplicação + Agendamento (liberado apenas se cliente estiver apta)
+if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
+    st.markdown("---")
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
-        st.markdown("""
-            <div style='border: 1px solid #ccc; border-radius: 10px; padding: 25px; margin-top: 20px; margin-bottom: 40px;'>
-        """, unsafe_allow_html=True)
-
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
         tipos = {
@@ -221,8 +218,8 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             },
             "Volume Brasileiro": {
                 "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                "desc": txt("Fios em formato Y — volume leve e natural.",
-                            "Fibras en forma de Y — volumen ligero y natural."),
+                "desc": txt("Fios Y — volume leve e natural.",
+                            "Fibras en Y — volumen ligero y natural."),
                 "valor": "10€"
             },
             "Fio a Fio": {
@@ -248,78 +245,59 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             selecionado = st.session_state.tipo_aplicacao
             st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {selecionado}"))
 
-        st.markdown("</div>", unsafe_allow_html=True)
+        st.markdown("---")
 
-else:
-    st.info("📌 Complete a ficha clínica para prosseguir com o agendamento.")
-
-# 🎯 Agenda (exibe se técnica foi definida)
-if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicacao"):
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        st.markdown("""
-            <div style='border: 1px solid #ccc; border-radius: 10px; padding: 25px; margin-top: 20px; margin-bottom: 40px;'>
-        """, unsafe_allow_html=True)
-
-        st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
-
-        hoje = datetime.date.today()
-        data = st.date_input("📅 Escolha a data", min_value=hoje)
+        # 📅 Agendamento
+        st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
+        data = st.date_input("📆 Escolha a data", min_value=date.today())
 
         def gerar_horarios():
-            base = datetime.datetime.strptime("08:00", "%H:%M")
-            return [(base + datetime.timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
+            base = datetime.strptime("08:00", "%H:%M")
+            return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
 
-        horarios_ocupados = st.session_state.get("historico_ocupados", [])
+        horarios_ocupados = st.session_state.historico_ocupados
 
         def esta_livre(data, horario):
-            inicio = datetime.datetime.strptime(horario, "%H:%M")
-            fim = inicio + datetime.timedelta(hours=2)
+            inicio = datetime.strptime(horario, "%H:%M")
+            fim = inicio + timedelta(hours=2)
             for ag_data, ag_hora in horarios_ocupados:
                 if data == ag_data:
-                    ag_inicio = datetime.datetime.strptime(ag_hora, "%H:%M")
-                    ag_fim = ag_inicio + datetime.timedelta(hours=2)
+                    ag_inicio = datetime.strptime(ag_hora, "%H:%M")
+                    ag_fim = ag_inicio + timedelta(hours=2)
                     if inicio < ag_fim and fim > ag_inicio:
                         return False
             return True
 
-        horarios = gerar_horarios()
-        horarios_livres = [h for h in horarios if esta_livre(data, h)]
+        horarios_disponiveis = [h for h in gerar_horarios() if esta_livre(data, h)]
 
-        if not horarios_livres:
+        if not horarios_disponiveis:
             st.warning("⛔ Nenhum horário disponível neste dia.")
         else:
-            horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
+            horario = st.selectbox("🕐 Horário", horarios_disponiveis)
+            hora_fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
             efeito = st.session_state.efeito_escolhido
             tipo = st.session_state.tipo_aplicacao
             valor = st.session_state.valor
-            hora_fim = (datetime.datetime.strptime(horario, "%H:%M") + datetime.timedelta(hours=2)).strftime("%H:%M")
 
             st.markdown(f"💖 Serviço: **{efeito} + {tipo}** — 💶 {valor}")
-            st.markdown(f"📅 {data.strftime('%d/%m/%Y')} — 🕐 `{horario} às {hora_fim}`")
+            st.markdown(f"📅 Data: `{data.strftime('%d/%m/%Y')}` — ⏰ `{horario} às {hora_fim}`")
 
-            mensagem = st.text_area("📩 Mensagem para a Cris (opcional)", placeholder="Tenho alergia, preciso confirmar...")
+            mensagem = st.text_area("📩 Mensagem para Cris (opcional)", placeholder="Ex: tenho alergia, favor confirmar")
 
             if st.button("✅ Confirmar atendimento"):
                 st.session_state.agendamento_confirmado = True
-                if "historico_ocupados" not in st.session_state:
-                    st.session_state.historico_ocupados = []
                 st.session_state.historico_ocupados.append((data, horario))
+                st.success("✅ Atendimento agendado com sucesso!")
 
-        if st.session_state.get("agendamento_confirmado"):
-            st.success("✅ Atendimento agendado com sucesso!")
-
-            st.markdown("""
-                <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
-                    <h5>📌 Cuidados antes e depois da aplicação</h5>
-                    <ul>
-                        <li>🚫 Compareça sem maquiagem nos olhos</li>
-                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                    </ul>
-                </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown("""
+                    <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
+                        <h5>📌 Cuidados antes e depois da aplicação</h5>
+                        <ul>
+                            <li>🚫 Compareça sem maquiagem nos olhos</li>
+                            <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                            <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                            <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                            <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                        </ul>
+                    </div>
+                """, unsafe_allow_html=True)
