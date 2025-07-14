@@ -117,19 +117,24 @@ if cadastro_ok:
                     st.session_state.ficha_validada = True
                     st.session_state.cliente_apta = True
 else:
-    st.markdown("""
-<div style='
-    background-color:#e8f4fc;
-    padding:8px 12px;
-    border-radius:6px;
-    border-left:4px solid #539dcd;
-    color:#222;
-    text-align:center;
-    font-size:15px;
-'>
-📌 <strong>Complete o cadastro corretamente para liberar a ficha clínica.</strong>
-</div>
-""", unsafe_allow_html=True)
+    col_e, col_c, col_d = st.columns([1, 2, 1])
+    with col_c:
+        st.markdown("""
+        <div style='
+            background-color:#e8f4fc;
+            padding:8px 12px;
+            border-radius:6px;
+            border-left:4px solid #539dcd;
+            color:#222;
+            text-align:center;
+            font-size:15px;
+        '>
+        📌 <strong>Complete o cadastro corretamente para liberar a ficha clínica.</strong>
+        </div>
+        """, unsafe_allow_html=True)
+
+# 🔓 Etapas seguintes — liberadas após ficha validada
+if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
 
 
 
