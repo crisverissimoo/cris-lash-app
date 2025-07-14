@@ -173,6 +173,15 @@ if st.session_state.ficha_validada:
         }
 
         for nome, efeito in efeitos.items():
+            st.markdown("""
+                <div style='
+                    border: 2px solid #e09b8e;
+                    border-radius: 12px;
+                    padding: 20px;
+                    margin-bottom: 30px;
+                '>
+            """, unsafe_allow_html=True)
+
             col_img, col_txt = st.columns([1.6, 1.4])
 
             with col_img:
@@ -201,8 +210,7 @@ if st.session_state.ficha_validada:
                     if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
                         st.session_state.efeito_escolhido = nome
 
-            # 🌸 Linha rosa queimado entre os cards
-            st.markdown("<hr style='border: none; height: 3px; background-color: #e09b8e;'>", unsafe_allow_html=True)
+            st.markdown("</div>", unsafe_allow_html=True)
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
@@ -210,3 +218,4 @@ if st.session_state.ficha_validada:
                 f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
+
