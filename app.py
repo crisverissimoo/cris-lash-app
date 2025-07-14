@@ -195,9 +195,19 @@ if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta
 
 
         
- # 💅 Escolha do Tipo de Aplicação
-# 💅 Escolha do Tipo de Aplicação
-# 💅 Tipo de Aplicação — em duas colunas
+# ✅ Função txt — no topo do app
+def txt(pt, es):
+    idioma = st.session_state.get("idioma", "pt")
+    return pt if idioma == "pt" else es
+
+# ✅ Imports — também no topo
+from datetime import datetime, timedelta, date
+
+# ✅ Inicialização segura
+if "historico_ocupados" not in st.session_state:
+    st.session_state.historico_ocupados = []
+
+# 💅 Bloco: Tipo de Aplicação
 col_esq, col_centro, col_dir = st.columns([1, 2, 1])
 with col_centro:
     st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
@@ -238,7 +248,6 @@ with col_centro:
                 tipo = tipos[nome]
                 with col:
                     st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                    # 📸 imagem padronizada com largura e altura fixa
                     st.markdown(f"<img src='{tipo['img']}' width='220' height='160' style='object-fit: cover;'>", unsafe_allow_html=True)
                     st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
                     st.caption(tipo["desc"])
@@ -247,27 +256,7 @@ with col_centro:
                         st.session_state.valor = tipo["valor"]
                     st.markdown("</div>", unsafe_allow_html=True)
 
-    # 💬 Confirmação ou bloqueio do próximo passo
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        if st.session_state.get("tipo_aplicacao"):
-            selecionado = st.session_state.tipo_aplicacao
-            st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
-        else:
-            st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
-
-
-        # 💅 Selecionei o tipo — agora libera o agendamento
-from datetime import datetime, timedelta, date  # isso deve ficar no início do app
-
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
-
-# ⏳ só exibe agendamento se tipo_aplicacao foi escolhido
-# ✅ Defina a função txt() no topo do app, se ainda não tiver
-# ✅ Defina a função txt() no topo do app, se ainda não tiver
-# ✅ Função txt deve vir no topo
-# 💬 Confirmação ou bloqueio do próximo passo
+# 💬 Confirmação visual
 col_esq, col_centro, col_dir = st.columns([1, 2, 1])
 with col_centro:
     if st.session_state.get("tipo_aplicacao"):
@@ -276,14 +265,11 @@ with col_centro:
     else:
         st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
 
-# ✅ Só exibe agendamento se tipo_aplicacao foi definido
+# 🔒 Só exibe agendamento SE tipo_aplicacao foi escolhido
 if st.session_state.get("tipo_aplicacao"):
-
-    # 🗓️ Bloco de agendamento centralizado
     col_e, col_centro, col_d = st.columns([1, 2, 1])
     with col_centro:
         st.markdown("<h4 style='text-align:center;'>📅 Agendamento</h4>", unsafe_allow_html=True)
-
         hoje = date.today()
         data = st.date_input(txt("📆 Escolha a data", "📆 Selecciona la fecha"), min_value=hoje)
 
@@ -315,7 +301,6 @@ if st.session_state.get("tipo_aplicacao"):
 
             st.markdown(f"💖 Serviço: **{efeito} + {tipo}** — 💶 {valor}")
             st.markdown(f"📅 Data: `{data.strftime('%d/%m/%Y')}` — ⏰ `{horario} às {hora_fim}`")
-
             mensagem = st.text_area("📩 Mensagem para Cris (opcional)", placeholder="Ex: tenho alergia, favor confirmar")
 
             if st.button("✅ Confirmar atendimento"):
@@ -323,7 +308,6 @@ if st.session_state.get("tipo_aplicacao"):
                 st.session_state.historico_ocupados.append((data, horario))
                 st.success(txt("✅ Atendimento agendado com sucesso!", "✅ Atención programada con éxito!"))
 
-                # Cuidados pós aplicação
                 st.markdown("""
                     <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
                         <h5>📌 Cuidados antes e depois da aplicação</h5>
@@ -336,4 +320,5 @@ if st.session_state.get("tipo_aplicacao"):
                         </ul>
                     </div>
                 """, unsafe_allow_html=True)
+
 
