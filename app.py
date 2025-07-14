@@ -238,7 +238,7 @@ with col_centro:
                 tipo = tipos[nome]
                 with col:
                     st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                    st.image(tipo["img"], width=220)  # 📸 todas com tamanho padronizado
+                    st.image(tipo["img"], width=220)  # 📸 todas iguais
                     st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
                     st.caption(tipo["desc"])
                     if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
@@ -246,6 +246,7 @@ with col_centro:
                         st.session_state.valor = tipo["valor"]
                     st.markdown("</div>", unsafe_allow_html=True)
 
+    # 💬 Confirmação ou bloqueio do próximo passo
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         if st.session_state.get("tipo_aplicacao"):
@@ -253,7 +254,6 @@ with col_centro:
             st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
         else:
             st.warning(txt("👀 Selecione uma aplicação para continuar.", "👀 Selecciona un tipo para continuar."))
-
 
 
 
