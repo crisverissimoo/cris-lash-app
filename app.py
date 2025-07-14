@@ -258,7 +258,7 @@ with col_centro:
 
 
         # 💅 Selecionei o tipo — agora libera o agendamento
-      from datetime import datetime, timedelta, date  # garantir que tudo esteja importado
+  from datetime import datetime, timedelta, date  # garantir que tudo esteja importado
 
 hoje = date.today()
 if "historico_ocupados" not in st.session_state:
@@ -319,4 +319,3 @@ with col_centro:
                     </ul>
                 </div>
             """, unsafe_allow_html=True)
-
