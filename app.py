@@ -79,14 +79,12 @@ with col_cad2:
 if autorizada:
     respostas = {}
 
-          
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
-             st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
-
-            
             with st.form("form_clinica"):
+                st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+
                 perguntas = {
                     "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
                     "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
@@ -111,7 +109,7 @@ if autorizada:
                 col_btn = st.columns([1, 2, 1])[1]
                 with col_btn:
                     enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
-
+                    
                 if enviar:
                     if any(resposta is None for resposta in respostas.values()):
                         st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
