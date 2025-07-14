@@ -292,8 +292,6 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
 
 import datetime
 
-import datetime
-
 # Hoje
 hoje = datetime.date.today()
 
@@ -353,4 +351,13 @@ if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicac
                 '>
                     <h5>📌 Cuidados antes e depois da aplicação</h5>
                     <ul>
-                        <li>🚫 Compareça sem maquiagem nos
+                        <li>🚫 Compareça sem maquiagem nos olhos</li>
+                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                    </ul>
+                </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
