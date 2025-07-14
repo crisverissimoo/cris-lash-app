@@ -149,67 +149,55 @@ if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
 # 💅 Etapa 0 — Ficha validada
-if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
-
-    # ✨ Etapa 1 — Escolha de Efeito Lash
-    col_e, col_centro, col_d = st.columns([1, 2, 1])
+if st.session_state.get("efeito_escolhido"):
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
-        st.markdown("<h4 style='text-align:center;'>✨ Efeito Lash</h4>", unsafe_allow_html=True)
-        efeitos = ["Bone", "Esquilo", "Gato", "Natural", "Doll", "Foxy"]
-        efeito = st.radio(txt("Escolha o efeito desejado:", "Selecciona el efecto deseado:"), efeitos)
+        st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
-        if efeito:
-            st.session_state.efeito_escolhido = efeito
-            st.success(txt(f"✅ Efeito escolhido: {efeito}", f"✅ Efecto seleccionado: {efeito}"))
+        tipos = {
+            "Egípcio 3D": {
+                "img": "https://i.imgur.com/TOPRWFQ.jpeg",
+                "desc": txt("Fios em leque 3D com geometria precisa — efeito artístico e sofisticado.",
+                            "Fibras en abanico 3D con geometría precisa — efecto artístico y sofisticado."),
+                "valor": "10€"
+            },
+            "Volume Russo 4D": {
+                "img": "https://i.imgur.com/tBX2O8e.jpeg",
+                "desc": txt("4 fios por cílio — resultado glamouroso e intenso.",
+                            "4 fibras por pestaña — resultado glamoroso e intenso."),
+                "valor": "10€"
+            },
+            "Volume Brasileiro": {
+                "img": "https://i.imgur.com/11rw6Jv.jpeg",
+                "desc": txt("Fios Y — volume leve e natural.",
+                            "Fibras en Y — volumen ligero y natural."),
+                "valor": "10€"
+            },
+            "Fio a Fio": {
+                "img": "https://i.imgur.com/VzlySv4.jpeg",
+                "desc": txt("1 fio por cílio — acabamento natural tipo rímel.",
+                            "1 fibra por pestaña — acabado natural tipo máscara."),
+                "valor": "10€"
+            }
+        }
 
-            # 🎀 Etapa 2 — Tipo de Aplicação
-            col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-            with col_centro:
-                st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
+        nomes = list(tipos.keys())
+        for i in range(0, len(nomes), 2):
+            col1, col2 = st.columns(2)
+            for j, col in enumerate([col1, col2]):
+                if i + j < len(nomes):
+                    nome = nomes[i + j]
+                    tipo = tipos[nome]
+                    with col:
+                        st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
+                        st.markdown(f"<img src='{tipo['img']}' width='220' height='160' style='object-fit: cover;'>", unsafe_allow_html=True)
+                        st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+                        st.caption(tipo["desc"])
+                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                            st.session_state.tipo_aplicacao = nome
+                            st.session_state.valor = tipo["valor"]
+                        st.markdown("</div>", unsafe_allow_html=True)
 
-                tipos = {
-                    "Egípcio 3D": {
-                        "img": "https://i.imgur.com/TOPRWFQ.jpeg",
-                        "desc": txt("Fios em leque 3D com geometria precisa — efeito artístico e sofisticado.",
-                                    "Fibras en abanico 3D con geometría precisa — efecto artístico y sofisticado."),
-                        "valor": "10€"
-                    },
-                    "Volume Russo 4D": {
-                        "img": "https://i.imgur.com/tBX2O8e.jpeg",
-                        "desc": txt("4 fios por cílio — resultado glamouroso e intenso.",
-                                    "4 fibras por pestaña — resultado glamoroso e intenso."),
-                        "valor": "10€"
-                    },
-                    "Volume Brasileiro": {
-                        "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                        "desc": txt("Fios Y — volume leve e natural.",
-                                    "Fibras en Y — volumen ligero y natural."),
-                        "valor": "10€"
-                    },
-                    "Fio a Fio": {
-                        "img": "https://i.imgur.com/VzlySv4.jpeg",
-                        "desc": txt("1 fio por cílio — acabamento natural tipo rímel.",
-                                    "1 fibra por pestaña — acabado natural tipo máscara."),
-                        "valor": "10€"
-                    }
-                }
-
-                nomes = list(tipos.keys())
-                for i in range(0, len(nomes), 2):
-                    col1, col2 = st.columns(2)
-                    for j, col in enumerate([col1, col2]):
-                        if i + j < len(nomes):
-                            nome = nomes[i + j]
-                            tipo = tipos[nome]
-                            with col:
-                                st.markdown("<div style='text-align:center;'>", unsafe_allow_html=True)
-                                st.markdown(f"<img src='{tipo['img']}' width='220' height='160' style='object-fit: cover;'>", unsafe_allow_html=True)
-                                st.markdown(f"<h5>🎀 {nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-                                st.caption(tipo["desc"])
-                                if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                                    st.session_state.tipo_aplicacao = nome
-                                    st.session_state.valor = tipo["valor"]
-                                st.markdown("</div>", unsafe_allow_html=True)
 
             # 📅 Etapa 3 — Agendamento só se tipo foi escolhido
             if st.session_state.get("tipo_aplicacao"):
