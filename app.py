@@ -2,20 +2,22 @@ import streamlit as st
 from datetime import datetime, date, timedelta
 import pytz
 
+# 🕐 Configuração de data e página
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 
+# 🌐 Função de idioma
 def txt(pt, es): return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
-# Estados iniciais
+# 🔧 Estados iniciais
 for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado"]:
     if key not in st.session_state:
         st.session_state[key] = None
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# 🎀 Idioma + boas-vindas + cadastro
+# 🎀 Idioma + boas-vindas + cadastro (centralizado)
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
@@ -34,48 +36,24 @@ with col2:
     st.markdown("---")
     st.markdown("<h4 style='text-align:center;'>🧍 Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
-    nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
+    nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"))
     nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
-                               min_value=date(1920, 1, 1), max_value=hoje, key="nascimento")
-    telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
-    email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
+                               min_value=date(1920, 1, 1), max_value=hoje)
+    telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"))
+    email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"))
 
     idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
     st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
 
     # 🔒 Autorização (se menor)
     autorizacao = "Sim"
-    autorizada = True
     if idade < 18:
         responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
         autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"), ["Sim", "Não", "Pendente"])
         if autorizacao != "Sim":
             st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
-            autorizada = False
 
-# ✅ Validação do cadastro completo
-cadastro_ok = (
-    nome and nascimento and telefone and
-    (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
-)
-
-# 🎀 Cadastro da cliente centralizado
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.markdown("<h4 style='text-align:center;'>🧍 Cadastro da Cliente</h4>", unsafe_allow_html=True)
-
-    nome = st.text_input("🧍 Nome completo")
-    nascimento = st.date_input("📅 Data de nascimento", min_value=date(1920, 1, 1), max_value=hoje)
-    telefone = st.text_input("📞 Telefone")
-    email = st.text_input("📧 Email (opcional)")
-    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-    st.write(f"📌 Idade: **{idade} anos**")
-
-    autorizacao = "Sim"
-    if idade < 18:
-        responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
-        autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"])
-
+    # ✅ Validação do cadastro completo
     cadastro_ok = (
         nome and nascimento and telefone and
         (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
