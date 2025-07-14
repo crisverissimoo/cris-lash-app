@@ -289,3 +289,65 @@ if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido 
             ))
 
         st.markdown("</div>", unsafe_allow_html=True)
+
+import datetime
+
+# 🎯 Etapa de Agendamento — liberado após serviço escolhido
+if "tipo_aplicacao" in st.session_state and st.session_state.tipo_aplicacao is not None:
+
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        st.markdown("""
+            <div style='
+                border: 1px solid #ccc;
+                border-radius: 10px;
+                padding: 25px;
+                margin-top: 20px;
+                margin-bottom: 40px;
+            '>
+        """, unsafe_allow_html=True)
+
+        st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
+
+        # 🕐 Seleção de Data e Horário disponíveis
+        dias_disponiveis = [hoje + datetime.timedelta(days=i) for i in range(1, 8)]
+        data = st.selectbox(txt("📅 Escolha a data", "📅 Elija la fecha"), dias_disponiveis, format_func=lambda d: d.strftime('%d/%m/%Y'))
+
+        horarios_disponiveis = ["09:00", "10:30", "13:00", "14:30", "16:00", "17:30"]
+        horario = st.selectbox(txt("🕐 Escolha o horário", "🕐 Elija la hora"), horarios_disponiveis)
+
+        # 🧾 Resumo do serviço selecionado
+        efeito = st.session_state.efeito_escolhido
+        tipo = st.session_state.tipo_aplicacao
+        st.markdown(f"💖 {txt('Serviço escolhido:', 'Servicio seleccionado')} **{efeito} + {tipo}**")
+        st.markdown(f"📅 {txt('Data:', 'Fecha')} `{data.strftime('%d/%m/%Y')}` — 🕐 `{horario}`")
+
+        # 💌 Botão para confirmar agendamento
+        if st.button(txt("✅ Confirmar atendimento", "✅ Confirmar atención"), key="confirmar_agenda"):
+            st.session_state.agendamento_confirmado = True
+
+        # 🚨 Mensagem final após confirmação
+        if st.session_state.get("agendamento_confirmado", False):
+            st.success(txt("✅ Atendimento agendado com sucesso!", "✅ Atención agendada correctamente"))
+
+            st.markdown("""
+                <div style='
+                    border: 2px dashed #e09b8e;
+                    background-color: #fffaf8;
+                    border-radius: 10px;
+                    padding: 20px;
+                    margin-top: 20px;
+                '>
+                    <h5>📌 Cuidados antes e depois da aplicação</h5>
+                    <ul>
+                        <li>🚫 Compareça sem maquiagem nos olhos</li>
+                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                    </ul>
+                </div>
+            """, unsafe_allow_html=True)
+
+        st.markdown("</div>", unsafe_allow_html=True)
+
