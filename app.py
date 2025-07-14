@@ -223,10 +223,15 @@ if st.session_state.ficha_validada:
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 
 # Só exibe o bloco se efeito_escolhido estiver definido
+# 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
+
+# Só exibe o bloco se efeito_escolhido estiver definido
 # Só exibe o bloco se efeito_escolhido estiver definido
 if "efeito_escolhido" in st.session_state and st.session_state.efeito_escolhido is not None:
 
-    st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
+    with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Tipo de Aplicación")):
+
+        st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
 
         tipos = {
             "Egípcio 3D": {
