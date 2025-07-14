@@ -53,15 +53,10 @@ with col2:
         responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
         autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"), ["Sim", "Não", "Pendente"])
         if autorizacao != "Sim":
-            st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.", "❌ Cliente menor sin autorización — atención bloqueada."))
+                st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
+                             "❌ Cliente menor sin autorización — atención bloqueada."))
+                autorizada = False
 
-# 🎯 Validação do cadastro
-cadastro_ok = (
-    nome.strip() != "" and telefone.strip() != "" and
-    (idade >= 18 or (idade < 18 and autorizacao == "Sim"))
-)
-
-# 🧾 Ficha clínica só aparece se cadastro estiver completo e válido
 if autorizada:
     respostas = {}
 
