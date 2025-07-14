@@ -136,22 +136,22 @@ with col_centro:
 
 if st.session_state.get("ficha_validada") and st.session_state.get("cliente_apta"):
 
-    # ✅ Função txt
+# ✅ Função txt
 def txt(pt, es):
     idioma = st.session_state.get("idioma", "pt")
     return pt if idioma == "pt" else es
 
-# ✅ Imports essenciais
+# ✅ Imports
 from datetime import datetime, timedelta, date
 
-# ✅ Histórico de agendamentos
+# ✅ Histórico seguro
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 
-# 💅 BLOQUEIO: só libera tipo e agendamento se o efeito foi escolhido
+# ✅ Etapa 1: Verifica se o efeito foi escolhido
 if st.session_state.get("efeito_escolhido"):
 
-    # 🎀 Tipo de Aplicação — duas colunas
+    # 🎀 Etapa 2: Tipo de Aplicação (duas colunas)
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         st.markdown("<h4 style='text-align:center;'>🎀 Tipo de Aplicação</h4>", unsafe_allow_html=True)
@@ -200,10 +200,10 @@ if st.session_state.get("efeito_escolhido"):
                             st.session_state.valor = tipo["valor"]
                         st.markdown("</div>", unsafe_allow_html=True)
 
-    # ✅ Confirmação do tipo + desbloqueio da agenda
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        if st.session_state.get("tipo_aplicacao"):
+    # ✅ Etapa 3: Verifica se o tipo foi escolhido
+    if st.session_state.get("tipo_aplicacao"):
+        col_e, col_centro, col_d = st.columns([1, 2, 1])
+        with col_centro:
             selecionado = st.session_state.tipo_aplicacao
             st.success(txt(f"✅ Tipo selecionado: {selecionado}", f"✅ Tipo seleccionado: {seleccionado}"))
 
@@ -260,12 +260,13 @@ if st.session_state.get("efeito_escolhido"):
                             </ul>
                         </div>
                     """, unsafe_allow_html=True)
-        else:
-            st.warning(txt("👀 Selecione o tipo de aplicação para continuar com o agendamento.",
-                           "👀 Selecciona el tipo de aplicación para continuar con la cita."))
+    else:
+        col_e, col_centro, col_d = st.columns([1, 2, 1])
+        with col_centro:
+            st.warning(txt("👁️ Escolha o tipo de aplicação para liberar o agendamento.",
+                           "👁️ Selecciona el tipo de aplicación para desbloquear la cita."))
 else:
-    # 🔒 BLOQUEIO: nenhum efeito escolhido
     col_e, col_centro, col_d = st.columns([1, 2, 1])
     with col_centro:
-        st.warning(txt("👁️ Primeiro selecione o efeito desejado para liberar o agendamento.",
-                       "👁️ Primero selecciona el efecto deseado para desbloquear la cita."))
+        st.warning(txt("✨ Primeiro selecione o efeito desejado para liberar as etapas seguintes.",
+                       "✨ Primero selecciona el efecto deseado para desbloquear las opciones."))
