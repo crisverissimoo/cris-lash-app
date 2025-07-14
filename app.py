@@ -176,14 +176,16 @@ if st.session_state.ficha_validada:
             col_img, col_txt = st.columns([1.6, 1.4])
 
             with col_img:
+                st.markdown("<div style='display:flex; align-items:center; height:100%;'>", unsafe_allow_html=True)
                 st.image(efeito["img"], width=460)
+                st.markdown("</div>", unsafe_allow_html=True)
 
             with col_txt:
                 st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
                 st.write(efeito["desc"])
                 st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
 
-                # Botão centralizado via colunas invisíveis
+                # Botão centralizado com colunas invisíveis
                 col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
                 with col_b2:
                     if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
