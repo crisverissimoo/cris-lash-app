@@ -176,39 +176,41 @@ if st.session_state.ficha_validada:
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("✨ Escolha o Efeito Lash", "✨ Elige el Efecto Lash"), expanded=True):
+            st.markdown("<h4 style='text-align:center;'>✨ Efeito Lash</h4>", unsafe_allow_html=True)
+
             efeitos = {
                 "Clássica": {
                     "img": "https://i.imgur.com/Nqrwdcm.png",
-                    "desc": txt("Fios distribuídos uniformemente — efeito natural e delicado", "Fibras distribuidas uniformemente — efecto natural y delicado"),
+                    "desc": txt("Distribuição uniforme — efeito natural e delicado", "Distribución uniforme — efecto natural y delicado"),
                     "tipo_olho": txt("Olhos amendoado ou simétricos", "Ojos almendrados o simétricos")
                 },
                 "Boneca": {
                     "img": "https://i.imgur.com/vJUuvsl.png",
-                    "desc": txt("Maior concentração no centro — abre e arredonda o olhar", "Mayor concentración en el centro — abre y redondea la mirada"),
+                    "desc": txt("Centro mais intenso — abre e arredonda o olhar", "Centro más intenso — abre y redondea la mirada"),
                     "tipo_olho": txt("Olhos pequenos, fechados ou orientais", "Ojos pequeños, cerrados u orientales")
                 },
                 "Gatinho": {
                     "img": "https://i.imgur.com/zpBFK0e.png",
-                    "desc": txt("Fios longos no canto externo — efeito sensual e alongado", "Fibras largas en la esquina externa — efecto sensual y alargado"),
+                    "desc": txt("Alongado no canto externo — olhar sensual", "Alargado en la esquina — mirada sensual"),
                     "tipo_olho": txt("Olhos caídos ou arredondados", "Ojos caídos o redondeados")
                 },
                 "Esquilo": {
                     "img": "https://i.imgur.com/BY5eEsr.png",
-                    "desc": txt("Volume acentuado entre o centro e canto externo — estilo marcante", "Volumen acentuado entre el centro y la esquina externa — estilo llamativo"),
+                    "desc": txt("Volume entre centro e canto — estilo marcante", "Volumen entre el centro y la esquina — estilo llamativo"),
                     "tipo_olho": txt("Olhos puxados ou olhos grandes", "Ojos rasgados o grandes")
                 }
             }
 
             for nome, efeito in efeitos.items():
                 col_img, col_txt = st.columns([1.4, 1.6])
-
+                
                 with col_img:
-                    st.image(efeito["img"], width=360)
+                    st.image(efeito["img"], width=520)  # 📸 imagem maior
 
                 with col_txt:
-                    st.markdown(f"<h5 style='text-align:center; margin-top:0;'>✨ {txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
-                    st.write(efeito["desc"])
-                    st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
+                    st.markdown(f"<h5 style='text-align:center;'>🎀 {txt('Efeito','Efecto')} {nome}</h5>", unsafe_allow_html=True)
+                    st.caption(efeito["desc"])
+                    st.caption("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
 
                     col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
                     with col_b2:
@@ -218,9 +220,10 @@ if st.session_state.ficha_validada:
             if st.session_state.get("efeito_escolhido"):
                 nome = st.session_state.efeito_escolhido
                 st.success("✅ " + txt(
-                    f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
-                    f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
+                    f"Efeito selecionado: {nome}",
+                    f"Efecto seleccionado: {nome}"
                 ))
+
 
 
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
