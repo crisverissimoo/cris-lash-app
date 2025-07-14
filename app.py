@@ -201,7 +201,8 @@ if st.session_state.ficha_validada:
                     if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
                         st.session_state.efeito_escolhido = nome
 
-            st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
+            # 🌸 Linha rosa queimado entre os cards
+            st.markdown("<hr style='border: none; height: 3px; background-color: #e09b8e;'>", unsafe_allow_html=True)
 
         if "efeito_escolhido" in st.session_state:
             nome = st.session_state.efeito_escolhido
