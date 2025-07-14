@@ -218,3 +218,4 @@ if st.session_state.ficha_validada:
                 f"Efeito selecionado: {nome}\n{efeitos[nome]['desc']}",
                 f"Efecto seleccionado: {nome}\n{efeitos[nome]['desc']}"
             ))
+
