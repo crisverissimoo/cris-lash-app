@@ -7,6 +7,7 @@ hoje = datetime.now(fuso).date()
 
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 
+# Estado inicial
 if "historico" not in st.session_state:
     st.session_state.historico = []
 if "formato_escolhido" not in st.session_state:
@@ -17,15 +18,26 @@ if "cliente_apta" in st.session_state and st.session_state.cliente_apta == False
     st.error("❌ Cliente não está apta para atendimento. Reação alérgica ou condição contraindicada.")
     st.stop()
 
-# 🌐 Idioma
+# Idioma
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     idioma = st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
     def txt(pt, es): return pt if idioma == "Português" else es
 
+    # 🎀 Mensagem de boas-vindas
+    st.markdown(f"""
+    <div style='background-color:#fff5f5; padding:15px; border-radius:10px; border-left:5px solid #e09b8e;'>
+    👋 <strong>{txt('Bem-vinda ao Cris Lash!', 'Bienvenida a Cris Lash!')}</strong><br>
+    ✨ {txt('Atendimento profissional com técnica em formação.', 'Atención profesional en formación.') }<br>
+    💶 {txt('Valor promocional de lançamento: 10€ por aplicação!', 'Precio de lanzamiento: ¡10€ por aplicación!')}
+    </div>
+    """, unsafe_allow_html=True)
+
+    # Título + data
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.write(f"📅 {txt('Hoje é','Hoy es')} `{hoje.strftime('%d/%m/%Y')}`")
 
+    # Ficha da cliente
     with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente")):
         st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
@@ -35,6 +47,7 @@ with col2:
         telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
         email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
 
+        # Cálculo da idade
         idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
         menor = idade < 18
         st.write(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
@@ -49,7 +62,11 @@ with col2:
                              "❌ Cliente menor sin autorización — atención bloqueada."))
                 autorizada = False
 
+# Validação de ficha
 if autorizada:
+    st.session_state.ficha_validada = True
+    st.session_state.cliente_apta = True
+
     respostas = {}
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
