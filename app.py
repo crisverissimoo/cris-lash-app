@@ -180,20 +180,20 @@ if st.session_state.ficha_validada:
                     <div style='
                         display: flex;
                         justify-content: center;
-                        padding-top: 100px;
+                        padding-top: 120px;
                     '>
                 """, unsafe_allow_html=True)
                 st.image(efeito["img"], width=460)
                 st.markdown("</div>", unsafe_allow_html=True)
 
             with col_txt:
-                st.markdown(f"<h5 style='margin-top:0;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
+                st.markdown(f"<h5 style='margin-top:0; text-align:center;'>{txt(f'Efeito {nome}', f'Efecto {nome}')}</h5>", unsafe_allow_html=True)
                 st.write(efeito["desc"])
                 st.markdown("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
 
                 col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
                 with col_b2:
-                    if st.button(txt(f"⬅ Selecionar {nome}", f"⬅ Seleccionar {nome}"), key=f"btn_{nome}"):
+                    if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
                         st.session_state.efeito_escolhido = nome
 
             st.markdown("<hr style='margin-top:20px; margin-bottom:20px;'>", unsafe_allow_html=True)
