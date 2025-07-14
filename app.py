@@ -297,81 +297,52 @@ if st.session_state.get("efeito_escolhido"):
 
 
 # Função para gerar horários disponíveis
-def gerar_horarios():
-    base = datetime.datetime.strptime("08:00", "%H:%M")
-    horarios = [(base + datetime.timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
-    return horarios
-
-# Função para verificar se horário está livre
-def esta_livre(data, horario):
-    inicio = datetime.datetime.strptime(horario, "%H:%M")
-    fim = inicio + datetime.timedelta(hours=2)
-
-    for ag_data, ag_hora in horarios_ocupados:
-        ag_inicio = datetime.datetime.strptime(ag_hora, "%H:%M")
-        ag_fim = ag_inicio + datetime.timedelta(hours=2)
-
-        if data == ag_data and (
-            (inicio >= ag_inicio and inicio < ag_fim) or
-            (fim > ag_inicio and fim <= ag_fim)
-        ):
-            return False
-    return True
-
-# 🎯 Etapa Agenda
-if "efeito_escolhido" in st.session_state and st.session_state.get("tipo_aplicacao"):
-
+if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
+        with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
+            st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
 
-        st.markdown("""
-            <div style='border: 1px solid #ccc; border-radius: 10px; padding: 25px; margin-top: 20px; margin-bottom: 40px;'>
-        """, unsafe_allow_html=True)
+            hoje = datetime.date.today()
+            data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje)
 
-        st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
+            horarios = gerar_horarios()
+            horarios_livres = [h for h in horarios if esta_livre(data, h)]
 
-        # 📅 Calendário
-        hoje = datetime.date.today()
-        data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje)
+            if not horarios_livres:
+                st.warning("⛔ Nenhum horário disponível neste dia.")
+            else:
+                horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
 
-        # 🕐 Horários livres
-        horarios = gerar_horarios()
-        horarios_livres = [h for h in horarios if esta_livre(data, h)]
+                efeito = st.session_state.efeito_escolhido
+                tipo = st.session_state.tipo_aplicacao
+                valor = st.session_state.get("valor", "10€")
 
-        if not horarios_livres:
-            st.warning("⛔ Nenhum horário disponível neste dia.")
-        else:
-            horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
+                fim = (datetime.datetime.strptime(horario, "%H:%M") + datetime.timedelta(hours=2)).strftime("%H:%M")
 
-            efeito = st.session_state.efeito_escolhido
-            tipo = st.session_state.tipo_aplicacao
+                st.markdown(f"💖 Serviço escolhido:")
+                st.markdown(f"- ✨ Efeito: **{efeito}**")
+                st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
+                st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
 
-            st.markdown(f"💖 Serviço escolhido: **{efeito} + {tipo}**")
-            st.markdown(f"📅 Dia: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` até `{(datetime.datetime.strptime(horario, '%H:%M') + datetime.timedelta(hours=2)).strftime('%H:%M')}`")
+                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas, preferências...")
 
-            # 💬 Mensagem personalizada
-            mensagem = st.text_area("📩 Deixe uma mensagem (opcional)", placeholder="Ex: tenho alergia, preciso de confirmação, etc.")
+                if st.button("✅ Confirmar atendimento"):
+                    st.session_state.agendamento_confirmado = True
+                    horarios_ocupados.append((data, horario))
 
-            # ✅ Confirmação
-            if st.button("✅ Confirmar atendimento"):
-                st.session_state.agendamento_confirmado = True
-                horarios_ocupados.append((data, horario))
+            if st.session_state.get("agendamento_confirmado"):
+                st.success("✅ Atendimento agendado com sucesso!")
 
-        # 📌 Mensagem pós confirmação
-        if st.session_state.get("agendamento_confirmado"):
-            st.success("✅ Atendimento agendado com sucesso!")
-
-            st.markdown("""
-                <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
-                    <h5>📌 Cuidados antes e depois da aplicação</h5>
-                    <ul>
-                        <li>🚫 Compareça sem maquiagem nos olhos</li>
-                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                    </ul>
-                </div>
-            """, unsafe_allow_html=True)
-
-        st.markdown("</div>", unsafe_allow_html=True)
+                st.markdown("""
+                    <div style='border: 2px dashed #e09b8e; background-color: #fffaf8; border-radius: 10px; padding: 20px; margin-top: 20px;'>
+                        <h5>📌 Cuidados antes e depois da aplicação</h5>
+                        <ul>
+                            <li>🚫 Compareça sem maquiagem nos olhos</li>
+                            <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                            <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                            <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                            <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                        </ul>
+                    </div>
+                """, unsafe_allow_html=True)
