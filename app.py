@@ -2,34 +2,31 @@ import streamlit as st
 from datetime import datetime, date, timedelta
 import pytz
 
-# 🔐 Controle de acesso ao modo profissional + boas-vindas
-with st.expander("👑 Área profissional"):
+# 💖 Boas-vindas (visível sempre, fora da área restrita)
+st.markdown("""
+    <div style='
+        text-align: center;
+        background-color: #f5e3e0;
+        padding: 30px;
+        border-radius: 12px;
+        border: 2px solid #e09b8e;
+        margin-top: 20px;
+        margin-bottom: 25px;
+    '>
+        <h2 style='color: #c08081;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
+        <p style='font-size: 18px;'>Atendimento profissional com técnica em formação.</p>
+        <p style='font-size: 20px; font-weight: bold; color: #e09b8e;'>Valor promocional de lançamento: 10€ por aplicação!</p>
+    </div>
+""", unsafe_allow_html=True)
+
+# 🔐 Área profissional (restrita por senha)
+with st.expander("👑 Área profissional", expanded=False):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
 
     col1, col2, col3 = st.columns([1, 2, 1])
-    
-    with col2:
-        modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
+    modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
 
-        st.markdown("""
-        <div style='
-            text-align: center;
-            background-color: #f5e3e0;
-            padding: 30px;
-            border-radius: 12px;
-            border: 2px solid #e09b8e;
-            margin-top: 20px;
-            margin-bottom: 20px;
-        '>
-            <h2 style='color: #c08081;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
-            <p style='font-size: 18px;'>Atendimento profissional com técnica em formação.</p>
-            <p style='font-size: 20px; font-weight: bold; color: #e09b8e;'>Valor promocional de lançamento: 10€ por aplicação!</p>
-        </div>
-        """, unsafe_allow_html=True)
-
-
-
-# ✅ Inicialização
+# ✅ Inicialização do sistema (seguem seus blocos abaixo)
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
@@ -38,6 +35,7 @@ if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
 horarios_ocupados = st.session_state.historico_ocupados
+
 
 
 
