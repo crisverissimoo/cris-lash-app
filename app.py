@@ -461,3 +461,15 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 link = f"https://wa.me/{telefone.strip()}?text={texto}"
                 st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
 
+# 📋 Histórico de atendimentos
+if st.session_state.historico_clientes:
+    st.markdown("## 📋 Histórico de Atendimentos Lash Boutique")
+
+    for cliente in reversed(st.session_state.historico_clientes):
+        with st.expander(f"📌 Protocolo #{cliente['protocolo']} — {cliente['data']}"):
+            st.markdown(f"- ✨ Efeito: **{cliente['efeito']}**")
+            st.markdown(f"- 🎀 Técnica: **{cliente['tipo']}** — 💶 **{cliente['valor']}**")
+            st.markdown(f"- 🕐 Horário: `{cliente['horario']}`")
+            st.markdown(f"- 💬 Mensagem: `{cliente['mensagem'] or '—'}`")
+else:
+    st.info("📭 Nenhum atendimento registrado ainda.")
