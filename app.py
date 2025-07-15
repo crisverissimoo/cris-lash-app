@@ -6,9 +6,9 @@ import pytz
 
 with st.expander("👑 Área profissional"):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
+    st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
+    modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
+    st.markdown("</div>", unsafe_allow_html=True)
 
 
 # ✅ Inicialização
