@@ -9,9 +9,21 @@ with st.expander("👑 Área profissional"):
     # Criar colunas para centralizar
     col1, col2, col3 = st.columns([1, 1.5, 3])
 with col2:
-    st.markdown("### Bem-vinda ao **Cris Lash**!")
-    st.write("Atendimento profissional com técnica em formação.")
-    st.success("Valor promocional de lançamento: 10€ por aplicação!")
+    st.markdown("""
+    <div style='
+        text-align: center;
+        background-color: #f5e3e0;
+        padding: 30px;
+        border-radius: 12px;
+        border: 2px solid #e09b8e;
+        margin-bottom: 25px;
+    '>
+        <h2 style='color: #c08081;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
+        <p style='font-size: 18px;'>Atendimento profissional com técnica em formação.</p>
+        <p style='font-size: 20px; font-weight: bold; color: #e09b8e;'>Valor promocional de lançamento: 10€ por aplicação!</p>
+    </div>
+""", unsafe_allow_html=True)
+
 
 
 
