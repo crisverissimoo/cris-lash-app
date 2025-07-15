@@ -1,27 +1,22 @@
-
-
 import streamlit as st
 from datetime import datetime, date, timedelta
 import pytz
 
+# 🔐 Controle de acesso ao modo profissional
 with st.expander("👑 Área profissional"):
+    st.write("Digite o código secreto para visualizar recursos administrativos.")
     modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
 
+# ✅ Inicialização
+if "historico_ocupados" not in st.session_state:
+    st.session_state.historico_ocupados = []
+if "historico_clientes" not in st.session_state:
+    st.session_state.historico_clientes = []
+if "protocolo" not in st.session_state:
+    st.session_state.protocolo = 1
 
-# 📛 BLOQUEIO manual
-if modo_admin:
-    with st.expander("📛 Bloquear horários manualmente", expanded=False):
-        # ... código de bloqueio aqui ...
+horarios_ocupados = st.session_state.historico_ocupados
 
-# 📋 Painel CRM
-if modo_admin and st.session_state.historico_clientes:
-    st.markdown("## 📋 Histórico de Atendimentos Lash Boutique")
-    for cliente in reversed(st.session_state.historico_clientes):
-        with st.expander(f"📌 Protocolo #{cliente['protocolo']} — {cliente['data']}"):
-            st.markdown(f"- ✨ Efeito: **{cliente['efeito']}**")
-            st.markdown(f"- 🎀 Técnica: **{cliente['tipo']}** — 💶 **{cliente['valor']}**")
-            st.markdown(f"- 🕐 Horário: `{cliente['horario']}`")
-            st.markdown(f"- 💬 Mensagem: `{cliente['mensagem'] or '—'}`")
 
 
 
