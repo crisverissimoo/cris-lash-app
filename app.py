@@ -62,16 +62,7 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-    st.markdown("""
-        <div style='background-color:#fff2f2; padding:15px; border-radius:10px;
-                    border-left:5px solid #e09b8e; color:#333; font-size:16px'>
-            👋 <strong>Bem-vinda ao Cris Lash!</strong><br>
-            ✨ Atendimento profissional com técnica em formação.<br>
-            💶 Valor promocional de lançamento: <strong>10€</strong> por aplicação!
-        </div>
-    """, unsafe_allow_html=True)
-
-    st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
+       st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
 # 🔜 Continuação esperada: Ficha da Cliente com travamento por idade + autorização (Etapa 1.2)
