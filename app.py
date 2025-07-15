@@ -7,8 +7,11 @@ with st.expander("👑 Área profissional"):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
     
     # Criar colunas para centralizar
-    col1, col2, col3 = st.columns([1, 2, 1])
-    modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
+    col1, col2, col3 = st.columns([1, 1.5, 3])
+with col2:
+    st.markdown("### Bem-vinda ao **Cris Lash**!")
+    st.write("Atendimento profissional com técnica em formação.")
+    st.success("Valor promocional de lançamento: 10€ por aplicação!")
 
 
 
