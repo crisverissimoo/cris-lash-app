@@ -1,4 +1,8 @@
-with st.expander("👑 Área profissional"):
+import streamlit as st
+from datetime import datetime, date, timedelta
+import pytz
+
+# 🔐 Controle de acesso ao modo profissional + boas-vindaswith st.expander("👑 Área profissional"):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
 
     col1, col2, col3 = st.columns([1, 2, 1])
