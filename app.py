@@ -2,8 +2,8 @@ import streamlit as st
 from datetime import datetime, date, timedelta
 import pytz
 
-# 🔐 Controle de acesso ao modo profissional + boas-vindaswith st.expander("👑 Área profissional"):
-    with st.expander("👑 Área profissional"):
+# 🔐 Controle de acesso ao modo profissional + boas-vindas
+with st.expander("👑 Área profissional"):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -26,6 +26,7 @@ import pytz
             <p style='font-size: 20px; font-weight: bold; color: #e09b8e;'>Valor promocional de lançamento: 10€ por aplicação!</p>
         </div>
         """, unsafe_allow_html=True)
+
 
 
 # ✅ Inicialização
