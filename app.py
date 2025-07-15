@@ -3,9 +3,13 @@ from datetime import datetime, date, timedelta
 import pytz
 
 # 🔐 Controle de acesso ao modo profissional
+
 with st.expander("👑 Área profissional"):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
-    modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
+
 
 # ✅ Inicialização
 if "historico_ocupados" not in st.session_state:
