@@ -390,7 +390,7 @@ if "protocolo" not in st.session_state:
 
 horarios_ocupados = st.session_state.historico_ocupados
 
-# 🎯 Funções auxiliares
+# 🎯 Funções
 def gerar_horarios():
     base = datetime.strptime("08:00", "%H:%M")
     return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
@@ -419,88 +419,3 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 for h in horarios_a_bloquear:
                     st.session_state.historico_ocupados.append((data_bloqueio, h))
                 st.success(f"✅ {len(horarios_a_bloquear)} horário(s) bloqueado(s) em {data_bloqueio.strftime('%d/%m/%Y')}")
-
-        # 📅 AGENDAMENTO
-        with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
-            st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
-
-            hoje = datetime.today().date()
-            data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje, key="data_agendamento")
-
-            horarios = gerar_horarios()
-            horarios_livres = [h for h in horarios if esta_livre(data, h)]
-
-            if not horarios_livres:
-                st.warning("⛔ Nenhum horário disponível neste dia.")
-            else:
-                horario = st.selectbox("🕐 Escolha o horário", horarios_livres, key="horario_agendamento")
-
-                efeito = st.session_state.efeito_escolhido
-                tipo = st.session_state.tipo_aplicacao
-                valor = st.session_state.get("valor", "10€")
-                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
-
-                st.markdown("💖 Serviço escolhido:")
-                st.markdown(f"- ✨ Efeito: **{efeito}**")
-                st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
-                st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
-
-                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas, preferências...", key="mensagem_cliente")
-
-                if st.button("✅ Confirmar atendimento", key="confirmar_agendamento"):
-                    st.session_state.agendamento_confirmado = True
-                    st.session_state.historico_ocupados.append((data, horario))
-
-                    protocolo = st.session_state.protocolo
-                    st.session_state.protocolo += 1
-
-                    st.session_state.historico_clientes.append({
-                        "protocolo": protocolo,
-                        "data": data.strftime('%d/%m/%Y'),
-                        "horario": f"{horario} → {fim}",
-                        "efeito": efeito,
-                        "tipo": tipo,
-                        "valor": valor,
-                        "mensagem": mensagem
-                    })
-
-        # ✅ RESUMO final + card rosa + WhatsApp
-        if st.session_state.get("agendamento_confirmado") and st.session_state.historico_clientes:
-            cliente = st.session_state.historico_clientes[-1]
-            resumo = f"""
-📌 Protocolo: #{cliente['protocolo']}
-✨ Efeito: {cliente['efeito']}
-🎀 Técnica: {cliente['tipo']} — 💶 {cliente['valor']}
-📅 Data: {cliente['data']} — 🕐 {cliente['horario']}
-💬 Obs: {cliente['mensagem'] or '—'}
-            """
-
-            st.success("✅ Atendimento agendado com sucesso!")
-
-            st.markdown("""
-                <div style='
-                    border: 2px dashed #e09b8e;
-                    background-color: #c08081;
-                    border-radius: 10px;
-                    padding: 20px;
-                    margin-top: 20px;
-                    color: white;
-                '>
-                    <h5>📌 Cuidados antes e depois da aplicação</h5>
-                    <ul>
-                        <li>🚫 Compareça sem maquiagem nos olhos</li>
-                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                    </ul>
-                </div>
-            """, unsafe_allow_html=True)
-
-            st.markdown("---")
-            st.markdown("📲 Compartilhar atendimento via WhatsApp")
-            telefone = st.text_input("📞 Número (com DDI, ex: +34...)", key="telefone_whatsapp")
-            if telefone:
-                texto = resumo.replace("\n", "%0A").replace("—", "")
-                link = f"https://wa.me/{telefone.strip()}?text={texto}"
-                st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
