@@ -1,31 +1,27 @@
-import streamlit as st
-from datetime import datetime, date, timedelta
-import pytz
-
-# 🔐 Controle de acesso ao modo profissional + boas-vindas
 with st.expander("👑 Área profissional"):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
 
-    # Criar colunas e posicionar campo de senha centralizado
     col1, col2, col3 = st.columns([1, 2, 1])
-    modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
+    
+    with col2:
+        modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
 
-    # Bloco de boas-vindas centralizado dentro da coluna
-    col2.markdown("""
-    <div style='
-        text-align: center;
-        background-color: #f5e3e0;
-        padding: 30px;
-        border-radius: 12px;
-        border: 2px solid #e09b8e;
-        margin-top: 20px;
-        margin-bottom: 20px;
-    '>
-        <h2 style='color: #c08081;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
-        <p style='font-size: 18px;'>Atendimento profissional com técnica em formação.</p>
-        <p style='font-size: 20px; font-weight: bold; color: #e09b8e;'>Valor promocional de lançamento: 10€ por aplicação!</p>
-    </div>
-    """, unsafe_allow_html=True)
+        st.markdown("""
+        <div style='
+            text-align: center;
+            background-color: #f5e3e0;
+            padding: 30px;
+            border-radius: 12px;
+            border: 2px solid #e09b8e;
+            margin-top: 20px;
+            margin-bottom: 20px;
+        '>
+            <h2 style='color: #c08081;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
+            <p style='font-size: 18px;'>Atendimento profissional com técnica em formação.</p>
+            <p style='font-size: 20px; font-weight: bold; color: #e09b8e;'>Valor promocional de lançamento: 10€ por aplicação!</p>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 
 
