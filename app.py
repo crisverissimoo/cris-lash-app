@@ -390,7 +390,7 @@ if "protocolo" not in st.session_state:
 
 horarios_ocupados = st.session_state.historico_ocupados
 
-# 🎯 Funções
+# 🎯 Funções auxiliares
 def gerar_horarios():
     base = datetime.strptime("08:00", "%H:%M")
     return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
@@ -405,7 +405,7 @@ def esta_livre(data, horario):
             return False
     return True
 
-# 🗓️ Etapa de Agendamento
+# 🗓️ Etapa de Agendamento única
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
@@ -464,7 +464,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         "mensagem": mensagem
                     })
 
-        # ✅ RESUMO + WhatsApp
+        # ✅ RESUMO final + card rosa + WhatsApp
         if st.session_state.get("agendamento_confirmado") and st.session_state.historico_clientes:
             cliente = st.session_state.historico_clientes[-1]
             resumo = f"""
