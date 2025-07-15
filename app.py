@@ -2,8 +2,17 @@ import streamlit as st
 from datetime import datetime, date, timedelta
 import pytz
 
-# 💖 Boas-vindas (visível sempre, fora da área restrita)
-st.markdown("""
+# 🌐 Seletor de idioma
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    idioma = st.selectbox("🌐 Idioma / Language", ["Português", "Español"])
+
+# 🧵 Função tradutora
+def txt(pt, es):
+    return pt if idioma == "Português" else es
+
+# 💖 Boas-vindas (fora da área restrita)
+st.markdown(f"""
     <div style='
         text-align: center;
         background-color: #e8d1cb;
@@ -13,20 +22,23 @@ st.markdown("""
         margin-top: 20px;
         margin-bottom: 20px;
     '>
-        <h2 style='color: #a7585c;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
-        <p style='font-size: 16px;'>Atendimento profissional com técnica em formação.</p>
-        <p style='font-size: 18px; font-weight: bold; color: #c08081;'>Valor promocional de lançamento: 10€ por aplicação!</p>
+        <h2 style='color: #a7585c;'>💎 {txt('Bem-vinda ao Cris Lash', 'Bienvenida a Cris Lash')}</h2>
+        <p>{txt('Atendimento profissional com técnica em formação.',
+                'Atención profesional con técnica en formación.')}</p>
+        <p style='font-weight: bold;'>{txt('Promoção: 10€ por aplicação!',
+                                            '¡Promoción: 10€ por aplicación!')}</p>
     </div>
 """, unsafe_allow_html=True)
 
 # 🔐 Área profissional (restrita por senha)
 with st.expander("👑 Área profissional", expanded=False):
-    st.write("Digite o código secreto para visualizar recursos administrativos.")
+    st.write(txt("Digite o código secreto para visualizar recursos administrativos.",
+                 "Ingrese la clave secreta para ver funciones administrativas."))
 
     col1, col2, col3 = st.columns([1, 2, 1])
     modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
 
-# ✅ Inicialização do sistema (seguem seus blocos abaixo)
+# ✅ Inicialização do sistema
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
@@ -35,6 +47,19 @@ if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
 horarios_ocupados = st.session_state.historico_ocupados
+
+# 📲 Botão WhatsApp simulado (só aparece no modo_admin por enquanto)
+if modo_admin:
+    nome_cliente = "Fernanda"
+    horario = "17:00h"
+    texto_whats = txt(
+        f"Olá {nome_cliente}! 🌸 Seu agendamento na Cris Lash está confirmado para {horario}. Te vejo em breve!",
+        f"Hola {nome_cliente}! 🌸 Tu cita en Cris Lash está confirmada para las {horario}. ¡Hasta pronto!"
+    )
+
+    link_whats = f"https://wa.me/?text={texto_whats.replace(' ', '%20')}"
+    st.markdown(f"[📲 {txt('Enviar no WhatsApp', 'Enviar por WhatsApp')}]({link_whats})", unsafe_allow_html=True)
+
 
 
 
