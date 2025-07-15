@@ -7,6 +7,23 @@ import pytz
 # 🔐 Controle de acesso ao modo profissional
 modo_admin = st.text_input("🔐 Código de acesso (só profissional)", type="password") == "rainha"
 
+# 📛 BLOQUEIO manual
+if modo_admin:
+    with st.expander("📛 Bloquear horários manualmente", expanded=False):
+        # ... código de bloqueio aqui ...
+
+# 📋 Painel CRM
+if modo_admin and st.session_state.historico_clientes:
+    st.markdown("## 📋 Histórico de Atendimentos Lash Boutique")
+    for cliente in reversed(st.session_state.historico_clientes):
+        with st.expander(f"📌 Protocolo #{cliente['protocolo']} — {cliente['data']}"):
+            st.markdown(f"- ✨ Efeito: **{cliente['efeito']}**")
+            st.markdown(f"- 🎀 Técnica: **{cliente['tipo']}** — 💶 **{cliente['valor']}**")
+            st.markdown(f"- 🕐 Horário: `{cliente['horario']}`")
+            st.markdown(f"- 💬 Mensagem: `{cliente['mensagem'] or '—'}`")
+
+
+
 # 🌍 Fuso horário e data atual
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
