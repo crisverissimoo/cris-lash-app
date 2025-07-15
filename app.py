@@ -379,7 +379,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     </div>
                 """, unsafe_allow_html=True)
 
-# ✅ Inicializar variáveis se necessário
+# ✅ Inicialização
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
@@ -463,44 +463,43 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         "mensagem": mensagem
                     })
 
-            # ✅ RESUMO final do agendamento
-            if st.session_state.get("agendamento_confirmado") and st.session_state.historico_clientes:
-                cliente = st.session_state.historico_clientes[-1]
-                resumo = f"""
+        # ✅ RESUMO + WhatsApp
+        if st.session_state.get("agendamento_confirmado") and st.session_state.historico_clientes:
+            cliente = st.session_state.historico_clientes[-1]
+            resumo = f"""
 📌 Protocolo: #{cliente['protocolo']}
 ✨ Efeito: {cliente['efeito']}
 🎀 Técnica: {cliente['tipo']} — 💶 {cliente['valor']}
 📅 Data: {cliente['data']} — 🕐 {cliente['horario']}
 💬 Obs: {cliente['mensagem'] or '—'}
-                """
+            """
 
-                st.success("✅ Atendimento agendado com sucesso!")
+            st.success("✅ Atendimento agendado com sucesso!")
 
-                st.markdown("""
-                    <div style='
-                        border: 2px dashed #e09b8e;
-                        background-color: #c08081;
-                        border-radius: 10px;
-                        padding: 20px;
-                        margin-top: 20px;
-                        color: white;
-                    '>
-                        <h5>📌 Cuidados antes e depois da aplicação</h5>
-                        <ul>
-                            <li>🚫 Compareça sem maquiagem nos olhos</li>
-                            <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                            <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                            <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                            <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                        </ul>
-                    </div>
-                """, unsafe_allow_html=True)
+            st.markdown("""
+                <div style='
+                    border: 2px dashed #e09b8e;
+                    background-color: #c08081;
+                    border-radius: 10px;
+                    padding: 20px;
+                    margin-top: 20px;
+                    color: white;
+                '>
+                    <h5>📌 Cuidados antes e depois da aplicação</h5>
+                    <ul>
+                        <li>🚫 Compareça sem maquiagem nos olhos</li>
+                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                    </ul>
+                </div>
+            """, unsafe_allow_html=True)
 
-                # 📲 Compartilhar por WhatsApp
-                st.markdown("---")
-                st.markdown("📲 Compartilhar atendimento via WhatsApp")
-                telefone = st.text_input("📞 Número (com DDI, ex: +34...)", key="telefone_whatsapp")
-                if telefone:
-                    texto = resumo.replace("\n", "%0A").replace("—", "")
-                    link = f"https://wa.me/{telefone.strip()}?text={texto}"
-                    st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
+            st.markdown("---")
+            st.markdown("📲 Compartilhar atendimento via WhatsApp")
+            telefone = st.text_input("📞 Número (com DDI, ex: +34...)", key="telefone_whatsapp")
+            if telefone:
+                texto = resumo.replace("\n", "%0A").replace("—", "")
+                link = f"https://wa.me/{telefone.strip()}?text={texto}"
+                st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
