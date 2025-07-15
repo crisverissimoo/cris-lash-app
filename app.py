@@ -380,6 +380,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 """, unsafe_allow_html=True)
 
 # ✅ Inicialização
+# ✅ Inicialização
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
