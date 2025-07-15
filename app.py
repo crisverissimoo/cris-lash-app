@@ -1,3 +1,6 @@
+# 🔐 Controle de acesso ao modo profissional
+modo_admin = st.text_input("🔐 Código de acesso (só profissional)", type="password") == "rainha"
+
 import streamlit as st
 from datetime import datetime, date, timedelta
 import pytz
