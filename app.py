@@ -3,12 +3,13 @@ from datetime import datetime, date, timedelta
 import pytz
 
 # 🔐 Controle de acesso ao modo profissional
-
 with st.expander("👑 Área profissional"):
     st.write("Digite o código secreto para visualizar recursos administrativos.")
-    st.markdown("<div style='text-align: center;'>", unsafe_allow_html=True)
-    modo_admin = st.text_input("🔐 Código de acesso", type="password") == "rainha"
-    st.markdown("</div>", unsafe_allow_html=True)
+    
+    # Criar colunas para centralizar
+    col1, col2, col3 = st.columns([1, 2, 1])
+    modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
+
 
 
 # ✅ Inicialização
