@@ -6,16 +6,16 @@ import pytz
 st.markdown("""
     <div style='
         text-align: center;
-        background-color: #f5e3e0;
-        padding: 30px;
-        border-radius: 12px;
-        border: 2px solid #e09b8e;
+        background-color: #e8d1cb;
+        padding: 20px;
+        border-radius: 10px;
+        border: 2px solid #c08081;
         margin-top: 20px;
-        margin-bottom: 25px;
+        margin-bottom: 20px;
     '>
-        <h2 style='color: #c08081;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
-        <p style='font-size: 18px;'>Atendimento profissional com técnica em formação.</p>
-        <p style='font-size: 20px; font-weight: bold; color: #e09b8e;'>Valor promocional de lançamento: 10€ por aplicação!</p>
+        <h2 style='color: #a7585c;'>Bem-vinda ao <span style='font-weight: bold;'>Cris Lash</span>!</h2>
+        <p style='font-size: 16px;'>Atendimento profissional com técnica em formação.</p>
+        <p style='font-size: 18px; font-weight: bold; color: #c08081;'>Valor promocional de lançamento: 10€ por aplicação!</p>
     </div>
 """, unsafe_allow_html=True)
 
