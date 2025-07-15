@@ -2,16 +2,27 @@ import streamlit as st
 from datetime import datetime, date, timedelta
 import pytz
 
-# 🌐 Seletor de idioma
+# 🪞 Configuração de página
+st.set_page_config("Consultoria Cris Lash", layout="wide")
+
+# 🌍 Fuso horário e data atual
+fuso = pytz.timezone("Europe/Madrid")
+hoje = datetime.now(fuso).date()
+
+# 🌐 Idioma com estado
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    idioma = st.selectbox("🌐 Idioma / Language", ["Português", "Español"])
+    st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-# 🧵 Função tradutora
+# 🧵 Função tradutora com base em st.session_state
 def txt(pt, es):
-    return pt if idioma == "Português" else es
+    return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
-# 💖 Boas-vindas (fora da área restrita)
+# 🎀 Cabeçalho centralizado
+st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
+st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
+
+# 💖 Boas-vindas centralizada e mais suave
 st.markdown(f"""
     <div style='
         text-align: center;
@@ -19,10 +30,10 @@ st.markdown(f"""
         padding: 20px;
         border-radius: 10px;
         border: 2px solid #c08081;
-        margin-top: 20px;
+        margin-top: 10px;
         margin-bottom: 20px;
     '>
-        <h2 style='color: #a7585c;'>💎 {txt('Bem-vinda ao Cris Lash', 'Bienvenida a Cris Lash')}</h2>
+        <h3 style='color: #a7585c;'>{txt('Bem-vinda ao Cris Lash', 'Bienvenida a Cris Lash')}</h3>
         <p>{txt('Atendimento profissional com técnica em formação.',
                 'Atención profesional con técnica en formación.')}</p>
         <p style='font-weight: bold;'>{txt('Promoção: 10€ por aplicação!',
@@ -38,7 +49,10 @@ with st.expander("👑 Área profissional", expanded=False):
     col1, col2, col3 = st.columns([1, 2, 1])
     modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
 
-# ✅ Inicialização do sistema
+# 🧠 Estados iniciais
+for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado"]:
+    if key not in st.session_state:
+        st.session_state[key] = None
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
@@ -46,9 +60,7 @@ if "historico_clientes" not in st.session_state:
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
-horarios_ocupados = st.session_state.historico_ocupados
-
-# 📲 Botão WhatsApp simulado (só aparece no modo_admin por enquanto)
+# 📲 Botão WhatsApp (simulado por enquanto)
 if modo_admin:
     nome_cliente = "Fernanda"
     horario = "17:00h"
@@ -59,6 +71,7 @@ if modo_admin:
 
     link_whats = f"https://wa.me/?text={texto_whats.replace(' ', '%20')}"
     st.markdown(f"[📲 {txt('Enviar no WhatsApp', 'Enviar por WhatsApp')}]({link_whats})", unsafe_allow_html=True)
+
 
 
 
