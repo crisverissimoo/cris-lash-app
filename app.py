@@ -97,40 +97,37 @@ with col2:
             st.markdown("---")
             st.markdown("## 👑 Painel Administrativo Boutique")
 
-            # 🧍 Leitura de atendimentos salvos e exibição completa
-CAMINHO_ARQUIVO = "agenda.json"
-clientes_salvos = []
-if os.path.exists(CAMINHO_ARQUIVO):
-    with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
-        clientes_salvos = json.load(f)
+            # 🗂️ Lista de Atendimentos Registrados
+            CAMINHO_ARQUIVO = "agenda.json"
+            clientes_salvos = []
+            if os.path.exists(CAMINHO_ARQUIVO):
+                with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
+                    clientes_salvos = json.load(f)
 
-st.markdown("### 🗂️ Lista de Atendimentos Registrados")
-if clientes_salvos:
-    # 🔢 Ordena os atendimentos por protocolo (do menor para o maior)
-    clientes_salvos.sort(key=lambda c: c["protocolo"])
-
-    for cliente in clientes_salvos:
-        st.markdown(f"""
-            <div style='
-                background-color:#f9f9f9;
-                padding:15px;
-                border-left:5px solid #c08081;
-                border-radius:5px;
-                font-size:15px;
-                margin-bottom:10px;
-            '>
-                <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                <strong>🧍 Nome:</strong> {cliente['nome']}<br>
-                <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-                <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
-                <strong>📅 Data:</strong> {cliente['data']}<br>
-                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-            </div>
-        """, unsafe_allow_html=True)
-else:
-    st.info("📂 Nenhum atendimento registrado ainda.")
-
+            st.markdown("### 📋 Atendimentos em ordem de protocolo")
+            if clientes_salvos:
+                clientes_salvos.sort(key=lambda c: c["protocolo"])
+                for cliente in clientes_salvos:
+                    st.markdown(f"""
+                        <div style='
+                            background-color:#f9f9f9;
+                            padding:15px;
+                            border-left:5px solid #c08081;
+                            border-radius:5px;
+                            font-size:15px;
+                            margin-bottom:10px;
+                        '>
+                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                            <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                            <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+                            <strong>📅 Data:</strong> {cliente['data']}<br>
+                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+                        </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("📂 Nenhum atendimento registrado ainda.")
 
             # 📌 Horários bloqueados
             st.markdown("### 📅 Horários ocupados")
@@ -144,8 +141,9 @@ else:
             else:
                 st.info("📂 Nenhum horário bloqueado ainda.")
 
-            # 🔒 Bloqueio manual
+            # 🔒 Bloqueio manual de horário
             with st.expander("🚫 Bloquear novo horário"):
+                hoje = datetime.today().date()
                 dia_bloqueio = st.date_input("📅 Data para bloquear", value=hoje, key="bloqueio_data")
                 hora_bloqueio = st.selectbox("⏰ Horário", gerar_horarios(), key="bloqueio_hora")
                 if st.button("🚫 Bloquear horário", key="bloqueio_botao"):
@@ -154,6 +152,9 @@ else:
                         st.success(f"✅ Horário {hora_bloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')} bloqueado com sucesso.")
                     else:
                         st.warning("⚠️ Esse horário já está ocupado.")
+
+
+           
 
 
             # 📋 Seleção de cliente
