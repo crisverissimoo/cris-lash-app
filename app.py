@@ -44,19 +44,45 @@ with col2:
         </div>
     """, unsafe_allow_html=True)
 
-# 🔐 Área profissional com controle de acesso
+# 🧵 Painel Administrativo Boutique — Tudo em Um Bloco
+from datetime import datetime, timedelta
+
+hoje = datetime.today().date()
+
+# Inicializa os estados
 if "acesso_admin" not in st.session_state:
     st.session_state.acesso_admin = False
+if "historico_ocupados" not in st.session_state:
+    st.session_state.historico_ocupados = []
+if "historico_clientes" not in st.session_state:
+    st.session_state.historico_clientes = []
 
+# Função para gerar horários
+def gerar_horarios():
+    base = datetime.strptime("08:00", "%H:%M")
+    return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
+
+def esta_livre(data, horario):
+    inicio = datetime.strptime(horario, "%H:%M")
+    fim = inicio + timedelta(hours=2)
+    for ag_data, ag_hora in st.session_state.historico_ocupados:
+        ag_inicio = datetime.strptime(ag_hora, "%H:%M")
+        ag_fim = ag_inicio + timedelta(hours=2)
+        if data == ag_data and (
+            (inicio >= ag_inicio and inicio < ag_fim) or
+            (fim > ag_inicio and fim <= ag_fim) or
+            (inicio <= ag_inicio and fim >= ag_fim)
+        ):
+            return False
+    return True
+
+# 🔐 Área profissional
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander("👑 Área profissional", expanded=False):
-        st.write(txt("Digite o código secreto para visualizar recursos administrativos.",
-                     "Ingrese la clave secreta para ver funciones administrativas."))
-
+        st.write("Digite o código secreto para liberar o acesso administrativo.")
         colA, colB, colC = st.columns([1, 2, 1])
         codigo_digitado = colB.text_input("🔐 Código de acesso", type="password")
-
         if colB.button("🔓 Entrar"):
             if codigo_digitado.strip().lower() == "rainha":
                 st.session_state.acesso_admin = True
@@ -64,40 +90,60 @@ with col2:
             else:
                 st.error("❌ Código inválido — tente novamente.")
 
-# 👑 Área administrativa — seleção de cliente
-if st.session_state.get("acesso_admin") and st.session_state.get("historico_clientes"):
+# 👑 Painel administrativo
+if st.session_state.get("acesso_admin"):
 
-    st.markdown("### 🔎 Gerenciamento de Atendimento")
+    st.markdown("## 👑 Painel Administrativo Boutique")
 
-    selecionada = st.selectbox(
-        "🧑‍💼 Escolha cliente:",
-        [c["nome"] for c in st.session_state.historico_clientes],
-        key="cliente_reprograma"
-    )
+    # 📅 Horários ocupados
+    st.markdown("### 📌 Horários Bloqueados")
+    if st.session_state.historico_ocupados:
+        agenda = {}
+        for data, hora in st.session_state.historico_ocupados:
+            d_str = data.strftime('%d/%m/%Y')
+            agenda.setdefault(d_str, []).append(hora)
+        for dia, horas in agenda.items():
+            st.markdown(f"**📅 {dia}**: {' | '.join(sorted(horas))}")
+    else:
+        st.info("📂 Nenhum horário bloqueado ainda.")
 
-    cliente = next((c for c in st.session_state.historico_clientes if c["nome"] == selecionada), None)
+    # 🚫 Bloqueio manual de horário
+    with st.expander("🔒 Bloquear horário manualmente"):
+        dia_bloqueio = st.date_input("📅 Data para bloquear", value=hoje, key="bloqueio_data")
+        hora_bloqueio = st.selectbox("⏰ Horário", gerar_horarios(), key="bloqueio_hora")
+        if st.button("🚫 Bloquear horário", key="botao_bloqueio"):
+            if esta_livre(dia_bloqueio, hora_bloqueio):
+                st.session_state.historico_ocupados.append((dia_bloqueio, hora_bloqueio))
+                st.success(f"✅ Horário {hora_bloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')} bloqueado com sucesso.")
+            else:
+                st.warning("⚠️ Esse horário já está ocupado.")
 
-    if cliente:
-        st.markdown(f"""
-            <div style='
-                max-width: 450px;
-                margin: 15px auto;
-                background-color:#f0f4f8;
-                padding:15px;
-                border-radius:10px;
-                box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-                font-size:16px;
-                line-height:1.5;
-                color: #2c2c2c;
-            '>
-                <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-                <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
-                <strong>📅 Data:</strong> {cliente['data']}<br>
-                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                <strong>💬 Mensagem:</strong> {cliente.get('mensagem', '—')}
-            </div>
-        """, unsafe_allow_html=True)
+    # 🧍 Clientes agendadas
+    st.markdown("### 📋 Clientes Agendadas")
+    if st.session_state.historico_clientes:
+        nomes = [c["nome"] for c in st.session_state.historico_clientes]
+        selecionada = st.selectbox("🧍 Escolha uma cliente", nomes)
+        cliente = next((c for c in st.session_state.historico_clientes if c["nome"] == selecionada), None)
+        if cliente:
+            st.markdown(f"""
+                <div style='
+                    background-color:#f9f9f9;
+                    padding:15px;
+                    border-left:5px solid #c08081;
+                    border-radius:5px;
+                    font-size:15px;
+                '>
+                    <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                    <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                    <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+                    <strong>📅 Data:</strong> {cliente['data']}<br>
+                    <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                    <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+                </div>
+            """, unsafe_allow_html=True)
+    else:
+        st.info("📂 Nenhum atendimento registrado ainda.")
+
 
 
 # 🧠 Estados iniciais
