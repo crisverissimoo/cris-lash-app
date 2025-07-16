@@ -166,11 +166,12 @@ with col2:
                 if cliente:
                     st.markdown(f"""
                         <div style='
-                            background-color:#f9f9f9;
+                            background-color:#f5e3e6;
                             padding:15px;
-                            border-left:5px solid #c08081;
-                            border-radius:5px;
+                            border-left:5px solid #c08081
+                            border-radius:8px;;
                             font-size:15px;
+                            margin-bottom:10px;
                         '>
                             <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
                             <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
