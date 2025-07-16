@@ -614,7 +614,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     """, unsafe_allow_html=True)
 
 # 🗓️ Etapa final — Agendamento
-if st.button("✅ Confirmar atendimento"):
+if st.button("✅ Confirmar atendimento", key="confirmar_atendimento_unico"):
     protocolo = st.session_state.protocolo
     st.session_state.protocolo += 1
 
