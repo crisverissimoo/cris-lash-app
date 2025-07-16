@@ -566,14 +566,11 @@ if st.session_state.get("efeito_escolhido"):
                 with col_img:
                     st.markdown(f"""
                         <div style='text-align:center;'>
-                            <img src='{tipo["img"]}' alt='{nome}' style='
-                                width: 320px;
-                                height: 200px;
-                                object-fit: cover;
-                                border-radius: 8px;
-                            '>
+                           <img src="{tipo['img']}" alt="{nome}" style="
+                                width: 100%;
+                                border-radius: 8px;                                                          '>
                         </div>
-                    """, unsafe_allow_html=True)
+                    """, unsafe_allow_html=True))
 
                 with col_txt:
                     st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
