@@ -146,31 +146,32 @@ with st.expander("🚫 Bloquear período"):
 
             
             # 📋 Seleção de cliente
-            st.markdown("### 🧍 Gerenciar atendimentos")
-            if st.session_state.historico_clientes:
-                nomes = [c["nome"] for c in st.session_state.historico_clientes]
-                selecionada = st.selectbox("🧍 Escolha uma cliente", nomes)
-                cliente = next((c for c in st.session_state.historico_clientes if c["nome"] == selecionada), None)
-                if cliente:
-                    st.markdown(f"""
-                        <div style='
-                            background-color:#f5e3e6;
-                            padding:15px;
-                            border-left:5px solid #c08081
-                            border-radius:8px;;
-                            font-size:15px;
-                            margin-bottom:10px;
-                        '>
-                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-                            <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
-                            <strong>📅 Data:</strong> {cliente['data']}<br>
-                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-                        </div>
-                    """, unsafe_allow_html=True)
-            else:
-                st.info("📂 Nenhum atendimento registrado ainda.")
+st.markdown("### 🧍 Gerenciar atendimentos")
+if st.session_state.historico_clientes:
+    nomes = [c["nome"] for c in st.session_state.historico_clientes]
+    selecionada = st.selectbox("🧍 Escolha uma cliente", nomes, key="cliente_escolhida")
+    cliente = next((c for c in st.session_state.historico_clientes if c["nome"] == selecionada), None)
+    if cliente:
+        st.markdown(f"""
+            <div style='
+                background-color: #f4e3e5;
+                padding:15px;
+                border-left:4px solid #b4637d;
+                border-radius:8px;
+                font-size:15px;
+                margin-bottom:10px;
+                color: #2a2a2a;
+            '>
+                <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+                <strong>📅 Data:</strong> {cliente['data']}<br>
+                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+            </div>
+        """, unsafe_allow_html=True)
+else:
+    st.info("📂 Nenhum atendimento registrado ainda.")
 
 
 
