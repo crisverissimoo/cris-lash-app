@@ -545,47 +545,79 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 # 📋 Histórico Boutique
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
-    with st.expander("📋 Histórico de Atendimentos", expanded=True):
+    with st.expander("📅 Agendamento do Atendimento", expanded=True):
+    data = st.date_input("📅 Escolha a data", min_value=datetime.today().date())
+    horarios_livres = [h for h in gerar_horarios() if esta_livre(data, h)]
 
-        if st.session_state.historico_clientes:
-            st.markdown("<h4 style='text-align:center;'>📋 Histórico de Atendimentos Lash Boutique</h4>", unsafe_allow_html=True)
+    if not horarios_livres:
+        st.warning("⛔ Nenhum horário disponível neste dia.")
+    else:
+        horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
+        fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
 
-            for cliente in reversed(st.session_state.historico_clientes):
-                st.markdown(f"""
-                    <div style='
-                        max-width: 450px;
-                        margin: 0 auto 15px auto;
-                        background-color:#f7e8e6;
-                        padding:15px;
-                        border-radius:10px;
-                        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-                        font-size:16px;
-                        line-height:1.5;
-                        color: #2c2c2c;
-                    '>
-                        <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                        <strong>🧍 Nome:</strong> {cliente['nome']}<br>
-                        <strong>✨ Efeito:</strong> {cliente['efeito']} — {cliente['tipo']}<br>
-                        <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                        <strong>💬 Mensagem:</strong> {cliente.get('mensagem', '—')}
-                    </div>
-                """, unsafe_allow_html=True)
+        efeito = st.session_state.efeito_escolhido
+        tipo = st.session_state.tipo_aplicacao
+        valor = st.session_state.get("valor", "10€")
+        nome = st.session_state.get("nome_cliente", "—")
+        mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
 
-        else:
-            st.markdown(f"""
+        st.markdown("💖 Confirme os dados do atendimento:")
+        st.markdown(f"- ✨ Efeito: **{efeito}**")
+        st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
+        st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
+        st.markdown(f"- 🧍 Nome: **{nome}**")
+        st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
+
+        if st.button("✅ Confirmar atendimento"):
+            st.session_state.agendamento_confirmado = True
+            protocolo = st.session_state.protocolo
+            st.session_state.protocolo += 1
+
+            cliente = {
+                "protocolo": protocolo,
+                "efeito": efeito,
+                "tipo": tipo,
+                "valor": valor,
+                "data": data.strftime('%d/%m/%Y'),
+                "horario": f"{horario} → {fim}",
+                "mensagem": mensagem,
+                "nome": nome
+            }
+
+            st.session_state.historico_clientes.append(cliente)
+            st.session_state.historico_ocupados.append((data, horario))
+
+            st.success("✅ Atendimento agendado com sucesso!")
+
+            st.markdown("""
                 <div style='
-                    max-width: 450px;
-                    margin: auto;
-                    background-color: #e3f2fd;
-                    color: #2c2c2c;
-                    padding: 15px;
+                    border: 2px dashed #e09b8e;
+                    background-color: #c08081;
                     border-radius: 10px;
-                    text-align: center;
-                    box-shadow: 0 0 5px rgba(0,0,0,0.05);
-                    font-size: 17px;
-                    font-weight: 500;
+                    padding: 20px;
+                    margin-top: 20px;
+                    color: white;
                 '>
-                    📋 {txt("Nenhum atendimento registrado ainda.",
-                            "Aún no hay atenciones registradas.")}
+                    <h5>📌 Cuidados antes e depois da aplicação</h5>
+                    <ul>
+                        <li>🚫 Compareça sem maquiagem nos olhos</li>
+                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                    </ul>
                 </div>
             """, unsafe_allow_html=True)
+
+            st.markdown("📲 Compartilhar atendimento via WhatsApp")
+            telefone = st.text_input("📞 Número com DDI (ex: +34...)", key="telefone_whatsapp")
+            if telefone:
+                resumo = f"""📌 Protocolo: #{cliente['protocolo']}
+✨ Efeito: {cliente['efeito']}
+🎀 Técnica: {cliente['tipo']} — 💶 {cliente['valor']}
+📅 Data: {cliente['data']} — 🕐 Horário: {cliente['horario']}
+💬 Obs: {cliente['mensagem'] or '—'}"""
+                texto = resumo.replace("\n", "%0A").replace("—", "")
+                link = f"https://wa.me/{telefone.strip()}?text={texto}"
+                st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
+
