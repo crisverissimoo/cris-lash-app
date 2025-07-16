@@ -185,34 +185,6 @@ if st.session_state.get("cadastro_confirmado"):
 
 
 
-# 📊 Histórico de atendimentos
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    with st.expander(txt("📋 Histórico de Atendimentos", "📋 Historial de Atenciones"), expanded=False):
-        if st.session_state.historico_clientes:
-            for cliente in reversed(st.session_state.historico_clientes):
-                st.markdown(f"""
-                    <div style='
-                        max-width: 450px;
-                        margin: 0 auto 15px auto;
-                        background-color:#f7e8e6;
-                        padding:15px;
-                        border-radius:10px;
-                        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-                        font-size:16px;
-                        line-height:1.5;
-                    '>
-                        <strong>🔢 Protocolo:</strong> {cliente['Protocolo']}<br>
-                        <strong>🧍 Nome:</strong> {cliente['Nome']}<br>
-                        <strong>✨ Efeito:</strong> {cliente['Efeito']} — {cliente['Tipo']}<br>
-                        <strong>⏰ Horário:</strong> {cliente['Horário']}<br>
-                        <strong>💶 Valor:</strong> {cliente['Valor']} €
-                    </div>
-                """, unsafe_allow_html=True)
-        else:
-            st.info(txt("Nenhum atendimento registrado ainda.",
-                        "Aún no hay atenciones registradas."))
-
 
 # 🔁 Reprogramação de cliente
 col1, col2, col3 = st.columns([1, 2, 1])
