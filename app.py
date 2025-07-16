@@ -67,11 +67,11 @@ with col2:
     with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente"), expanded=True):
         st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
-        nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"), key="nome_cliente")
+        nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"))
         nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
-                                   min_value=datetime(1920, 1, 1).date(), max_value=hoje, key="nascimento")
-        telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"), key="telefone")
-        email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"), key="email")
+                                   min_value=datetime(1920, 1, 1).date(), max_value=hoje)
+        telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"))
+        email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"))
 
         idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
         menor = idade < 18
@@ -79,24 +79,32 @@ with col2:
 
         autorizada = True
         if menor:
-            responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"), key="responsavel")
+            responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
             autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"),
-                                   ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
+                                   ["Sim", "Não", "Pendente"], index=None)
             if autorizacao != "Sim":
                 st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
                              "❌ Cliente menor sin autorización — atención bloqueada."))
                 autorizada = False
 
+        erro = False
         if st.button(txt("✅ Confirmar cadastro", "✅ Confirmar registro")):
             if not nome or not telefone or idade < 0 or (menor and not autorizada):
+                erro = True
                 st.warning(txt("⚠️ Preencha os dados corretamente para prosseguir.",
                                "⚠️ Rellena correctamente para continuar."))
             else:
+                st.session_state.nome_cliente = nome
+                st.session_state.nascimento = nascimento
+                st.session_state.telefone = telefone
+                st.session_state.email = email
+                st.session_state.idade_cliente = idade
                 st.session_state.cadastro_completo = True
                 st.success(txt("✅ Cadastro finalizado com sucesso!",
                                "✅ Registro completado con éxito!"))
 
-# 🎀 Aplicação + CRM + WhatsApp
+# só segue adiante se cadastro_completo estiver marcado como True
+
 if st.session_state.get("cadastro_completo"):
 
     col_apl1, col_apl2, col_apl3 = st.columns([1, 2, 1])
