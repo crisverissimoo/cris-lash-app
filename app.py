@@ -624,19 +624,24 @@ with col2:
                 """, unsafe_allow_html=True)
 
         else:
-            st.markdown(f"""
-                <div style='
-                    max-width: 450px;
-                    margin: auto;
-                    background-color: #e3f2fd;
-                    padding: 15px;
-                    border-radius: 10px;
-                    text-align: center;
-                    box-shadow: 0 0 5px rgba(0,0,0,0.05);
-                '>
-                    📭 {txt("Nenhum atendimento registrado ainda.",
-                            "Aún no hay atenciones registradas.")}
-                </div>
-            """, unsafe_allow_html=True)
+    colA, colB, colC = st.columns([1, 2, 1])
+    with colB:
+        st.markdown(f"""
+            <div style='
+                background-color: #e3f2fd;
+                color: #2c2c2c;
+                padding: 15px;
+                border-radius: 10px;
+                text-align: center;
+                box-shadow: 0 0 5px rgba(0,0,0,0.05);
+                max-width: 450px;
+                margin: auto;
+                font-size: 17px;
+                font-weight: 500;
+            '>
+                📋 {txt("Nenhum atendimento registrado ainda.",
+                        "Aún no hay atenciones registradas.")}
+            </div>
+        """, unsafe_allow_html=True)
 
 
