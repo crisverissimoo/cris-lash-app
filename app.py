@@ -431,7 +431,7 @@ if st.session_state.get("efeito_escolhido"):
 
 from datetime import datetime, timedelta
 
-# Inicialização
+# ⏱️ Inicialização de histórico
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
@@ -439,7 +439,7 @@ if "historico_clientes" not in st.session_state:
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
-# Funções
+# 🎯 Funções para horários
 def gerar_horarios():
     base = datetime.strptime("08:00", "%H:%M")
     return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
@@ -458,13 +458,13 @@ def esta_livre(data, horario):
             return False
     return True
 
-# Agendamento
+# 🗓️ Etapa final — Agendamento
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.expander("📅 Agendamento do Atendimento", expanded=True):
-            data = st.date_input("📅 Escolha a data", min_value=datetime.today().date())
+            data = st.date_input("📅 Escolha a data do atendimento", min_value=datetime.today().date())
             horarios_livres = [h for h in gerar_horarios() if esta_livre(data, h)]
 
             if not horarios_livres:
@@ -473,14 +473,14 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
                 fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
 
-                efeito = st.session_state.efeito_escolhido
-                tipo = st.session_state.tipo_aplicacao
-                valor = st.session_state.get("valor", "10€")
                 nome = st.session_state.get("nome_cliente", "—")
-                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, preferências...")
+                efeito = st.session_state.get("efeito_escolhido", "—")
+                tipo = st.session_state.get("tipo_aplicacao", "—")
+                valor = st.session_state.get("valor", "—")
+                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
 
-                # Revisão antes de confirmar
-                st.markdown("💖 Confirme os dados abaixo antes de finalizar:")
+                # ✅ Revisão antes de salvar
+                st.markdown("💖 Confirme os dados do atendimento abaixo:")
                 st.markdown(f"- 🧍 Nome: **{nome}**")
                 st.markdown(f"- ✨ Efeito: **{efeito}**")
                 st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
@@ -527,3 +527,4 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                             </ul>
                         </div>
                     """, unsafe_allow_html=True)
+
