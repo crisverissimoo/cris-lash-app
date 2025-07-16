@@ -429,7 +429,10 @@ if st.session_state.get("efeito_escolhido"):
 
 
 
-# ✅ Inicialização
+# ✅ Import necessário
+from datetime import datetime, timedelta
+
+# ✅ Inicialização dos estados
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
@@ -456,7 +459,6 @@ def esta_livre(data, horario):
 
 # 🗓️ Etapa de agendamento + bloqueio
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
-
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
@@ -495,6 +497,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     st.session_state.historico_ocupados.append((data, horario))
 
                     st.success("✅ Atendimento agendado com sucesso!")
+
                     st.markdown(f"""
                         <div style='border:2px dashed #e09b8e; background-color:#c08081; border-radius:10px; padding:20px; margin-top:20px; color:white;'>
                             <h5>📌 Cuidados antes e depois da aplicação</h5>
@@ -529,3 +532,4 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 for h in horarios_a_bloquear:
                     st.session_state.historico_ocupados.append((data_bloqueio, h))
                 st.success(f"✅ {len(horarios_a_bloquear)} horário(s) bloqueado(s) em {data_bloqueio.strftime('%d/%m/%Y')}")
+
