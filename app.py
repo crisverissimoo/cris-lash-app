@@ -614,6 +614,7 @@ with col2:
                         box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
                         font-size:16px;
                         line-height:1.5;
+                        color: #2c2c2c;
                     '>
                         <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
                         <strong>🧍 Nome:</strong> {cliente['nome']}<br>
@@ -624,24 +625,23 @@ with col2:
                 """, unsafe_allow_html=True)
 
         else:
-    colA, colB, colC = st.columns([1, 2, 1])
-    with colB:
-        st.markdown(f"""
-            <div style='
-                background-color: #e3f2fd;
-                color: #2c2c2c;
-                padding: 15px;
-                border-radius: 10px;
-                text-align: center;
-                box-shadow: 0 0 5px rgba(0,0,0,0.05);
-                max-width: 450px;
-                margin: auto;
-                font-size: 17px;
-                font-weight: 500;
-            '>
-                📋 {txt("Nenhum atendimento registrado ainda.",
-                        "Aún no hay atenciones registradas.")}
-            </div>
-        """, unsafe_allow_html=True)
+            st.markdown(f"""
+                <div style='
+                    max-width: 450px;
+                    margin: auto;
+                    background-color: #e3f2fd;
+                    color: #2c2c2c;
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+                    font-size: 17px;
+                    font-weight: 500;
+                '>
+                    📋 {txt("Nenhum atendimento registrado ainda.",
+                            "Aún no hay atenciones registradas.")}
+                </div>
+            """, unsafe_allow_html=True)
+
 
 
