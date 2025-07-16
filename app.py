@@ -130,7 +130,11 @@ with col2:
                         """, unsafe_allow_html=True)
 
                         if st.button(f"❌ Excluir protocolo {cliente['protocolo']}", key=f"excluir_{idx}"):
-                            confirmacao = st.radio(f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?", ["Cancelar", "Confirmar"], key=f"confirmar_{idx}")
+                            confirmacao = st.radio(
+                                f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?",
+                                ["Cancelar", "Confirmar"],
+                                key=f"confirmar_{idx}"
+                            )
                             if confirmacao == "Confirmar":
                                 clientes_salvos.pop(idx)
                                 with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
@@ -215,7 +219,8 @@ with col2:
                             border-left:4px solid #b4637d;
                             border-radius:8px;
                             font-size:15px;
-                            margin
+                            margin-bottom:10px;
+
 
 
 
