@@ -146,6 +146,7 @@ with st.expander("🚫 Bloquear período"):
 
             
             # 📋 Seleção de cliente
+# 📋 Seleção de cliente
 st.markdown("### 🧍 Gerenciar atendimentos")
 if st.session_state.historico_clientes:
     nomes = [c["nome"] for c in st.session_state.historico_clientes]
@@ -170,8 +171,21 @@ if st.session_state.historico_clientes:
                 <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
             </div>
         """, unsafe_allow_html=True)
+
+        # 🔓 Opção para remover horário bloqueado referente à cliente
+        if st.button("🔓 Liberar horário desta cliente", key=f"liberar_horario_{cliente['protocolo']}"):
+            data_obj = datetime.strptime(cliente["data"], "%d/%m/%Y").date()
+            horario_str = cliente["horario"].split(" → ")[0]
+            if (data_obj, horario_str) in st.session_state.historico_ocupados:
+                st.session_state.historico_ocupados = [
+                    (d, h) for (d, h) in st.session_state.historico_ocupados if not (d == data_obj and h == horario_str)
+                ]
+                st.success(f"✅ Horário `{horario_str}` em {cliente['data']} liberado com sucesso.")
+            else:
+                st.info("📂 Esse horário não estava bloqueado manualmente.")
 else:
     st.info("📂 Nenhum atendimento registrado ainda.")
+
 
 
 
