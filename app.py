@@ -183,18 +183,6 @@ if st.session_state.get("cadastro_confirmado"):
                 link = f"https://wa.me/?text={texto.replace(' ', '%20')}"
                 st.markdown(f"[📲 {txt('Enviar no WhatsApp', 'Enviar por WhatsApp')}]({link})", unsafe_allow_html=True)
 
-# 🌙 Cuidados pós-aplicação
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    with st.expander(txt("🌙 Cuidados pós-aplicação", "🌙 Cuidados posteriores"), expanded=False):
-        st.markdown(f"""
-            <ul style='font-size:16px;'>
-                <li>{txt('Evite molhar os cílios nas primeiras 24h', 'Evita mojar las pestañas en las primeras 24h')}</li>
-                <li>{txt('Não use rímel ou curvex', 'No uses máscara ni rizador')}</li>
-                <li>{txt('Evite sauna ou vapor', 'Evita sauna o vapor')}</li>
-                <li>{txt('Higienize com espuma própria para extensão', 'Limpia con espuma especial para extensiones')}</li>
-            </ul>
-        """, unsafe_allow_html=True)
 
 
 # 📊 Histórico de atendimentos
@@ -558,4 +546,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                             </ul>
                         </div>
                     """, unsafe_allow_html=True)
+
+
+                
 
