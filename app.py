@@ -64,6 +64,41 @@ with col2:
             else:
                 st.error("❌ Código inválido — tente novamente.")
 
+# 👑 Área administrativa — seleção de cliente
+if st.session_state.get("acesso_admin") and st.session_state.get("historico_clientes"):
+
+    st.markdown("### 🔎 Gerenciamento de Atendimento")
+
+    selecionada = st.selectbox(
+        "🧑‍💼 Escolha cliente:",
+        [c["nome"] for c in st.session_state.historico_clientes],
+        key="cliente_reprograma"
+    )
+
+    cliente = next((c for c in st.session_state.historico_clientes if c["nome"] == selecionada), None)
+
+    if cliente:
+        st.markdown(f"""
+            <div style='
+                max-width: 450px;
+                margin: 15px auto;
+                background-color:#f0f4f8;
+                padding:15px;
+                border-radius:10px;
+                box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+                font-size:16px;
+                line-height:1.5;
+                color: #2c2c2c;
+            '>
+                <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+                <strong>📅 Data:</strong> {cliente['data']}<br>
+                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                <strong>💬 Mensagem:</strong> {cliente.get('mensagem', '—')}
+            </div>
+        """, unsafe_allow_html=True)
+
 
 # 🧠 Estados iniciais
 for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado", "cadastro_completo"]:
