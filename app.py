@@ -76,6 +76,7 @@ def esta_livre(data, horario):
     return True
 
 # 🔐 Área profissional + painel
+# 🔐 Área profissional + painel
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander("👑 Área profissional", expanded=True):
@@ -153,32 +154,34 @@ with col2:
             else:
                 st.info("📂 Nenhum horário bloqueado ainda.")
 
+            # 🚫 Bloqueio de período
             with st.expander("🚫 Bloquear período"):
-    hoje = datetime.today().date()
-    dia_bloqueio = st.date_input("📅 Data para bloqueio", value=hoje, key="bloqueio_data")
+                hoje = datetime.today().date()
+                dia_bloqueio = st.date_input("📅 Data para bloqueio", value=hoje, key="bloqueio_data")
 
-    tipo_bloqueio = st.radio("Qual período deseja bloquear?", ["⏰ Horário único", "🌇 Tarde completa"], key="tipo_bloqueio")
+                tipo_bloqueio = st.radio("Qual período deseja bloquear?", ["⏰ Horário único", "🌇 Tarde completa"], key="tipo_bloqueio")
 
-    if tipo_bloqueio == "⏰ Horário único":
-        hora_bloqueio = st.selectbox("⏰ Horário", gerar_horarios(), key="bloqueio_hora")
-        if st.button("🚫 Bloquear horário", key="bloqueio_botao"):
-            if esta_livre(dia_bloqueio, hora_bloqueio):
-                st.session_state.historico_ocupados.append((dia_bloqueio, hora_bloqueio))
-                st.success(f"✅ Horário {hora_bloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')} bloqueado com sucesso.")
-            else:
-                st.warning("⚠️ Esse horário já está ocupado.")
-    
-    elif tipo_bloqueio == "🌇 Tarde completa":
-        tarde_horarios = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]
-        bloqueados = []
-        for h in tarde_horarios:
-            if esta_livre(dia_bloqueio, h):
-                st.session_state.historico_ocupados.append((dia_bloqueio, h))
-                bloqueados.append(h)
-        if bloqueados:
-            st.success(f"✅ Tarde bloqueada ({', '.join(bloqueados)}) em {dia_bloqueio.strftime('%d/%m/%Y')}.")
-        else:
-            st.warning("⚠️ Todos os horários da tarde já estavam ocupados.")
+                if tipo_bloqueio == "⏰ Horário único":
+                    hora_bloqueio = st.selectbox("⏰ Horário", gerar_horarios(), key="bloqueio_hora")
+                    if st.button("🚫 Bloquear horário", key="bloqueio_botao"):
+                        if esta_livre(dia_bloqueio, hora_bloqueio):
+                            st.session_state.historico_ocupados.append((dia_bloqueio, hora_bloqueio))
+                            st.success(f"✅ Horário {hora_bloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')} bloqueado com sucesso.")
+                        else:
+                            st.warning("⚠️ Esse horário já está ocupado.")
+
+                elif tipo_bloqueio == "🌇 Tarde completa":
+                    tarde_horarios = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]
+                    bloqueados = []
+                    for h in tarde_horarios:
+                        if esta_livre(dia_bloqueio, h):
+                            st.session_state.historico_ocupados.append((dia_bloqueio, h))
+                            bloqueados.append(h)
+                    if bloqueados:
+                        st.success(f"✅ Tarde bloqueada ({', '.join(bloqueados)}) em {dia_bloqueio.strftime('%d/%m/%Y')}.")
+                    else:
+                        st.warning("⚠️ Todos os horários da tarde já estavam ocupados.")
+
 
 
 
