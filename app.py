@@ -97,38 +97,40 @@ with col2:
             st.markdown("---")
             st.markdown("## 👑 Painel Administrativo Boutique")
 
-            # 🧍 Leitura de atendimentos salvos
-            CAMINHO_ARQUIVO = "agenda.json"
-            clientes_salvos = []
-            if os.path.exists(CAMINHO_ARQUIVO):
-                with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
-                    clientes_salvos = json.load(f)
+            # 🧍 Leitura de atendimentos salvos e exibição completa
+CAMINHO_ARQUIVO = "agenda.json"
+clientes_salvos = []
+if os.path.exists(CAMINHO_ARQUIVO):
+    with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
+        clientes_salvos = json.load(f)
 
-            st.markdown("### 🗂️ Lista de Atendimentos Registrados")
-            if clientes_salvos:
-                nomes = [c["nome"] for c in clientes_salvos]
-                selecionada = st.selectbox("🧍 Selecione uma cliente", nomes, key="cliente_select")
+st.markdown("### 🗂️ Lista de Atendimentos Registrados")
+if clientes_salvos:
+    # 🔢 Ordena os atendimentos por protocolo (do menor para o maior)
+    clientes_salvos.sort(key=lambda c: c["protocolo"])
 
-                cliente = next((c for c in clientes_salvos if c["nome"] == selecionada), None)
-                if cliente:
-                    st.markdown(f"""
-                        <div style='
-                            background-color:#f9f9f9;
-                            padding:15px;
-                            border-left:5px solid #c08081;
-                            border-radius:5px;
-                            font-size:15px;
-                        '>
-                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-                            <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
-                            <strong>📅 Data:</strong> {cliente['data']}<br>
-                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-                        </div>
-                    """, unsafe_allow_html=True)
-            else:
-                st.info("📂 Nenhum atendimento registrado ainda.")
+    for cliente in clientes_salvos:
+        st.markdown(f"""
+            <div style='
+                background-color:#f9f9f9;
+                padding:15px;
+                border-left:5px solid #c08081;
+                border-radius:5px;
+                font-size:15px;
+                margin-bottom:10px;
+            '>
+                <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+                <strong>📅 Data:</strong> {cliente['data']}<br>
+                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+            </div>
+        """, unsafe_allow_html=True)
+else:
+    st.info("📂 Nenhum atendimento registrado ainda.")
+
 
             # 📌 Horários bloqueados
             st.markdown("### 📅 Horários ocupados")
