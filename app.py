@@ -66,13 +66,18 @@ from datetime import datetime
 
 hoje = datetime.today().date()
 
+# 🔐 Inicializa a trava se não existir
+if "cadastro_completo" not in st.session_state:
+    st.session_state.cadastro_completo = False
+
+# 🗂️ Cadastro da Cliente
 from datetime import datetime
 
 hoje = datetime.today().date()
 
-# 🔐 Inicializa a trava se não existir
-if "cadastro_completo" not in st.session_state:
-    st.session_state.cadastro_completo = False
+# 🔐 Inicializa controle único
+if "cadastro_confirmado" not in st.session_state:
+    st.session_state.cadastro_confirmado = False
 
 # 🗂️ Cadastro da Cliente
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -100,26 +105,30 @@ with col2:
                              "❌ Cliente menor sin autorización — atención bloqueada."))
                 autorizada = False
 
-        erro = False
+        # ⚠️ Mensagem de erro se clicar sem preencher tudo
         if st.button(txt("✅ Confirmar cadastro", "✅ Confirmar registro")):
-            if not nome or not telefone or idade < 0 or (menor and not autorizada):
-                erro = True
-                st.warning(txt("⚠️ Preencha os dados corretamente para prosseguir.",
-                               "⚠️ Rellena correctamente para continuar."))
-            else:
+            campos_ok = nome and telefone and nascimento and idade >= 0
+            if menor:
+                campos_ok = campos_ok and autorizada
+
+            if campos_ok:
                 st.session_state.nome_cliente = nome
                 st.session_state.nascimento = nascimento
                 st.session_state.telefone = telefone
                 st.session_state.email = email
                 st.session_state.idade_cliente = idade
-                st.session_state.cadastro_completo = True
+                st.session_state.cadastro_confirmado = True
                 st.success(txt("✅ Cadastro finalizado com sucesso!",
                                "✅ Registro completado con éxito!"))
+            else:
+                st.warning(txt("⚠️ Preencha todos os dados corretamente para continuar.",
+                               "⚠️ Rellena correctamente todos los campos para continuar."))
+
 
 
 # só segue adiante se cadastro_completo estiver marcado como True
 
-if st.session_state.get("cadastro_completo"):
+if st.session_state.get("cadastro_confirmado"):
 
     col_apl1, col_apl2, col_apl3 = st.columns([1, 2, 1])
     with col_apl2:
