@@ -589,16 +589,11 @@ if st.session_state.get("efeito_escolhido"):
 
 
 
+f# 🗓️ Etapa final — Agendamento
 from datetime import datetime, timedelta
 import os
 import json
 
-# 🗓️ Etapa final — Agendamento
-from datetime import datetime, timedelta
-import os
-import json
-
-# 🗓️ Etapa final — Agendamento
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -619,7 +614,6 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 valor = st.session_state.get("valor", "—")
                 mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
 
-                # ✅ Revisão antes de salvar
                 st.markdown("💖 Confirme os dados do atendimento abaixo:")
                 st.markdown(f"- 🧍 Nome: **{nome}**")
                 st.markdown(f"- ✨ Efeito: **{efeito}**")
@@ -642,7 +636,6 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         "nome": nome
                     }
 
-                    # 💾 Salvamento durável
                     CAMINHO_ARQUIVO = "agenda.json"
                     dados_existentes = []
                     if os.path.exists(CAMINHO_ARQUIVO):
@@ -658,7 +651,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                    # 📌 Cuidados pós aplicação — HTML costurado
+                    # 📌 Cuidados pós aplicação
                     st.markdown("""
 <div style="border:2px dashed #e09b8e; background-color:#c08081;
 border-radius:10px; padding:20px; margin-top:20px; color:white;">
@@ -672,5 +665,3 @@ border-radius:10px; padding:20px; margin-top:20px; color:white;">
 </ul>
 </div>
 """, unsafe_allow_html=True)
-
-
