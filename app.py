@@ -157,6 +157,45 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander(txt("🌙 Cuidados pós-aplicação", "🌙 Cuidados posteriores"), expanded=False):
         st.markdown(f"""
+            <ul style='font-size:16px;'>
+                <li>{txt('Evite molhar os cílios nas primeiras 24h', 'Evita mojar las pestañas en las primeras 24h')}</li>
+                <li>{txt('Não use rímel ou curvex', 'No uses máscara ni rizador')}</li>
+                <li>{txt('Evite sauna ou vapor', 'Evita sauna o vapor')}</li>
+                <li>{txt('Higienize com espuma própria para extensão', 'Limpia con espuma especial para extensiones')}</li>
+            </ul>
+        """, unsafe_allow_html=True)
+
+# 📊 Histórico de atendimentos
+col1, col2, col3 = st.columns([0.5, 3, 0.5])
+with col2:
+    with st.expander(txt("📋 Histórico de Atendimentos", "📋 Historial de Atenciones"), expanded=False):
+        if st.session_state.historico_clientes:
+            for cliente in reversed(st.session_state.historico_clientes):
+                st.markdown(f"""
+                    <div style='background-color:#f7e8e6; padding:10px; margin-bottom:10px; border-radius:8px;'>
+                        <strong>🔢 Protocolo:</strong> {cliente['Protocolo']}<br>
+                        <strong>🧍 Nome:</strong> {cliente['Nome']}<br>
+                        <strong>✨ Efeito:</strong> {cliente['Efeito']} — {cliente['Tipo']}<br>
+                        <strong>⏰ Horário:</strong> {cliente['Horário']}<br>
+                        <strong>💶 Valor:</strong> {cliente['Valor']} €
+                    </div>
+                """, unsafe_allow_html=True)
+        else:
+            st.info(txt("Nenhum atendimento registrado ainda.",
+                        "Aún no hay atenciones registradas."))
+
+# 🔁 Reprogramação de cliente
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    with st.expander(txt("🔁 Reprogramar cliente", "🔁 Reprogramar cliente"), expanded=False):
+        if st.session_state.historico_clientes:
+            selecionada = st.selectbox("📍 Escolha cliente:", [c["Nome"] for c in st.session_state.historico_clientes], key="cliente_reprograma")
+            novo_horario = st.time_input("⏰ Novo horário")
+
+            if st.button(txt("📅 Reprogramar aplicação", "📅 Reprogramar aplicación")):
+                st.success(txt(f"✅ {selecionada} reprogramada para {novo_horario.strftime('%H:%M')}",
+                               f"✅ {selecionada} reprogramada para las {novo_horario.strftime('%H:%M')}"))
+
 
 
 if autorizada:
