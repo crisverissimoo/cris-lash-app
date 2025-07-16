@@ -5,11 +5,11 @@ import pytz
 # 🪞 Configuração de página
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 
-# 🌍 Fuso horário e data atual
+# 🌍 Fuso horário e data
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 
-# 🌐 Idioma com estado
+# 🌐 Idioma
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
@@ -18,51 +18,53 @@ with col2:
 def txt(pt, es):
     return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
-# 💎 Cabeçalho
-st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
-st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
+# 🎀 Cabeçalho
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
 # 💖 Boas-vindas
-st.markdown(f"""
-    <div style='
-        text-align: center;
-        background-color: #e8d1cb;
-        padding: 20px;
-        border-radius: 10px;
-        border: 2px solid #c08081;
-        margin-top: 10px;
-        margin-bottom: 20px;
-    '>
-        <h3 style='color: #a7585c;'>{txt('Bem-vinda ao Cris Lash', 'Bienvenida a Cris Lash')}</h3>
-        <p>{txt('Atendimento profissional com técnica em formação.',
-                'Atención profesional con técnica en formación.')}</p>
-        <p style='font-weight: bold;'>{txt('Promoção: 10€ por aplicação!',
-                                            '¡Promoción: 10€ por aplicación!')}</p>
-    </div>
-""", unsafe_allow_html=True)
+col1, col2, col3 = st.columns([0.5, 3, 0.5])
+with col2:
+    st.markdown(f"""
+        <div style='
+            text-align: center;
+            background-color: #e8d1cb;
+            padding: 20px;
+            border-radius: 10px;
+            border: 2px solid #c08081;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        '>
+            <h3 style='color: #a7585c;'>{txt('Bem-vinda ao Cris Lash', 'Bienvenida a Cris Lash')}</h3>
+            <p>{txt('Atendimento profissional com técnica em formação.',
+                    'Atención profesional con técnica en formación.')}</p>
+            <p style='font-weight: bold;'>{txt('Promoção: 10€ por aplicação!',
+                                                '¡Promoción: 10€ por aplicación!')}</p>
+        </div>
+    """, unsafe_allow_html=True)
 
 # 🔐 Área profissional
-with st.expander("👑 Área profissional", expanded=False):
-    st.write(txt("Digite o código secreto para visualizar recursos administrativos.",
-                 "Ingrese la clave secreta para ver funciones administrativas."))
-
-    col1, col2, col3 = st.columns([1, 2, 1])
-    modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    with st.expander("👑 Área profissional", expanded=False):
+        st.write(txt("Digite o código secreto para visualizar recursos administrativos.",
+                     "Ingrese la clave secreta para ver funciones administrativas."))
+        colA, colB, colC = st.columns([1, 2, 1])
+        modo_admin = colB.text_input("🔐 Código de acesso", type="password") == "rainha"
 
 # 🧠 Inicialização de estados
 for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado", "cadastro_completo"]:
     if key not in st.session_state:
         st.session_state[key] = None
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
-if "historico_clientes" not in st.session_state:
-    st.session_state.historico_clientes = []
-if "protocolo" not in st.session_state:
-    st.session_state.protocolo = 1
+for key in ["historico_ocupados", "historico_clientes", "protocolo"]:
+    if key not in st.session_state:
+        st.session_state[key] = [] if key != "protocolo" else 1
 
 # 🗂️ Cadastro da Cliente
-col_cad1, col_cad2, col_cad3 = st.columns([1, 2, 1])
-with col_cad2:
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
     with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente"), expanded=True):
         st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
@@ -94,6 +96,7 @@ with col_cad2:
                 st.session_state.cadastro_completo = True
                 st.success(txt("✅ Cadastro finalizado com sucesso!",
                                "✅ Registro completado con éxito!"))
+
 
 
 if autorizada:
