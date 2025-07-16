@@ -589,11 +589,16 @@ if st.session_state.get("efeito_escolhido"):
 
 
 
+from datetime import datetime, timedelta
+import os
+import json
+
 # 🗓️ Etapa final — Agendamento
 from datetime import datetime, timedelta
 import os
 import json
 
+# 🗓️ Etapa final — Agendamento
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -622,7 +627,6 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
                 st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
 
-                # ✅ Botão único com salvamento durável
                 if st.button("✅ Confirmar atendimento", key="confirmar_atendimento_unico"):
                     protocolo = st.session_state.protocolo
                     st.session_state.protocolo += 1
@@ -641,13 +645,10 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     # 💾 Salvamento durável
                     CAMINHO_ARQUIVO = "agenda.json"
                     dados_existentes = []
-
                     if os.path.exists(CAMINHO_ARQUIVO):
                         with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
                             dados_existentes = json.load(f)
-
                     dados_existentes.append(cliente)
-
                     with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
                         json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
 
@@ -657,10 +658,10 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-# 📌 Cuidados pós aplicação
-st.markdown("""
-<div style="border: 2px dashed #e09b8e; background-color: #c08081;
-border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
+                    # 📌 Cuidados pós aplicação — HTML costurado
+                    st.markdown("""
+<div style="border:2px dashed #e09b8e; background-color:#c08081;
+border-radius:10px; padding:20px; margin-top:20px; color:white;">
 <h5>📌 Cuidados antes e depois da aplicação</h5>
 <ul>
     <li>🚫 Compareça sem maquiagem nos olhos</li>
@@ -671,4 +672,5 @@ border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
 </ul>
 </div>
 """, unsafe_allow_html=True)
+
 
