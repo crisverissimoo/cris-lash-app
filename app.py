@@ -44,14 +44,26 @@ with col2:
         </div>
     """, unsafe_allow_html=True)
 
-# 🔐 Área profissional
+# 🔐 Área profissional com controle de acesso
+if "acesso_admin" not in st.session_state:
+    st.session_state.acesso_admin = False
+
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander("👑 Área profissional", expanded=False):
         st.write(txt("Digite o código secreto para visualizar recursos administrativos.",
                      "Ingrese la clave secreta para ver funciones administrativas."))
+
         colA, colB, colC = st.columns([1, 2, 1])
-        modo_admin = colB.text_input("🔐 Código de acesso", type="password") == "rainha"
+        codigo_digitado = colB.text_input("🔐 Código de acesso", type="password")
+
+        if colB.button("🔓 Entrar"):
+            if codigo_digitado.strip().lower() == "rainha":
+                st.session_state.acesso_admin = True
+                st.success("💎 Acesso profissional liberado!")
+            else:
+                st.error("❌ Código inválido — tente novamente.")
+
 
 # 🧠 Estados iniciais
 for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado", "cadastro_completo"]:
