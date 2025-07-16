@@ -605,4 +605,22 @@ if st.session_state.historico_clientes:
             st.markdown(f"- 🕐 Horário: `{cliente['horario']}`")
             st.markdown(f"- 💬 Mensagem: `{cliente['mensagem'] or '—'}`")
 else:
-    st.info("📭 Nenhum atendimento registrado ainda.")
+    else:
+    colA, colB, colC = st.columns([1, 2, 1])
+    with colB:
+        st.markdown(f"""
+            <div style='
+                background-color: #e3f2fd;
+                color: #1a1a1a;
+                padding: 15px;
+                border-radius: 8px;
+                text-align: center;
+                box-shadow: 0 0 5px rgba(0,0,0,0.05);
+                max-width: 400px;
+                margin: auto;
+            '>
+                📋 {txt("Nenhum atendimento registrado ainda.",
+                        "Aún no hay atenciones registradas.")}
+            </div>
+        """, unsafe_allow_html=True)
+
