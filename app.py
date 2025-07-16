@@ -99,6 +99,7 @@ with col2:
 
 
 
+
 if autorizada:
     respostas = {}
 
