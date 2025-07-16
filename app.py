@@ -432,7 +432,9 @@ if st.session_state.get("efeito_escolhido"):
 # ✅ Import necessário
 from datetime import datetime, timedelta
 
-# ✅ Inicialização
+from datetime import datetime, timedelta
+
+# 🔐 Inicialização
 if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
@@ -440,9 +442,7 @@ if "historico_clientes" not in st.session_state:
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
-horarios_ocupados = st.session_state.historico_ocupados
-
-# 🎯 Funções únicas
+# 🔍 Funções de horário
 def gerar_horarios():
     base = datetime.strptime("08:00", "%H:%M")
     return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
@@ -450,7 +450,7 @@ def gerar_horarios():
 def esta_livre(data, horario):
     inicio = datetime.strptime(horario, "%H:%M")
     fim = inicio + timedelta(hours=2)
-    for ag_data, ag_hora in horarios_ocupados:
+    for ag_data, ag_hora in st.session_state.historico_ocupados:
         ag_inicio = datetime.strptime(ag_hora, "%H:%M")
         ag_fim = ag_inicio + timedelta(hours=2)
         if data == ag_data and (
@@ -465,51 +465,50 @@ def esta_livre(data, horario):
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
-            data = st.date_input("📅 Escolha a data do atendimento", min_value=datetime.today().date())
+
+        with st.expander("📅 Agendamento do Atendimento", expanded=True):
+            data = st.date_input("📅 Escolha a data", min_value=datetime.today().date())
             horarios_livres = [h for h in gerar_horarios() if esta_livre(data, h)]
 
             if not horarios_livres:
                 st.warning("⛔ Nenhum horário disponível neste dia.")
             else:
                 horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
+                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
+
                 efeito = st.session_state.efeito_escolhido
                 tipo = st.session_state.tipo_aplicacao
                 valor = st.session_state.get("valor", "10€")
-                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
-
-                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, preferências...")
+                nome = st.session_state.get("nome_cliente", "—")
+                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
 
                 if st.button("✅ Confirmar atendimento"):
-                    st.session_state.agendamento_confirmado = True
-
-                    protocolo = st.session_state.protocolo
-                    st.session_state.protocolo += 1
-
                     cliente = {
-                        "protocolo": protocolo,
+                        "protocolo": st.session_state.protocolo,
                         "efeito": efeito,
                         "tipo": tipo,
                         "valor": valor,
                         "data": data.strftime('%d/%m/%Y'),
                         "horario": f"{horario} → {fim}",
                         "mensagem": mensagem,
-                        "nome": st.session_state.get("nome_cliente", "—")
+                        "nome": nome
                     }
 
                     st.session_state.historico_clientes.append(cliente)
                     st.session_state.historico_ocupados.append((data, horario))
+                    st.session_state.protocolo += 1
+                    st.session_state.agendamento_confirmado = True
 
                     st.success("✅ Atendimento agendado com sucesso!")
 
                     st.markdown("""
                         <div style='
-                            border: 2px dashed #e09b8e;
-                            background-color: #c08081;
-                            border-radius: 10px;
-                            padding: 20px;
-                            margin-top: 20px;
-                            color: white;
+                            border:2px dashed #e09b8e;
+                            background-color:#c08081;
+                            border-radius:10px;
+                            padding:20px;
+                            margin-top:20px;
+                            color:white;
                         '>
                             <h5>📌 Cuidados antes e depois da aplicação</h5>
                             <ul>
@@ -522,8 +521,8 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         </div>
                     """, unsafe_allow_html=True)
 
-                    st.markdown("📲 Compartilhar atendimento via WhatsApp")
-                    telefone = st.text_input("📞 Número (com DDI, ex: +34...)", key="telefone_whatsapp")
+                    st.markdown("📲 Compartilhar via WhatsApp")
+                    telefone = st.text_input("📞 Número com DDI (ex: +34...)", key="telefone_whatsapp")
                     if telefone:
                         resumo = f"""📌 Protocolo: #{cliente['protocolo']}
 ✨ Efeito: {cliente['efeito']}
@@ -534,12 +533,59 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         link = f"https://wa.me/{telefone.strip()}?text={texto}"
                         st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
 
-        # ⛔ Bloqueio manual
         with st.expander("📛 Bloquear horários manualmente", expanded=False):
             data_bloqueio = st.date_input("📅 Data para bloquear", min_value=datetime.today().date(), key="data_bloqueio")
-            livres_para_bloqueio = [h for h in gerar_horarios() if esta_livre(data_bloqueio, h)]
-            horarios_a_bloquear = st.multiselect("⛔ Selecione os horários a bloquear", livres_para_bloqueio, key="horarios_bloqueio")
+            livres = [h for h in gerar_horarios() if esta_livre(data_bloqueio, h)]
+            horarios_a_bloquear = st.multiselect("⛔ Horários a bloquear", livres, key="horarios_bloqueio")
             if st.button("🚫 Bloquear horários"):
                 for h in horarios_a_bloquear:
                     st.session_state.historico_ocupados.append((data_bloqueio, h))
-                st.success(f"✅ {len(horarios_a_bloquear)} horário(s) bloqueado(s) em {data_bloqueio.strftime('%d/%m/%Y')}")
+                st.success(f"✅ Bloqueado {len(horarios_a_bloquear)} horário(s) em {data_bloqueio.strftime('%d/%m/%Y')}")
+
+# 📋 Histórico Boutique
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    with st.expander("📋 Histórico de Atendimentos", expanded=True):
+
+        if st.session_state.historico_clientes:
+            st.markdown("<h4 style='text-align:center;'>📋 Histórico de Atendimentos Lash Boutique</h4>", unsafe_allow_html=True)
+
+            for cliente in reversed(st.session_state.historico_clientes):
+                st.markdown(f"""
+                    <div style='
+                        max-width: 450px;
+                        margin: 0 auto 15px auto;
+                        background-color:#f7e8e6;
+                        padding:15px;
+                        border-radius:10px;
+                        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+                        font-size:16px;
+                        line-height:1.5;
+                        color: #2c2c2c;
+                    '>
+                        <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                        <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                        <strong>✨ Efeito:</strong> {cliente['efeito']} — {cliente['tipo']}<br>
+                        <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                        <strong>💬 Mensagem:</strong> {cliente.get('mensagem', '—')}
+                    </div>
+                """, unsafe_allow_html=True)
+
+        else:
+            st.markdown(f"""
+                <div style='
+                    max-width: 450px;
+                    margin: auto;
+                    background-color: #e3f2fd;
+                    color: #2c2c2c;
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+                    font-size: 17px;
+                    font-weight: 500;
+                '>
+                    📋 {txt("Nenhum atendimento registrado ainda.",
+                            "Aún no hay atenciones registradas.")}
+                </div>
+            """, unsafe_allow_html=True)
