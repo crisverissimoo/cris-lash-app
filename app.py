@@ -165,6 +165,7 @@ with col2:
             </ul>
         """, unsafe_allow_html=True)
 
+
 # 📊 Histórico de atendimentos
 col1, col2, col3 = st.columns([0.5, 3, 0.5])
 with col2:
@@ -183,6 +184,7 @@ with col2:
         else:
             st.info(txt("Nenhum atendimento registrado ainda.",
                         "Aún no hay atenciones registradas."))
+
 
 # 🔁 Reprogramação de cliente
 col1, col2, col3 = st.columns([1, 2, 1])
