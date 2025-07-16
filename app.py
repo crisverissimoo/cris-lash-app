@@ -429,171 +429,6 @@ if st.session_state.get("efeito_escolhido"):
 
 
 
-# Função para gerar horários disponíveis
-# 🎯 Função para gerar horários disponíveis
-# ✅ Alias para lista de horários ocupados no estado
-horarios_ocupados = st.session_state.historico_ocupados
-
-# 🎯 Função para gerar horários disponíveis
-def gerar_horarios():
-    base = datetime.strptime("08:00", "%H:%M")
-    horarios = [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
-    return horarios
-
-# 🎯 Função para verificar se horário está livre
-def esta_livre(data, horario):
-    inicio = datetime.strptime(horario, "%H:%M")
-    fim = inicio + timedelta(hours=2)
-
-    for ag_data, ag_hora in horarios_ocupados:
-        ag_inicio = datetime.strptime(ag_hora, "%H:%M")
-        ag_fim = ag_inicio + timedelta(hours=2)
-
-        if data == ag_data and (
-            (inicio >= ag_inicio and inicio < ag_fim) or
-            (fim > ag_inicio and fim <= ag_fim)
-        ):
-            return False
-    return True
-
-# 🗓️ Etapa de Agendamento
-if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        with st.expander(txt("📅 Agendamento do Atendimento", "📅 Reserva de cita"), expanded=True):
-            st.markdown("<h4 style='text-align:center;'>📅 Agendamento do Atendimento</h4>", unsafe_allow_html=True)
-
-            hoje = datetime.today().date()
-            data = st.date_input("📅 Escolha a data do atendimento", min_value=hoje)
-
-            horarios = gerar_horarios()
-            horarios_livres = [h for h in horarios if esta_livre(data, h)]
-
-            if not horarios_livres:
-                st.warning("⛔ Nenhum horário disponível neste dia.")
-            else:
-                horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
-
-                efeito = st.session_state.efeito_escolhido
-                tipo = st.session_state.tipo_aplicacao
-                valor = st.session_state.get("valor", "10€")
-                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
-
-                st.markdown("💖 Serviço escolhido:")
-                st.markdown(f"- ✨ Efeito: **{efeito}**")
-                st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
-                st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
-
-                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas, preferências...")
-
-                if st.button("✅ Confirmar atendimento"):
-                    st.session_state.agendamento_confirmado = True
-                    st.session_state.historico_ocupados.append((data, horario))
-
-            if st.session_state.get("agendamento_confirmado"):
-                st.success("✅ Atendimento agendado com sucesso!")
-
-                st.markdown("""
-                    <div style='
-                        border: 2px dashed #e09b8e;
-                        background-color: #c08081;
-                        border-radius: 10px;
-                        padding: 20px;
-                        margin-top: 20px;
-                    '>
-                        <h5>📌 Cuidados antes e depois da aplicação</h5>
-                        <ul>
-                            <li>🚫 Compareça sem maquiagem nos olhos</li>
-                            <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                            <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                            <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                            <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                        </ul>
-                    </div>
-                """, unsafe_allow_html=True)
-
-# ✅ Inicialização
-# ✅ Inicialização
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
-if "historico_clientes" not in st.session_state:
-    st.session_state.historico_clientes = []
-if "protocolo" not in st.session_state:
-    st.session_state.protocolo = 1
-
-horarios_ocupados = st.session_state.historico_ocupados
-
-# 🎯 Funções
-def gerar_horarios():
-    base = datetime.strptime("08:00", "%H:%M")
-    return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
-
-def esta_livre(data, horario):
-    inicio = datetime.strptime(horario, "%H:%M")
-    fim = inicio + timedelta(hours=2)
-    for ag_data, ag_hora in horarios_ocupados:
-        ag_inicio = datetime.strptime(ag_hora, "%H:%M")
-        ag_fim = ag_inicio + timedelta(hours=2)
-        if data == ag_data and ((inicio >= ag_inicio and inicio < ag_fim) or (fim > ag_inicio and fim <= ag_fim)):
-            return False
-    return True
-
-# 🗓️ Etapa de Agendamento única
-if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-
-        # 📛 BLOQUEIO manual
-        with st.expander("📛 Bloquear horários manualmente", expanded=False):
-            data_bloqueio = st.date_input("📅 Data para bloquear", min_value=datetime.today().date(), key="data_bloqueio")
-            livres_para_bloqueio = [h for h in gerar_horarios() if esta_livre(data_bloqueio, h)]
-            horarios_a_bloquear = st.multiselect("⛔ Selecione os horários a bloquear", livres_para_bloqueio, key="horarios_bloqueio")
-            if st.button("🚫 Bloquear horários"):
-                for h in horarios_a_bloquear:
-                    st.session_state.historico_ocupados.append((data_bloqueio, h))
-                st.success(f"✅ {len(horarios_a_bloquear)} horário(s) bloqueado(s) em {data_bloqueio.strftime('%d/%m/%Y')}")
-
-        # ✅ RESUMO final + card rosa + WhatsApp
-        if st.session_state.get("agendamento_confirmado") and st.session_state.historico_clientes:
-            cliente = st.session_state.historico_clientes[-1]
-            resumo = f"""
-📌 Protocolo: #{cliente['protocolo']}
-✨ Efeito: {cliente['efeito']}
-🎀 Técnica: {cliente['tipo']} — 💶 {cliente['valor']}
-📅 Data: {cliente['data']} — 🕐 {cliente['horario']}
-💬 Obs: {cliente['mensagem'] or '—'}
-            """
-
-            st.success("✅ Atendimento agendado com sucesso!")
-
-            st.markdown("""
-                <div style='
-                    border: 2px dashed #e09b8e;
-                    background-color: #c08081;
-                    border-radius: 10px;
-                    padding: 20px;
-                    margin-top: 20px;
-                    color: white;
-                '>
-                    <h5>📌 Cuidados antes e depois da aplicação</h5>
-                    <ul>
-                        <li>🚫 Compareça sem maquiagem nos olhos</li>
-                        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                    </ul>
-                </div>
-            """, unsafe_allow_html=True)
-
-            st.markdown("---")
-            st.markdown("📲 Compartilhar atendimento via WhatsApp")
-            telefone = st.text_input("📞 Número (com DDI, ex: +34...)", key="telefone_whatsapp")
-            if telefone:
-                texto = resumo.replace("\n", "%0A").replace("—", "")
-                link = f"https://wa.me/{telefone.strip()}?text={texto}"
-                st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
-
 # 📋 Histórico de atendimentos
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
@@ -608,12 +443,12 @@ with col2:
                     <div style='
                         max-width: 450px;
                         margin: 0 auto 15px auto;
-                        background-color:#f7e8e6;
-                        padding:15px;
-                        border-radius:10px;
+                        background-color: #f7e8e6;
+                        padding: 15px;
+                        border-radius: 10px;
                         box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
-                        font-size:16px;
-                        line-height:1.5;
+                        font-size: 16px;
+                        line-height: 1.5;
                         color: #2c2c2c;
                     '>
                         <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
@@ -642,6 +477,7 @@ with col2:
                             "Aún no hay atenciones registradas.")}
                 </div>
             """, unsafe_allow_html=True)
+
 
 
 
