@@ -90,32 +90,48 @@ with col2:
                 st.error("❌ Código inválido — tente novamente.")
 
         # 👑 Painel aparece após desbloqueio
-        if st.session_state.acesso_admin:
+        if st.session_state.get("acesso_admin"):
+            import json
+            import os
+
             st.markdown("---")
             st.markdown("## 👑 Painel Administrativo Boutique")
 
-            # 📌 Horários bloqueados
-            st.markdown("### 📅 Horários ocupados")
-            if st.session_state.historico_ocupados:
-                agenda = {}
-                for data, hora in st.session_state.historico_ocupados:
-                    d_str = data.strftime('%d/%m/%Y')
-                    agenda.setdefault(d_str, []).append(hora)
-                for dia, horas in agenda.items():
-                    st.markdown(f"**📅 {dia}**: {' | '.join(sorted(horas))}")
-            else:
-                st.info("📂 Nenhum horário bloqueado ainda.")
+            # 🧍 Leitura de atendimentos salvos
+            CAMINHO_ARQUIVO = "agenda.json"
+            clientes_salvos = []
+            if os.path.exists(CAMINHO_ARQUIVO):
+                with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
+                    clientes_salvos = json.load(f)
 
-            # 🔒 Bloqueio manual
-            with st.expander("🚫 Bloquear novo horário"):
-                dia_bloqueio = st.date_input("📅 Data para bloquear", value=hoje, key="bloqueio_data")
-                hora_bloqueio = st.selectbox("⏰ Horário", gerar_horarios(), key="bloqueio_hora")
-                if st.button("🚫 Bloquear horário", key="bloqueio_botao"):
-                    if esta_livre(dia_bloqueio, hora_bloqueio):
-                        st.session_state.historico_ocupados.append((dia_bloqueio, hora_bloqueio))
-                        st.success(f"✅ Horário {hora_bloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')} bloqueado com sucesso.")
-                    else:
-                        st.warning("⚠️ Esse horário já está ocupado.")
+            st.markdown("### 🗂️ Lista de Atendimentos Registrados")
+            if clientes_salvos:
+                nomes = [c["nome"] for c in clientes_salvos]
+                selecionada = st.selectbox("🧍 Selecione uma cliente", nomes, key="cliente_select")
+
+                cliente = next((c for c in clientes_salvos if c["nome"] == selecionada), None)
+                if cliente:
+                    st.markdown(f"""
+                        <div style='
+                            background-color:#f9f9f9;
+                            padding:15px;
+                            border-left:5px solid #c08081;
+                            border-radius:5px;
+                            font-size:15px;
+                        '>
+                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                            <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+                            <strong>📅 Data:</strong> {cliente['data']}<br>
+                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+                        </div>
+                    """, unsafe_allow_html=True)
+            else:
+                st.info("📂 Nenhum atendimento registrado ainda.")
+
+            # 📌 Horários bloqueados
+            st.markdown("###
 
             # 📋 Seleção de cliente
             st.markdown("### 🧍 Gerenciar atendimentos")
