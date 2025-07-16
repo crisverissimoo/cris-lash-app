@@ -1,5 +1,5 @@
 import streamlit as st
-from datetime import datetime, date, timedelta
+from datetime import datetime
 import pytz
 
 # 🪞 Configuração de página
@@ -14,15 +14,15 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-# 🧵 Função tradutora com base em st.session_state
+# 🧵 Função tradutora
 def txt(pt, es):
     return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
-# 🎀 Cabeçalho centralizado
+# 💎 Cabeçalho
 st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
 st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
-# 💖 Boas-vindas centralizada e mais suave
+# 💖 Boas-vindas
 st.markdown(f"""
     <div style='
         text-align: center;
@@ -41,7 +41,7 @@ st.markdown(f"""
     </div>
 """, unsafe_allow_html=True)
 
-# 🔐 Área profissional (restrita por senha)
+# 🔐 Área profissional
 with st.expander("👑 Área profissional", expanded=False):
     st.write(txt("Digite o código secreto para visualizar recursos administrativos.",
                  "Ingrese la clave secreta para ver funciones administrativas."))
@@ -49,8 +49,8 @@ with st.expander("👑 Área profissional", expanded=False):
     col1, col2, col3 = st.columns([1, 2, 1])
     modo_admin = col2.text_input("🔐 Código de acesso", type="password") == "rainha"
 
-# 🧠 Estados iniciais
-for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado"]:
+# 🧠 Inicialização de estados
+for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado", "cadastro_completo"]:
     if key not in st.session_state:
         st.session_state[key] = None
 if "historico_ocupados" not in st.session_state:
@@ -59,52 +59,6 @@ if "historico_clientes" not in st.session_state:
     st.session_state.historico_clientes = []
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
-
-# 📲 Botão WhatsApp (simulado por enquanto)
-if modo_admin:
-    nome_cliente = "Fernanda"
-    horario = "17:00h"
-    texto_whats = txt(
-        f"Olá {nome_cliente}! 🌸 Seu agendamento na Cris Lash está confirmado para {horario}. Te vejo em breve!",
-        f"Hola {nome_cliente}! 🌸 Tu cita en Cris Lash está confirmada para las {horario}. ¡Hasta pronto!"
-    )
-
-    link_whats = f"https://wa.me/?text={texto_whats.replace(' ', '%20')}"
-    st.markdown(f"[📲 {txt('Enviar no WhatsApp', 'Enviar por WhatsApp')}]({link_whats})", unsafe_allow_html=True)
-
-
-
-
-
-
-
-# 🌍 Fuso horário e data atual
-fuso = pytz.timezone("Europe/Madrid")
-hoje = datetime.now(fuso).date()
-
-# 🪞 Configuração de página
-st.set_page_config("Consultoria Cris Lash", layout="wide")
-
-# 🌐 Função de idioma
-def txt(pt, es): return pt if st.session_state.get("idioma", "Português") == "Português" else es
-
-# 🔁 Estados iniciais
-for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado"]:
-    if key not in st.session_state:
-        st.session_state[key] = None
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
-
-# 🎀 Boas-vindas + idioma centralizado
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
-
-       st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
-
-# 🔜 Continuação esperada: Ficha da Cliente com travamento por idade + autorização (Etapa 1.2)
-
 
 # 🗂️ Cadastro da Cliente
 col_cad1, col_cad2, col_cad3 = st.columns([1, 2, 1])
@@ -120,14 +74,13 @@ with col_cad2:
 
         idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
         menor = idade < 18
-        st.info(f"📌 {txt('Idade:','Edad:')} **{idade} {txt('anos','años')}**")
+        st.info(f"📌 {txt('Idade:', 'Edad:')} **{idade} {txt('anos', 'años')}**")
 
         autorizada = True
         if menor:
             responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"), key="responsavel")
             autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"),
                                    ["Sim", "Não", "Pendente"], index=None, key="aut_menor")
-
             if autorizacao != "Sim":
                 st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
                              "❌ Cliente menor sin autorización — atención bloqueada."))
