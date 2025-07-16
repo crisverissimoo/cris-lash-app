@@ -590,6 +590,10 @@ if st.session_state.get("efeito_escolhido"):
 
 
 # 🗓️ Etapa final — Agendamento
+from datetime import datetime, timedelta
+import os
+import json
+
 if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
 
     col1, col2, col3 = st.columns([1, 2, 1])
@@ -635,9 +639,6 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     }
 
                     # 💾 Salvamento durável
-                    import json
-                    import os
-
                     CAMINHO_ARQUIVO = "agenda.json"
                     dados_existentes = []
 
@@ -656,15 +657,10 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
+                    # 📌 Cuidados pós aplicação
                     st.markdown("""
-                        <div style='
-                            border: 2px dashed #e09b8e;
-                            background-color: #c08081;
-                            border-radius: 10px;
-                            padding: 20px;
-                            margin-top: 20px;
-                            color: white;
-                        '>
+                        <div style="border: 2px dashed #e09b8e; background-color: #c08081;
+                            border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
                             <h5>📌 Cuidados antes e depois da aplicação</h5>
                             <ul>
                                 <li>🚫 Compareça sem maquiagem nos olhos</li>
