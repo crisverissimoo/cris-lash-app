@@ -613,6 +613,76 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         </div>
                     """, unsafe_allow_html=True)
 
+# 🗓️ Etapa final — Agendamento
+if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
+
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        with st.expander("📅 Agendamento do Atendimento", expanded=True):
+            data = st.date_input("📅 Escolha a data do atendimento", min_value=datetime.today().date())
+            horarios_livres = [h for h in gerar_horarios() if esta_livre(data, h)]
+
+            if not horarios_livres:
+                st.warning("⛔ Nenhum horário disponível neste dia.")
+            else:
+                horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
+                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
+
+                nome = st.session_state.get("nome_cliente", "—")
+                efeito = st.session_state.get("efeito_escolhido", "—")
+                tipo = st.session_state.get("tipo_aplicacao", "—")
+                valor = st.session_state.get("valor", "—")
+                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
+
+                # ✅ Revisão antes de salvar
+                st.markdown("💖 Confirme os dados do atendimento abaixo:")
+                st.markdown(f"- 🧍 Nome: **{nome}**")
+                st.markdown(f"- ✨ Efeito: **{efeito}**")
+                st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
+                st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
+                st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
+
+                if st.button("✅ Confirmar atendimento"):
+                    protocolo = st.session_state.protocolo
+                    st.session_state.protocolo += 1
+
+                    cliente = {
+                        "protocolo": protocolo,
+                        "efeito": efeito,
+                        "tipo": tipo,
+                        "valor": valor,
+                        "data": data.strftime('%d/%m/%Y'),
+                        "horario": f"{horario} → {fim}",
+                        "mensagem": mensagem,
+                        "nome": nome
+                    }
+
+                    st.session_state.historico_clientes.append(cliente)
+                    st.session_state.historico_ocupados.append((data, horario))
+                    st.session_state.agendamento_confirmado = True
+
+                    st.success("✅ Atendimento agendado com sucesso!")
+
+                    st.markdown("""
+                        <div style='
+                            border: 2px dashed #e09b8e;
+                            background-color: #c08081;
+                            border-radius: 10px;
+                            padding: 20px;
+                            margin-top: 20px;
+                            color: white;
+                        '>
+                            <h5>📌 Cuidados antes e depois da aplicação</h5>
+                            <ul>
+                                <li>🚫 Compareça sem maquiagem nos olhos</li>
+                                <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                                <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                                <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                                <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                            </ul>
+                        </div>
+                    """, unsafe_allow_html=True)
+
 import json
 import os
 
@@ -633,6 +703,4 @@ with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
 
 st.success("✅ Atendimento registrado e salvo com sucesso!")
 
-
-                
 
