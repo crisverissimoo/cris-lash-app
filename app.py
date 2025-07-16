@@ -657,6 +657,29 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                         "nome": nome
                     }
 
+                    import json
+import os
+
+CAMINHO_ARQUIVO = "agenda.json"
+
+# lê dados salvos (se existirem)
+dados_existentes = []
+if os.path.exists(CAMINHO_ARQUIVO):
+    with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
+        dados_existentes = json.load(f)
+
+# adiciona o novo atendimento
+dados_existentes.append(cliente)
+
+# salva tudo de volta
+with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
+    json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
+
+st.success("✅ Atendimento registrado e salvo com sucesso!")
+
+
+
+
                     st.session_state.historico_clientes.append(cliente)
                     st.session_state.historico_ocupados.append((data, horario))
                     st.session_state.agendamento_confirmado = True
@@ -682,25 +705,5 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                             </ul>
                         </div>
                     """, unsafe_allow_html=True)
-
-import json
-import os
-
-CAMINHO_ARQUIVO = "agenda.json"
-
-# lê dados salvos (se existirem)
-dados_existentes = []
-if os.path.exists(CAMINHO_ARQUIVO):
-    with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
-        dados_existentes = json.load(f)
-
-# adiciona o novo atendimento
-dados_existentes.append(cliente)
-
-# salva tudo de volta
-with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
-    json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
-
-st.success("✅ Atendimento registrado e salvo com sucesso!")
 
 
