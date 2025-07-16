@@ -131,7 +131,28 @@ with col2:
                 st.info("📂 Nenhum atendimento registrado ainda.")
 
             # 📌 Horários bloqueados
-            st.markdown("###
+            st.markdown("### 📅 Horários ocupados")
+            if st.session_state.historico_ocupados:
+                agenda = {}
+                for data, hora in st.session_state.historico_ocupados:
+                    d_str = data.strftime('%d/%m/%Y')
+                    agenda.setdefault(d_str, []).append(hora)
+                for dia, horas in agenda.items():
+                    st.markdown(f"**📅 {dia}**: {' | '.join(sorted(horas))}")
+            else:
+                st.info("📂 Nenhum horário bloqueado ainda.")
+
+            # 🔒 Bloqueio manual
+            with st.expander("🚫 Bloquear novo horário"):
+                dia_bloqueio = st.date_input("📅 Data para bloquear", value=hoje, key="bloqueio_data")
+                hora_bloqueio = st.selectbox("⏰ Horário", gerar_horarios(), key="bloqueio_hora")
+                if st.button("🚫 Bloquear horário", key="bloqueio_botao"):
+                    if esta_livre(dia_bloqueio, hora_bloqueio):
+                        st.session_state.historico_ocupados.append((dia_bloqueio, hora_bloqueio))
+                        st.success(f"✅ Horário {hora_bloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')} bloqueado com sucesso.")
+                    else:
+                        st.warning("⚠️ Esse horário já está ocupado.")
+
 
             # 📋 Seleção de cliente
             st.markdown("### 🧍 Gerenciar atendimentos")
