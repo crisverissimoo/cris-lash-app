@@ -595,32 +595,48 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 st.markdown(f"[🔗 Abrir WhatsApp com mensagem]({link})")
 
 # 📋 Histórico de atendimentos
-if st.session_state.historico_clientes:
-    st.markdown("## 📋 Histórico de Atendimentos Lash Boutique")
+col1, col2, col3 = st.columns([1, 2, 1])
+with col2:
+    with st.expander(txt("📋 Histórico de Atendimentos", "📋 Historial de Atenciones"), expanded=True):
 
-    for cliente in reversed(st.session_state.historico_clientes):
-        with st.expander(f"📌 Protocolo #{cliente['protocolo']} — {cliente['data']}"):
-            st.markdown(f"- ✨ Efeito: **{cliente['efeito']}**")
-            st.markdown(f"- 🎀 Técnica: **{cliente['tipo']}** — 💶 **{cliente['valor']}**")
-            st.markdown(f"- 🕐 Horário: `{cliente['horario']}`")
-            st.markdown(f"- 💬 Mensagem: `{cliente['mensagem'] or '—'}`")
-else:
-    else:
-    colA, colB, colC = st.columns([1, 2, 1])
-    with colB:
-        st.markdown(f"""
-            <div style='
-                background-color: #e3f2fd;
-                color: #1a1a1a;
-                padding: 15px;
-                border-radius: 8px;
-                text-align: center;
-                box-shadow: 0 0 5px rgba(0,0,0,0.05);
-                max-width: 400px;
-                margin: auto;
-            '>
-                📋 {txt("Nenhum atendimento registrado ainda.",
-                        "Aún no hay atenciones registradas.")}
-            </div>
-        """, unsafe_allow_html=True)
+        if st.session_state.historico_clientes:
+
+            st.markdown("<h4 style='text-align:center;'>📋 Histórico de Atendimentos Lash Boutique</h4>", unsafe_allow_html=True)
+
+            for cliente in reversed(st.session_state.historico_clientes):
+                st.markdown(f"""
+                    <div style='
+                        max-width: 450px;
+                        margin: 0 auto 15px auto;
+                        background-color:#f7e8e6;
+                        padding:15px;
+                        border-radius:10px;
+                        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+                        font-size:16px;
+                        line-height:1.5;
+                    '>
+                        <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                        <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                        <strong>✨ Efeito:</strong> {cliente['efeito']} — {cliente['tipo']}<br>
+                        <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                        <strong>💬 Mensagem:</strong> {cliente.get('mensagem', '—')}
+                    </div>
+                """, unsafe_allow_html=True)
+
+        else:
+            st.markdown(f"""
+                <div style='
+                    max-width: 450px;
+                    margin: auto;
+                    background-color: #e3f2fd;
+                    padding: 15px;
+                    border-radius: 10px;
+                    text-align: center;
+                    box-shadow: 0 0 5px rgba(0,0,0,0.05);
+                '>
+                    📭 {txt("Nenhum atendimento registrado ainda.",
+                            "Aún no hay atenciones registradas.")}
+                </div>
+            """, unsafe_allow_html=True)
+
 
