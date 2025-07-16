@@ -112,9 +112,9 @@ with col2:
                     with st.container():
                         st.markdown(f"""
                             <div style='
-                                background-color: #f5e3e6;
+                                background-color: #f0d4da;
                                 padding:15px;
-                                border-left:5px solid #c08081;
+                                border-left:5px solid #cc4c73;
                                 border-radius:8px;
                                 font-size:15px;
                                 margin-bottom:10px;
