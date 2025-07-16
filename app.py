@@ -167,13 +167,22 @@ with col2:
 
 
 # 📊 Histórico de atendimentos
-col1, col2, col3 = st.columns([0.5, 3, 0.5])
+col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander(txt("📋 Histórico de Atendimentos", "📋 Historial de Atenciones"), expanded=False):
         if st.session_state.historico_clientes:
             for cliente in reversed(st.session_state.historico_clientes):
                 st.markdown(f"""
-                    <div style='background-color:#f7e8e6; padding:10px; margin-bottom:10px; border-radius:8px;'>
+                    <div style='
+                        max-width: 450px;
+                        margin: 0 auto 15px auto;
+                        background-color:#f7e8e6;
+                        padding:15px;
+                        border-radius:10px;
+                        box-shadow: 1px 1px 4px rgba(0,0,0,0.1);
+                        font-size:16px;
+                        line-height:1.5;
+                    '>
                         <strong>🔢 Protocolo:</strong> {cliente['Protocolo']}<br>
                         <strong>🧍 Nome:</strong> {cliente['Nome']}<br>
                         <strong>✨ Efeito:</strong> {cliente['Efeito']} — {cliente['Tipo']}<br>
