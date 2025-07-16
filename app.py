@@ -62,6 +62,11 @@ for key in ["historico_ocupados", "historico_clientes", "protocolo"]:
         st.session_state[key] = [] if key != "protocolo" else 1
 
 # 🗂️ Cadastro da Cliente
+from datetime import datetime
+
+hoje = datetime.today().date()
+
+# 🗂️ Cadastro da Cliente
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente"), expanded=True):
@@ -102,6 +107,7 @@ with col2:
                 st.session_state.cadastro_completo = True
                 st.success(txt("✅ Cadastro finalizado com sucesso!",
                                "✅ Registro completado con éxito!"))
+
 
 # só segue adiante se cadastro_completo estiver marcado como True
 
