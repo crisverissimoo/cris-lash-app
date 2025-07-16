@@ -599,20 +599,33 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.expander("📅 Agendamento do Atendimento", expanded=True):
-            data = st.date_input("📅 Escolha a data do atendimento", min_value=datetime.today().date())
-            horarios_livres = [h for h in gerar_horarios() if esta_livre(data, h)]
+
+            data = st.date_input(
+                "📅 Escolha a data do atendimento",
+                min_value=datetime.today().date()
+            )
+
+            horarios_livres = [
+                h for h in gerar_horarios()
+                if esta_livre(data, h)
+            ]
 
             if not horarios_livres:
                 st.warning("⛔ Nenhum horário disponível neste dia.")
             else:
                 horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
-                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
+                fim = (
+                    datetime.strptime(horario, "%H:%M") + timedelta(hours=2)
+                ).strftime("%H:%M")
 
                 nome = st.session_state.get("nome_cliente", "—")
                 efeito = st.session_state.get("efeito_escolhido", "—")
                 tipo = st.session_state.get("tipo_aplicacao", "—")
                 valor = st.session_state.get("valor", "—")
-                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
+                mensagem = st.text_area(
+                    "📩 Mensagem adicional (opcional)",
+                    placeholder="Ex: alergia, dúvidas..."
+                )
 
                 st.markdown("💖 Confirme os dados do atendimento abaixo:")
                 st.markdown(f"- 🧍 Nome: **{nome}**")
@@ -641,6 +654,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     if os.path.exists(CAMINHO_ARQUIVO):
                         with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
                             dados_existentes = json.load(f)
+
                     dados_existentes.append(cliente)
                     with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
                         json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
@@ -651,8 +665,8 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-# 📌 Cuidados pós aplicação
-st.markdown("""
+                    # 📌 Cuidados pós aplicação — HTML costurado
+                    cuidados_html = """\
 <div style="border: 2px dashed #e09b8e; background-color: #c08081;
 border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
 <h5>📌 Cuidados antes e depois da aplicação</h5>
@@ -664,4 +678,5 @@ border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
     <li>💧 Use apenas produtos oil-free na região dos olhos</li>
 </ul>
 </div>
-""", unsafe_allow_html=True)
+"""
+                    st.markdown(cuidados_html, unsafe_allow_html=True)
