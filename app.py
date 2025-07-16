@@ -614,96 +614,61 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     """, unsafe_allow_html=True)
 
 # 🗓️ Etapa final — Agendamento
-if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
+if st.button("✅ Confirmar atendimento"):
+    protocolo = st.session_state.protocolo
+    st.session_state.protocolo += 1
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        with st.expander("📅 Agendamento do Atendimento", expanded=True):
-            data = st.date_input("📅 Escolha a data do atendimento", min_value=datetime.today().date())
-            horarios_livres = [h for h in gerar_horarios() if esta_livre(data, h)]
+    cliente = {
+        "protocolo": protocolo,
+        "efeito": efeito,
+        "tipo": tipo,
+        "valor": valor,
+        "data": data.strftime('%d/%m/%Y'),
+        "horario": f"{horario} → {fim}",
+        "mensagem": mensagem,
+        "nome": nome
+    }
 
-            if not horarios_livres:
-                st.warning("⛔ Nenhum horário disponível neste dia.")
-            else:
-                horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
-                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
+    # 💾 Salvamento durável
+    import json
+    import os
 
-                nome = st.session_state.get("nome_cliente", "—")
-                efeito = st.session_state.get("efeito_escolhido", "—")
-                tipo = st.session_state.get("tipo_aplicacao", "—")
-                valor = st.session_state.get("valor", "—")
-                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
+    CAMINHO_ARQUIVO = "agenda.json"
+    dados_existentes = []
 
-                # ✅ Revisão antes de salvar
-                st.markdown("💖 Confirme os dados do atendimento abaixo:")
-                st.markdown(f"- 🧍 Nome: **{nome}**")
-                st.markdown(f"- ✨ Efeito: **{efeito}**")
-                st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
-                st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
-                st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
+    if os.path.exists(CAMINHO_ARQUIVO):
+        with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
+            dados_existentes = json.load(f)
 
-                if st.button("✅ Confirmar atendimento"):
-                    protocolo = st.session_state.protocolo
-                    st.session_state.protocolo += 1
+    dados_existentes.append(cliente)
 
-                    cliente = {
-                        "protocolo": protocolo,
-                        "efeito": efeito,
-                        "tipo": tipo,
-                        "valor": valor,
-                        "data": data.strftime('%d/%m/%Y'),
-                        "horario": f"{horario} → {fim}",
-                        "mensagem": mensagem,
-                        "nome": nome
-                    }
+    with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
+        json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
 
-                    import json
-import os
+    st.session_state.historico_clientes.append(cliente)
+    st.session_state.historico_ocupados.append((data, horario))
+    st.session_state.agendamento_confirmado = True
 
-CAMINHO_ARQUIVO = "agenda.json"
+    st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-# lê dados salvos (se existirem)
-dados_existentes = []
-if os.path.exists(CAMINHO_ARQUIVO):
-    with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
-        dados_existentes = json.load(f)
-
-# adiciona o novo atendimento
-dados_existentes.append(cliente)
-
-# salva tudo de volta
-with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
-    json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
-
-st.success("✅ Atendimento registrado e salvo com sucesso!")
-
-
-
-
-                    st.session_state.historico_clientes.append(cliente)
-                    st.session_state.historico_ocupados.append((data, horario))
-                    st.session_state.agendamento_confirmado = True
-
-                    st.success("✅ Atendimento agendado com sucesso!")
-
-                    st.markdown("""
-                        <div style='
-                            border: 2px dashed #e09b8e;
-                            background-color: #c08081;
-                            border-radius: 10px;
-                            padding: 20px;
-                            margin-top: 20px;
-                            color: white;
-                        '>
-                            <h5>📌 Cuidados antes e depois da aplicação</h5>
-                            <ul>
-                                <li>🚫 Compareça sem maquiagem nos olhos</li>
-                                <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-                                <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-                                <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-                                <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-                            </ul>
-                        </div>
-                    """, unsafe_allow_html=True)
+    st.markdown("""
+        <div style='
+            border: 2px dashed #e09b8e;
+            background-color: #c08081;
+            border-radius: 10px;
+            padding: 20px;
+            margin-top: 20px;
+            color: white;
+        '>
+            <h5>📌 Cuidados antes e depois da aplicação</h5>
+            <ul>
+                <li>🚫 Compareça sem maquiagem nos olhos</li>
+                <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+            </ul>
+        </div>
+    """, unsafe_allow_html=True)
 
 
