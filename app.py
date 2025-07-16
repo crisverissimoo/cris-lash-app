@@ -66,6 +66,14 @@ from datetime import datetime
 
 hoje = datetime.today().date()
 
+from datetime import datetime
+
+hoje = datetime.today().date()
+
+# 🔐 Inicializa a trava se não existir
+if "cadastro_completo" not in st.session_state:
+    st.session_state.cadastro_completo = False
+
 # 🗂️ Cadastro da Cliente
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
