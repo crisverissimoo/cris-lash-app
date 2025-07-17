@@ -535,64 +535,7 @@ import json
 if "etapa_agendamento" not in st.session_state:
     st.session_state.etapa_agendamento = False
 
-# Seleção da técnica
-if st.session_state.get("efeito_escolhido") and not st.session_state.etapa_agendamento:
-    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-    with col_centro:
-        with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Técnica de aplicación"), expanded=True):
-            st.markdown("<h4 style='text-align:center;'>🎀 Técnica de Aplicação</h4>", unsafe_allow_html=True)
 
-            tipos = {
-                "Egípcio 3D": {
-                    "img": "https://i.imgur.com/TOPRWFQ.jpeg",
-                    "desc": txt("Leque 3D artístico — acabamento definido e sofisticado.", "Abanico 3D artístico — acabado definido y sofisticado."),
-                    "valor": "25€"
-                },
-                "Volume Russo 4D": {
-                    "img": "https://i.imgur.com/tBX2O8e.jpeg",
-                    "desc": txt("4 fios por cílio — volume intenso e estruturado.", "4 fibras por pestaña — volumen intenso y estructurado."),
-                    "valor": "25€"
-                },
-                "Volume Brasileiro": {
-                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                    "desc": txt("Formato Y — volumoso e natural.", "Formato Y — voluminoso y natural."),
-                    "valor": "25€"
-                },
-                "Fio a Fio": {
-                    "img": "https://i.imgur.com/VzlySv4.jpeg",
-                    "desc": txt("1 fio por cílio — efeito rímel natural.", "1 fibra por pestaña — efecto natural tipo máscara."),
-                    "valor": "25€"
-                }
-            }
-
-            for i, (nome, tipo) in enumerate(tipos.items()):
-                st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
-
-                col_img, col_txt = st.columns([1.6, 1.4])
-                with col_img:
-                    st.markdown(f"""
-                        <div style='text-align:center;'>
-                            <img src="{tipo['img']}" alt="{nome}" style="width:220px; border-radius:8px;">
-                        </div>
-                    """, unsafe_allow_html=True)
-
-                with col_txt:
-                    st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-                    st.caption(tipo["desc"])
-
-                    col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
-                    with col_b2:
-                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}_{i}"):
-                            st.session_state.tipo_aplicacao = nome
-                            st.session_state.valor = tipo["valor"]
-                            st.session_state.etapa_agendamento = True  # Marca que pode seguir
-
-            if st.session_state.get("tipo_aplicacao"):
-                selecionado = st.session_state.tipo_aplicacao
-                st.success(txt(
-                    f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
-                    f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
-                ))
 
 # Bloco de agendamento
 from datetime import datetime, timedelta
