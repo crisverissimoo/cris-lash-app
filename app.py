@@ -70,9 +70,18 @@ if st.session_state.pagina_atual == "home":
 # 🙋‍♀️ Página Cliente
 elif st.session_state.pagina_atual == "cliente":
     st.markdown("""
-        <div class='box'>
+        <div style='
+            background-color: #fff6f6;
+            padding: 24px;
+            border-radius: 12px;
+            border: 2px dashed #f3b1b6;
+            max-width: 500px;
+            margin: auto;
+            text-align: center;
+            color: #660000;
+        '>
             <h4>🙋‍♀️ Painel da Cliente</h4>
-            <p>Preencha seus dados para iniciar o atendimento 💐</p>
+            <p style='font-size:14px;'>Preencha seus dados com carinho para iniciar o atendimento 💐</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -82,8 +91,46 @@ elif st.session_state.pagina_atual == "cliente":
 
     if nome and telefone and maioridade:
         st.success("✨ Dados validados! Atendimento liberado.")
+
+        protocolo = f"CL{st.session_state.protocolo:04}"
+        st.session_state.protocolo += 1
+
+        efeito = st.selectbox("✨ Efeito desejado", ["Clássico", "Volume", "Híbrido"])
+        tecnica = st.selectbox("🎀 Técnica", ["Fio a fio", "Volume russo", "Mega volume"])
+        valor = st.text_input("💲 Valor combinado")
+        data = st.date_input("📅 Data do atendimento")
+        horario = st.time_input("⏰ Horário do atendimento")
+        mensagem = st.text_area("💬 Alguma observação?", placeholder="Opcional...")
+
+        if st.button("📌 Finalizar agendamento"):
+            cliente = {
+                "protocolo": protocolo,
+                "nome": nome,
+                "efeito": efeito,
+                "tipo": tecnica,
+                "valor": valor,
+                "data": str(data),
+                "horario": str(horario),
+                "mensagem": mensagem
+            }
+            caminho_arquivo = "agenda.json"
+            clientes = []
+            if os.path.exists(caminho_arquivo):
+                with open(caminho_arquivo, "r", encoding="utf-8") as f:
+                    clientes = json.load(f)
+
+            clientes.append(cliente)
+            with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                json.dump(clientes, f, ensure_ascii=False, indent=2)
+
+            st.success(f"""
+                💖 Atendimento agendado com sucesso!
+                <br>🔢 Protocolo: <code>{protocolo}</code>
+                <br>Obrigada por confiar na Cris Lash ✨
+            """, unsafe_allow_html=True)
     else:
-        st.warning("⛔ Preencha todos os campos e confirme +18.")
+        st.warning("⛔ Preencha todos os campos e confirme maioridade.")
+
 
 # 👑 Página Administrativa
 elif st.session_state.pagina_atual == "adm":
