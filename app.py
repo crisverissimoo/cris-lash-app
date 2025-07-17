@@ -191,8 +191,7 @@ elif st.session_state.pagina_atual == "adm":
                                 json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
                             st.success("✅ Atendimento excluído com sucesso!")
                             st.experimental_rerun()
-        else:
-            st.info("📂
+      
         else:
             st.info("📂 Nenhum atendimento registrado ainda.")
 
