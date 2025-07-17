@@ -243,11 +243,6 @@ with col2:
     """, unsafe_allow_html=True)
 
 
-
-
-
-
-
 # 🧠 Estados iniciais
 for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado", "cadastro_completo"]:
     if key not in st.session_state:
