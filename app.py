@@ -174,19 +174,39 @@ with st.expander("👑 Área profissional", expanded=True):
         if clientes_salvos:
             clientes_salvos.sort(key=lambda c: c["protocolo"])
             for idx, cliente in enumerate(clientes_salvos):
-                with st.container():
-                    st.markdown(f"""
-                        <div style='
-                            background-color: #d495a2;
-                            padding:15px;
-                            border-left:5px solid #cc4c73;
-                            border-radius:8px;
-                            font-size:15px;
-                            margin-bottom:10px;
-                        '>
-                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                            <strong>🧍 Nome:</strong> {cliente['nome']}<br>
-                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br
+    with st.container():
+        st.markdown(f"""
+            <div style='
+                background-color: #d495a2;
+                padding:15px;
+                border-left:5px solid #cc4c73;
+                border-radius:8px;
+                font-size:15px;
+                margin-bottom:10px;
+            '>
+                <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                <strong>🎀 Técnica:</strong> {cliente['tipo']}{" — "}{cliente['valor']}<br>
+                <strong>📅 Data:</strong> {cliente['data']}<br>
+                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+            </div>
+        """, unsafe_allow_html=True)
+
+        if st.button(f"❌ Excluir protocolo {cliente['protocolo']}", key=f"excluir_{idx}"):
+            confirmacao = st.radio(
+                f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?",
+                ["Cancelar", "Confirmar"],
+                key=f"confirmar_{idx}"
+            )
+            if confirmacao == "Confirmar":
+                clientes_salvos.pop(idx)
+                with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                    json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
+                st.success("✅ Atendimento excluído com sucesso!")
+                st.experimental_rerun()
+
 
             # Horários ocupados
             st.markdown("### 📅 Horários ocupados")
