@@ -100,7 +100,7 @@ def esta_livre(data, horario):
             return False
     return True
 
-# 🔐 Área profissional + painel
+
 # 🔐 Área profissional + painel
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
