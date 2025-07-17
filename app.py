@@ -300,7 +300,7 @@ col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander(txt("🔁 Reprogramar cliente", "🔁 Reprogramar cliente"), expanded=False):
         if st.session_state.historico_clientes:
-            selecionada = st.selectbox("📍 Escolha cliente:", [c["Nome"] for c in st.session_state.historico_clientes], key="cliente_reprograma")
+            selecionada = st.selectbox("📍 Escolha cliente:", [c["nome"] for c in st.session_state.historico_clientes], key="cliente_reprograma")
             novo_horario = st.time_input("⏰ Novo horário")
 
             if st.button(txt("📅 Reprogramar aplicação", "📅 Reprogramar aplicación")):
