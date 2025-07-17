@@ -102,10 +102,11 @@ elif st.session_state.pagina_atual == "cliente":
             atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
 
             if atendimentos:
-                st.session_state.cliente_logada = True
-                st.session_state.nome_cliente = nome_login
-                st.session_state.telefone = tel_login
-                st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
+        st.session_state.cliente_logada = True
+        st.session_state.nome_cliente = nome_login
+        st.session_state.telefone = tel_login
+        st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
+        st.experimental_rerun()  # 👈 força atualização imediata ")
             else:
                 st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
 
@@ -169,8 +170,10 @@ if st.button("✅ Confirmar cadastro"):
         st.session_state.idade_cliente = idade
         st.session_state.cadastro_confirmado = True
         st.success("✅ Cadastro finalizado com sucesso!")
+        st.experimental_rerun()  # 👈 tela avança para ficha sem novo clique
     else:
         st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
+
 
 
 
