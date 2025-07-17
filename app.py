@@ -663,28 +663,18 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
                     """, unsafe_allow_html=True)
 
 
-if st.session_state.get("agendamento_confirmado"):
-    protocolo = st.session_state.historico_clientes[-1]["protocolo"]
-    data_atend = st.session_state.historico_clientes[-1]["data"]
-    horario_atend = st.session_state.historico_clientes[-1]["horario"]
+st.markdown(f"""
+    <div class="painel-agradecimento">
+        ✨ Atendimento confirmado com sucesso!<br><br>
+        Protocolo nº <strong>{protocolo}</strong><br>
+        Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong><br><br>
+        💖 Obrigada por confiar na <em>Cris Lash</em><br>
+        Cuide dos seus cílios com carinho — nos vemos em breve! 💐<br><br>
+        <a href="/" target="_self">
+            <button>🔁 Iniciar novo atendimento</button>
+        </a>
+    </div>
+""", unsafe_allow_html=True)
 
-    # Centralizar e simular fundo rosinha com cor tema clara
-    with st.container():
-        cols = st.columns([1, 5, 1])
-        with cols[1]:
-            st.markdown(
-                f"""
-                ### ✨ Atendimento confirmado com sucesso!
-
-                **Protocolo nº:** {protocolo}  
-                📅 **{data_atend}** — ⏰ **{horario_atend}**
-
-                💖 Obrigada por confiar na *Cris Lash*  
-                Cuide dos seus cílios com carinho — nos vemos em breve! 💐
-                """, help="Painel boutique"
-            )
-
-            st.divider()
-            st.button("🔁 Iniciar novo atendimento", use_container_width=True)
 
 
