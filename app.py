@@ -633,40 +633,49 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
 
                 if st.button("✅ Confirmar atendimento", key="confirmar_atendimento_unico"):
-                    protocolo = st.session_state.protocolo
-                    st.session_state.protocolo += 1
+    protocolo = st.session_state.protocolo
+    st.session_state.protocolo += 1
 
-                    cliente = {
-                        "protocolo": protocolo,
-                        "efeito": efeito,
-                        "tipo": tipo,
-                        "valor": valor,
-                        "data": data.strftime('%d/%m/%Y'),
-                        "horario": f"{horario} → {fim}",
-                        "mensagem": mensagem,
-                        "nome": nome
-                    }
+    cliente = {
+        "protocolo": protocolo,
+        "efeito": efeito,
+        "tipo": tipo,
+        "valor": valor,
+        "data": data.strftime('%d/%m/%Y'),
+        "horario": f"{horario} → {fim}",
+        "mensagem": mensagem,
+        "nome": nome
+    }
 
-                    CAMINHO_ARQUIVO = "agenda.json"
-                    dados_existentes = []
-                    if os.path.exists(CAMINHO_ARQUIVO):
-                        with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
-                            dados_existentes = json.load(f)
+    CAMINHO_ARQUIVO = "agenda.json"
+    dados_existentes = []
+    if os.path.exists(CAMINHO_ARQUIVO):
+        with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
+            dados_existentes = json.load(f)
 
-                    dados_existentes.append(cliente)
-                    with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
-                        json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
+    dados_existentes.append(cliente)
+    with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
+        json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
 
-                    st.session_state.historico_clientes.append(cliente)
-                    st.session_state.historico_ocupados.append((data, horario))
-                    st.session_state.agendamento_confirmado = True
+    st.session_state.historico_clientes.append(cliente)
+    st.session_state.historico_ocupados.append((data, horario))
+    st.session_state.agendamento_confirmado = True
 
-                    with col2:
-                        st.success("✅ Atendimento agendado e salvo com sucesso!")
+    with col2:
+        st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                        # ✅ Leitura externa do HTML dos cuidados
-                        with open("cuidados.html", "r", encoding="utf-8") as f:
-                            cuidados_html = f.read()
-
-                        st.markdown(cuidados_html, unsafe_allow_html=True)
+        cuidados_html = """
+        <div style="border: 2px dashed #e09b8e; background-color: #c08081;
+        border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
+            <h5>📌 Cuidados antes e depois da aplicação</h5>
+            <ul>
+                <li>🚫 Compareça sem maquiagem nos olhos</li>
+                <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+            </ul>
+        </div>
+        """
+        st.markdown(cuidados_html, unsafe_allow_html=True)
 
