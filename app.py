@@ -679,5 +679,6 @@ border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
   </ul>
 </div>
 """
-    st.markdown(cuidados_html, unsafe_allow_html=True)
+st.markdown(cuidados_html, unsafe_allow_html=True)
+
 
