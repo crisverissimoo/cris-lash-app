@@ -88,9 +88,8 @@ elif st.session_state.pagina_atual == "cliente":
     escolha = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], key="opcao_cliente")
 
     if escolha == "Já sou cliente":
-        st.markdown("### 🔐 Login leve")
         nome_login = st.text_input("🧍 Seu nome")
-        tel_login = st.text_input("📱 Seu telefone (com DDD)")
+        tel_login = st.text_input("📱 Seu telefone")
 
         if nome_login and tel_login:
             caminho = "agenda.json"
@@ -99,7 +98,7 @@ elif st.session_state.pagina_atual == "cliente":
                 with open(caminho, "r", encoding="utf-8") as f:
                     historico = json.load(f)
 
-            atendimentos = [c for c in historico if c["nome"] == nome_login and c["telefone"] == tel_login]
+            atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
 
             if atendimentos:
                 st.success("✨ Atendimento localizado com sucesso!")
@@ -114,55 +113,50 @@ elif st.session_state.pagina_atual == "cliente":
             else:
                 st.warning("🙈 Nenhum atendimento encontrado com esses dados.")
 
-    else:  # Novo cadastro
-        st.markdown("### 📝 Novo Cadastro da Cliente")
-        nome = st.text_input("🧍 Nome completo")
-        telefone = st.text_input("📱 Telefone com DDD")
-        maioridade = st.checkbox("✅ Confirmo que tenho mais de 18 anos")
+    else:
+        # 🗂️ Cadastro da Cliente
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente"), expanded=True):
+                st.markdown("<h4 style='text-align:center;'>🗂️ Cadastro da Cliente</h4>", unsafe_allow_html=True)
 
-        if nome and telefone and maioridade:
-            st.success("✨ Dados validados! Atendimento liberado.")
+                nome = st.text_input(txt("🧍 Nome completo", "🧍 Nombre completo"))
+                nascimento = st.date_input(txt("📅 Data de nascimento", "📅 Fecha de nacimiento"),
+                                           min_value=datetime(1920, 1, 1).date(), max_value=hoje)
+                telefone = st.text_input(txt("📞 Telefone", "📞 Teléfono"))
+                email = st.text_input(txt("📧 Email (opcional)", "📧 Correo (opcional)"))
 
-            protocolo = f"CL{st.session_state.protocolo:04}"
-            st.session_state.protocolo += 1
+                idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+                menor = idade < 18
+                st.info(f"📌 {txt('Idade:', 'Edad:')} **{idade} {txt('anos', 'años')}**")
 
-            efeito = st.selectbox("✨ Efeito desejado", ["Clássico", "Volume", "Híbrido"], key="efeito_novo")
-            tecnica = st.selectbox("🎀 Técnica", ["Fio a fio", "Volume russo", "Mega volume"], key="tecnica_novo")
-            valor = st.text_input("💲 Valor combinado", key="valor_novo")
-            data = st.date_input("📅 Data do atendimento")
-            horario = st.time_input("⏰ Horário do atendimento")
-            mensagem = st.text_area("💬 Observação (opcional)", key="msg_novo")
+                autorizada = True
+                if menor:
+                    responsavel = st.text_input(txt("👨‍👩‍👧 Nome do responsável", "👨‍👩‍👧 Nombre del responsable"))
+                    autorizacao = st.radio(txt("Autorização recebida?", "¿Autorización recibida?"),
+                                           ["Sim", "Não", "Pendente"], index=None)
+                    if autorizacao != "Sim":
+                        st.error(txt("❌ Cliente menor sem autorização — atendimento bloqueado.",
+                                     "❌ Cliente menor sin autorización — atención bloqueada."))
+                        autorizada = False
 
-            if st.button("📌 Finalizar agendamento", key="finaliza_novo"):
-                cliente = {
-                    "protocolo": protocolo,
-                    "nome": nome,
-                    "telefone": telefone,
-                    "efeito": efeito,
-                    "tipo": tecnica,
-                    "valor": valor,
-                    "data": str(data),
-                    "horario": str(horario),
-                    "mensagem": mensagem
-                }
+                if st.button(txt("✅ Confirmar cadastro", "✅ Confirmar registro")):
+                    campos_ok = nome and telefone and nascimento and idade >= 0
+                    if menor:
+                        campos_ok = campos_ok and autorizada
 
-                caminho = "agenda.json"
-                lista = []
-                if os.path.exists(caminho):
-                    with open(caminho, "r", encoding="utf-8") as f:
-                        lista = json.load(f)
-                lista.append(cliente)
-                with open(caminho, "w", encoding="utf-8") as f:
-                    json.dump(lista, f, ensure_ascii=False, indent=2)
-
-                st.success(f"""
-                    💖 Atendimento agendado com sucesso!
-                    <br>🔢 Protocolo: <code>{protocolo}</code>
-                    <br>Obrigada por confiar na Cris Lash 👑
-                """, unsafe_allow_html=True)
-        else:
-            st.warning("⛔ Preencha todos os dados e confirme maioridade.")
-
+                    if campos_ok:
+                        st.session_state.nome_cliente = nome
+                        st.session_state.nascimento = nascimento
+                        st.session_state.telefone = telefone
+                        st.session_state.email = email
+                        st.session_state.idade_cliente = idade
+                        st.session_state.cadastro_confirmado = True
+                        st.success(txt("✅ Cadastro finalizado com sucesso!",
+                                       "✅ Registro completado con éxito!"))
+                    else:
+                        st.warning(txt("⚠️ Preencha todos os dados corretamente para continuar.",
+                                       "⚠️ Rellena correctamente todos los campos para continuar."))
 
 
 # 👑 Página Administrativa
