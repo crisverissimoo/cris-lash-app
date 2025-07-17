@@ -676,7 +676,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                    # Link boutique de confirmação via WhatsApp
+                    # Botão de WhatsApp elegante com seu número
 numero_whatsapp = "34653841126"
 mensagem_whatsapp = f"""
 Olá, Cris! Sou {nome}, confirmando meu atendimento 💖
@@ -690,11 +690,12 @@ link_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensagem_whatsapp.replac
 
 st.markdown(f"""
     <a href="{link_whatsapp}" target="_blank">
-        <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px; font-weight:bold;">
+        <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px; font-weight:bold; margin-top:10px; margin-bottom:20px;">
             📲 Enviar confirmação via WhatsApp
         </button>
     </a>
 """, unsafe_allow_html=True)
+
 
                     st.markdown("""
     <div style='background-color:#f8d1d0; padding:20px; border-radius:12px;'>
