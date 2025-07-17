@@ -1,6 +1,22 @@
 import streamlit as st
-from datetime import datetime
-import pytz
+from datetime import datetime, timedelta
+import os
+import json
+
+# Função de tradução (PT ↔ ES)
+def txt(pt, es):
+    return pt if st.session_state.get("idioma") != "es" else es
+
+# Inicialização de estados
+if "historico_clientes" not in st.session_state:
+    st.session_state.historico_clientes = []
+if "historico_ocupados" not in st.session_state:
+    st.session_state.historico_ocupados = []
+if "protocolo" not in st.session_state:
+    st.session_state.protocolo = 1
+if "idioma" not in st.session_state:
+    st.session_state.idioma = "pt"  # pode trocar para "es"
+
 
 # 🪞 Configuração de página
 st.set_page_config("Consultoria Cris Lash", layout="wide")
