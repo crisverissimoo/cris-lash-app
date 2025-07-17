@@ -696,6 +696,25 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
     </div>
 """, unsafe_allow_html=True)
 
+# Link boutique de confirmação via WhatsApp
+numero_whatsapp = "34653841126"
+mensagem_whatsapp = f"""
+Olá, Cris! Sou {nome}, confirmando meu atendimento 💖
+
+Protocolo: {protocolo}
+Técnica: {tipo} — {efeito}
+Dia: {data.strftime('%d/%m/%Y')} às {horario}
+""".strip()
+
+link_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensagem_whatsapp.replace(' ', '%20').replace('\\n', '%0A')}"
+
+st.markdown(f"""
+    <a href="{link_whatsapp}" target="_blank">
+        <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px; font-weight:bold;">
+            📲 Enviar confirmação via WhatsApp
+        </button>
+    </a>
+""", unsafe_allow_html=True)
 
 
 
