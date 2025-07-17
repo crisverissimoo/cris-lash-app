@@ -1,61 +1,19 @@
 import streamlit as st
+import json, os
 from datetime import datetime
-import os
-import json
-import pytz
+hoje = datetime.now().date()
 
-# 🧠 Estados iniciais
-for k, v in {
-    "pagina_atual": "home",
-    "historico_clientes": [],
-    "historico_ocupados": [],
-    "protocolo": 1,
-    "idioma": "Português",
-    "acesso_admin": False
-}.items():
-    if k not in st.session_state:
-        st.session_state[k] = v
+def txt(pt, es):  # Utilitário para texto bilíngue
+    return pt if st.session_state.get("idioma") != "es" else es
 
-# 🌍 Data atual
-fuso = pytz.timezone("Europe/Madrid")
-hoje = datetime.now(fuso).date()
+# 🌸 Inicializa controle da tela
+if "pagina_atual" not in st.session_state:
+    st.session_state.pagina_atual = None
+if "protocolo" not in st.session_state:
+    st.session_state.protocolo = 1
 
-# 🌐 Estilo e título
-st.set_page_config("Consultoria Cris Lash", layout="centered")
-st.markdown("""
-    <style>
-    .box {
-        background-color: #fff6f6;
-        padding: 24px;
-        border-radius: 12px;
-        border: 2px dashed #f3b1b6;
-        color: #660000;
-        font-family: sans-serif;
-        max-width: 500px;
-        margin: auto;
-        margin-top: 30px;
-        text-align: center;
-    }
-    </style>
-""", unsafe_allow_html=True)
-
-# 🗣️ Função de tradução
-def txt(pt, es):
-    return pt if st.session_state.idioma == "Português" else es
-
-# 🌍 Idioma e data
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
-    st.markdown(f"<h3 style='text-align:center;'>💎 {txt('Sistema Cris Lash','Sistema Cris Lash')}</h3>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
-
-# 🔐 Inicializa controle de entrada
-if "entrada_escolhida" not in st.session_state:
-    st.session_state.entrada_escolhida = None
-
-# 🎀 Tela inicial boutique
-if st.session_state.entrada_escolhida is None:
+# 🎀 Tela Inicial Boutique
+if st.session_state.pagina_atual is None:
     st.markdown("""
         <div style='
             background-color: #fff6f6;
@@ -74,128 +32,95 @@ if st.session_state.entrada_escolhida is None:
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        escolha = st.radio("👉 Escolha uma opção:", ["Sou Cliente", "Área Administrativa"], index=None, key="radio_entrada")
+        escolha = st.radio("👑 Selecione sua área:", ["Sou Cliente", "Área Administrativa"], index=None, key="radio_entrada")
         if escolha == "Sou Cliente":
-            st.session_state.entrada_escolhida = "cliente"
+            st.session_state.pagina_atual = "cliente"
             st.experimental_rerun()
         elif escolha == "Área Administrativa":
-            st.session_state.entrada_escolhida = "admin"
+            st.session_state.pagina_atual = "admin"
             st.experimental_rerun()
 
-
-
-# 🙋‍♀️ Página Cliente
+# 🙋‍♀️ Área da Cliente
 elif st.session_state.pagina_atual == "cliente":
-    st.markdown("""
-        <div style='
-            background-color: #fff6f6;
-            padding: 20px;
-            border-radius: 12px;
-            max-width: 520px;
-            margin: auto;
-            text-align: center;
-            border: 2px dashed #f3b1b6;
-            color: #660000;
-        '>
-            <h4>🙋‍♀️ Área da Cliente</h4>
-            <p style='font-size:14px;'>Escolha como deseja continuar 💖</p>
-        </div>
-    """, unsafe_allow_html=True)
+    escolha_cliente = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], index=None, key="opcao_cliente")
 
-    escolha = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], key="opcao_cliente")
+    # 🔐 Login Boutique com formulário
+    if escolha_cliente == "Já sou cliente":
+        with st.form("form_login_cliente"):
+            nome_login = st.text_input("🧍 Seu nome")
+            tel_login = st.text_input("📱 Seu telefone com DDD")
+            confirmar_login = st.form_submit_button("✅ Entrar")
 
-    # 🔐 Login Boutique
-with st.form("form_login_cliente"):
-    nome_login = st.text_input("🧍 Seu nome")
-    tel_login = st.text_input("📱 Seu telefone com DDD")
-    confirmar_login = st.form_submit_button("✅ Entrar")
+            if confirmar_login and nome_login and tel_login:
+                caminho = "agenda.json"
+                historico = []
+                if os.path.exists(caminho):
+                    with open(caminho, "r", encoding="utf-8") as f:
+                        historico = json.load(f)
 
-    if confirmar_login and nome_login and tel_login:
-        caminho = "agenda.json"
-        historico = []
-        if os.path.exists(caminho):
-            with open(caminho, "r", encoding="utf-8") as f:
-                historico = json.load(f)
+                atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
 
-        atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
+                if atendimentos:
+                    st.session_state.cliente_logada = True
+                    st.session_state.nome_cliente = nome_login
+                    st.session_state.telefone = tel_login
+                    st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
+                    st.experimental_rerun()
+                else:
+                    st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
 
-        if atendimentos:
-            st.session_state.cliente_logada = True
-            st.session_state.nome_cliente = nome_login
-            st.session_state.telefone = tel_login
-            st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
-            st.experimental_rerun()
-        else:
-            st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
-
-
-
-        # Painel pós-login
         if st.session_state.get("cliente_logada"):
             st.markdown(f"### 💼 Histórico de {st.session_state.nome_cliente}")
-            caminho = "agenda.json"
-            historico = []
-            if os.path.exists(caminho):
-                with open(caminho, "r", encoding="utf-8") as f:
-                    historico = json.load(f)
+            for idx, cliente in enumerate(atendimentos):
+                with st.expander(f"📌 Atendimento {idx + 1} — protocolo {cliente['protocolo']}"):
+                    st.markdown(f"""
+                        <strong>🎀 Técnica:</strong> {cliente['tipo']} — {cliente['valor']}<br>
+                        <strong>📅 Data:</strong> {cliente['data']}<br>
+                        <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                        <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+                    """, unsafe_allow_html=True)
 
-            atendimentos = [c for c in historico if c.get("nome") == st.session_state.nome_cliente and c.get("telefone") == st.session_state.telefone]
+    # 📝 Cadastro Boutique + redirecionamento
+    elif escolha_cliente == "Fazer novo cadastro":
+        with st.form("form_cadastro"):
+            nome = st.text_input("🧍 Nome completo")
+            nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
+            telefone = st.text_input("📞 Telefone com DDD")
+            email = st.text_input("📧 Email (opcional)")
 
-            if atendimentos:
-                for idx, cliente in enumerate(atendimentos):
-                    with st.expander(f"📌 Atendimento {idx + 1} — protocolo {cliente['protocolo']}"):
-                        st.markdown(f"""
-                            <strong>🎀 Técnica:</strong> {cliente['tipo']} — {cliente['valor']}<br>
-                            <strong>📅 Data:</strong> {cliente['data']}<br>
-                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-                        """, unsafe_allow_html=True)
-            else:
-                st.info("📂 Você ainda não possui atendimentos registrados.")
+            idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+            menor = idade < 18
+            autorizada = True
 
-# 📝 Formulário de cadastro da cliente
-with st.form("form_cadastro"):
-    nome = st.text_input("🧍 Nome completo")
-    nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
-    telefone = st.text_input("📞 Telefone com DDD")
-    email = st.text_input("📧 Email (opcional)")
+            st.info(f"📌 Idade: **{idade} anos**")
 
-    # Validando idade
-    if nascimento > hoje:
-        st.warning("⚠️ Data de nascimento inválida — está no futuro.")
-        idade = -1
-    else:
-        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+            if menor:
+                responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
+                autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+                if autorizacao != "Sim":
+                    st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
+                    autorizada = False
 
-    menor = idade < 18 and idade >= 0
-    st.info(f"📌 Idade: **{idade if idade >= 0 else '—'} anos**")
+            confirmar = st.form_submit_button("✅ Confirmar cadastro")
 
-    autorizada = True
-    if menor:
-        responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
-        autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
-        if autorizacao != "Sim":
-            st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
-            autorizada = False
+            if confirmar:
+                campos_ok = nome and telefone and nascimento and idade >= 0
+                if menor:
+                    campos_ok = campos_ok and autorizada
 
-    confirmar = st.form_submit_button("✅ Confirmar cadastro")
+                if campos_ok:
+                    st.session_state.nome_cliente = nome
+                    st.session_state.nascimento = nascimento
+                    st.session_state.telefone = telefone
+                    st.session_state.email = email
+                    st.session_state.idade_cliente = idade
+                    st.session_state.cadastro_confirmado = True
+                    st.success("✅ Cadastro finalizado com sucesso!")
+                    st.experimental_rerun()
+                else:
+                    st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
 
-    if confirmar:
-        campos_ok = nome and telefone and nascimento and idade >= 0
-        if menor:
-            campos_ok = campos_ok and autorizada
-
-        if campos_ok:
-            st.session_state.nome_cliente = nome
-            st.session_state.nascimento = nascimento
-            st.session_state.telefone = telefone
-            st.session_state.email = email
-            st.session_state.idade_cliente = idade
-            st.session_state.cadastro_confirmado = True
-            st.success("✅ Cadastro finalizado com sucesso!")
-            st.experimental_rerun()  # 👈 já avança para a próxima etapa
-        else:
-            st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
+    
 
 
 
