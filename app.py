@@ -676,7 +676,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                    # 🌸 Botão boutique de WhatsApp
+                    # 🌸 Botão boutique de WhatsApp com número real
                     numero_whatsapp = "34653841126"
                     mensagem_whatsapp = f"""
 Olá, Cris! Sou {nome}, confirmando meu atendimento 💖
@@ -696,7 +696,7 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
                         </a>
                     """, unsafe_allow_html=True)
 
-                    # 💖 Cuidados pós-atendimento
+                    # 💖 Cuidados visuais pós-atendimento
                     st.markdown("""
                         <div style='background-color:#f8d1d0; padding:20px; border-radius:12px;'>
                             <h4 style='color:#660000;'>📌 Cuidados antes e depois da aplicação</h4>
@@ -709,6 +709,7 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
                             </ul>
                         </div>
                     """, unsafe_allow_html=True)
+
 
 
 
