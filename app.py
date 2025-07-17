@@ -2,13 +2,13 @@ import streamlit as st
 from datetime import datetime, timedelta
 import os
 import json
-import pytz  # Corrige o erro do timezone
+import pytz
 
-# 🗣️ Função de tradução (PT ↔ ES)
+# 🗣️ Função de tradução
 def txt(pt, es):
     return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
-# 🧠 Inicialização de estados
+# 🧠 Estados iniciais
 if "historico_clientes" not in st.session_state:
     st.session_state.historico_clientes = []
 if "historico_ocupados" not in st.session_state:
@@ -17,8 +17,10 @@ if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 if "idioma" not in st.session_state:
     st.session_state.idioma = "Português"
-    
-# 🌸 Estilo boutique para painéis delicados
+if "acesso_admin" not in st.session_state:
+    st.session_state.acesso_admin = False
+
+# 🌸 Estilo boutique global
 st.markdown("""
     <style>
     .painel-agradecimento {
@@ -45,19 +47,17 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-
 # 🪞 Configuração de página
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 
-# 🌍 Data atual no fuso de Madrid
+# 🌍 Data atual
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 
-# 🌐 Seletor de idioma centralizado
+# 🌐 Idioma
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
-
 
 # 🎀 Cabeçalho
 col1, col2, col3 = st.columns([1, 2, 1])
@@ -65,8 +65,7 @@ with col2:
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
-# Tela de boas-vindas com dois botões: cliente e administrativo
-
+# 🚪 Tela de entrada com escolha
 st.markdown("""
 <div style="background-color:#f8d1d0; padding:26px; border-radius:12px; max-width:500px; margin:auto; text-align:center; color:#660000;">
     <h4 style="margin-bottom:14px;">✨ Bem-vinda à Cris Lash 💖</h4>
@@ -74,7 +73,6 @@ st.markdown("""
         Sua beleza merece cuidado e carinho.  
         Selecione abaixo como deseja continuar 💐
     </p><br>
-
     <div style="display:flex; justify-content:center; gap:20px;">
         <a href="/cliente" target="_self">
             <button style="background-color:#fff6f6; color:#660000; padding:10px 18px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
@@ -89,7 +87,6 @@ st.markdown("""
     </div>
 </div>
 """, unsafe_allow_html=True)
-
 
 # 💖 Boas-vindas
 col1, col2, col3 = st.columns([0.5, 3, 0.5])
@@ -112,22 +109,7 @@ with col2:
         </div>
     """, unsafe_allow_html=True)
 
-from datetime import datetime, timedelta
-
-hoje = datetime.today().date()
-
-# 🧠 Estados iniciais
-if "acesso_admin" not in st.session_state:
-    st.session_state.acesso_admin = False
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
-if "historico_clientes" not in st.session_state:
-    st.session_state.historico_clientes = []
-    
-
-
-
-# 🎯 Horários
+# 🎯 Funções de horários
 def gerar_horarios():
     base = datetime.strptime("08:00", "%H:%M")
     return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
@@ -146,74 +128,65 @@ def esta_livre(data, horario):
             return False
     return True
 
+# 🔐 Painel administrativo com código "rainha"
+with st.expander("👑 Área profissional", expanded=True):
+    st.markdown("### 🔐 Acesso restrito")
+    st.write("Digite o código secreto para liberar o painel de administração.")
+    codigo_digitado = st.text_input("🔐 Código de acesso", type="password")
+    if st.button("🔓 Entrar"):
+        if codigo_digitado.strip().lower() == "rainha":
+            st.session_state.acesso_admin = True
+            st.success("💎 Acesso profissional liberado!")
+        else:
+            st.error("❌ Código inválido — tente novamente.")
 
-# 🔐 Área profissional + painel
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    with st.expander("👑 Área profissional", expanded=True):
-        st.markdown("### 🔐 Acesso restrito")
-        st.write("Digite o código secreto para liberar o painel de administração.")
-        codigo_digitado = st.text_input("🔐 Código de acesso", type="password")
-        if st.button("🔓 Entrar"):
-            if codigo_digitado.strip().lower() == "rainha":
-                st.session_state.acesso_admin = True
-                st.success("💎 Acesso profissional liberado!")
-            else:
-                st.error("❌ Código inválido — tente novamente.")
+    # 👑 Painel Lash Boss visual
+    if st.session_state.acesso_admin:
+        st.markdown("""
+            <div style='
+                background-color: #fff6f6;
+                padding: 26px;
+                border-radius: 12px;
+                max-width: 600px;
+                margin: auto;
+                margin-top: 40px;
+                text-align: center;
+                border: 2px solid #f3b1b6;
+                box-shadow: 0 0 6px #f3b1b6;
+                color: #660000;
+            '>
+                <h4>🗂 Painel Administrativo</h4>
+                <p style='font-size:14px;'>
+                    Gerencie agendamentos, horários ocupados e histórico de clientes com carinho 💖
+                </p>
+                <hr style='border: none; height: 1px; background-color: #f3b1b6; margin: 20px 0;'>
+            </div>
+        """, unsafe_allow_html=True)
 
-        if st.session_state.get("acesso_admin"):
-            import json
-            import os
-            from datetime import datetime
+        # 📋 Atendimentos por protocolo
+        st.markdown("### 📋 Atendimentos em ordem de protocolo")
+        caminho_arquivo = "agenda.json"
+        clientes_salvos = []
+        if os.path.exists(caminho_arquivo):
+            with open(caminho_arquivo, "r", encoding="utf-8") as f:
+                clientes_salvos = json.load(f)
 
-            st.markdown("---")
-            st.markdown("## 👑 Painel Administrativo Boutique")
-
-            # Carrega atendimentos
-            CAMINHO_ARQUIVO = "agenda.json"
-            clientes_salvos = []
-            if os.path.exists(CAMINHO_ARQUIVO):
-                with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
-                    clientes_salvos = json.load(f)
-
-            st.markdown("### 📋 Atendimentos em ordem de protocolo")
-            if clientes_salvos:
-                clientes_salvos.sort(key=lambda c: c["protocolo"])
-                for idx, cliente in enumerate(clientes_salvos):
-                    with st.container():
-                        st.markdown(f"""
-                            <div style='
-                                background-color: #d495a2;
-                                padding:15px;
-                                border-left:5px solid #cc4c73;
-                                border-radius:8px;
-                                font-size:15px;
-                                margin-bottom:10px;
-                            '>
-                                <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                                <strong>🧍 Nome:</strong> {cliente['nome']}<br>
-                                <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-                                <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
-                                <strong>📅 Data:</strong> {cliente['data']}<br>
-                                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                                <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-                            </div>
-                        """, unsafe_allow_html=True)
-
-                        if st.button(f"❌ Excluir protocolo {cliente['protocolo']}", key=f"excluir_{idx}"):
-                            confirmacao = st.radio(
-                                f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?",
-                                ["Cancelar", "Confirmar"],
-                                key=f"confirmar_{idx}"
-                            )
-                            if confirmacao == "Confirmar":
-                                clientes_salvos.pop(idx)
-                                with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
-                                    json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
-                                st.success("✅ Atendimento excluído com sucesso!")
-                                st.experimental_rerun()
-            else:
-                st.info("📂 Nenhum atendimento registrado ainda.")
+        if clientes_salvos:
+            clientes_salvos.sort(key=lambda c: c["protocolo"])
+            for idx, cliente in enumerate(clientes_salvos):
+                with st.container():
+                    st.markdown(f"""
+                        <div style='
+                            background-color: #d495a2;
+                            padding:15px;
+                            border-left:5px solid #cc4c73;
+                            border-radius:8px;
+                            font-size:15px;
+                            margin-bottom:10px;
+                        '>
+                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                            <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br
 
             # Horários ocupados
             st.markdown("### 📅 Horários ocupados")
