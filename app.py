@@ -664,9 +664,9 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     st.session_state.agendamento_confirmado = True
 
                     with col2:
-                        st.success("✅ Atendimento agendado e salvo com sucesso!")
+    st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                        cuidados_html = """\
+    cuidados_html = """
     <div style="border: 2px dashed #e09b8e; background-color: #c08081;
     border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
         <h5>📌 Cuidados antes e depois da aplicação</h5>
@@ -679,7 +679,8 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
         </ul>
     </div>
     """
-                        st.markdown(cuidados_html, unsafe_allow_html=True)
+    st.markdown(cuidados_html, unsafe_allow_html=True)
+
 
 
 
