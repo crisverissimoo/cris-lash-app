@@ -132,6 +132,7 @@ def esta_livre(data, horario):
 with st.expander("👑 Área profissional", expanded=True):
     st.markdown("### 🔐 Acesso restrito")
     st.write("Digite o código secreto para liberar o painel de administração.")
+    
     codigo_digitado = st.text_input("🔐 Código de acesso", type="password")
     if st.button("🔓 Entrar"):
         if codigo_digitado.strip().lower() == "rainha":
@@ -140,42 +141,28 @@ with st.expander("👑 Área profissional", expanded=True):
         else:
             st.error("❌ Código inválido — tente novamente.")
 
-    if clientes_salvos:
-    clientes_salvos.sort(key=lambda c: c["protocolo"])
-    for idx, cliente in enumerate(clientes_salvos):
-        with st.container():
-            st.markdown(f"""
-                <div style='
-                    background-color: #d495a2;
-                    padding:15px;
-                    border-left:5px solid #cc4c73;
-                    border-radius:8px;
-                    font-size:15px;
-                    margin-bottom:10px;
-                '>
-                    <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                    <strong>🧍 Nome:</strong> {cliente['nome']}<br>
-                    <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-                    <strong>🎀 Técnica:</strong> {cliente['tipo']}{" — "}{cliente['valor']}<br>
-                    <strong>📅 Data:</strong> {cliente['data']}<br>
-                    <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                    <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-                </div>
-            """, unsafe_allow_html=True)
-
-            if st.button(f"❌ Excluir protocolo {cliente['protocolo']}", key=f"excluir_{idx}"):
-                confirmacao = st.radio(
-                    f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?",
-                    ["Cancelar", "Confirmar"],
-                    key=f"confirmar_{idx}"
-                )
-                if confirmacao == "Confirmar":
-                    clientes_salvos.pop(idx)
-                    with open(caminho_arquivo, "w", encoding="utf-8") as f:
-                        json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
-                    st.success("✅ Atendimento excluído com sucesso!")
-                    st.experimental_rerun()
-
+    # 👑 Painel visual boutique
+    if st.session_state.acesso_admin:
+        st.markdown("""
+            <div style='
+                background-color: #fff6f6;
+                padding: 26px;
+                border-radius: 12px;
+                max-width: 600px;
+                margin: auto;
+                margin-top: 40px;
+                text-align: center;
+                border: 2px solid #f3b1b6;
+                box-shadow: 0 0 6px #f3b1b6;
+                color: #660000;
+            '>
+                <h4>🗂 Painel Administrativo</h4>
+                <p style='font-size:14px;'>
+                    Gerencie agendamentos, horários ocupados e histórico de clientes com carinho 💖
+                </p>
+                <hr style='border: none; height: 1px; background-color: #f3b1b6; margin: 20px 0;'>
+            </div>
+        """, unsafe_allow_html=True)
 
         # 📋 Atendimentos por protocolo
         st.markdown("### 📋 Atendimentos em ordem de protocolo")
@@ -186,53 +173,57 @@ with st.expander("👑 Área profissional", expanded=True):
                 clientes_salvos = json.load(f)
 
         if clientes_salvos:
-    clientes_salvos.sort(key=lambda c: c["protocolo"])
-    for idx, cliente in enumerate(clientes_salvos):
-        with st.container():
-            st.markdown(f"""
-                <div style='
-                    background-color: #d495a2;
-                    padding:15px;
-                    border-left:5px solid #cc4c73;
-                    border-radius:8px;
-                    font-size:15px;
-                    margin-bottom:10px;
-                '>
-                    <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-                    <strong>🧍 Nome:</strong> {cliente['nome']}<br>
-                    <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-                    <strong>🎀 Técnica:</strong> {cliente['tipo']}{" — "}{cliente['valor']}<br>
-                    <strong>📅 Data:</strong> {cliente['data']}<br>
-                    <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                    <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-                </div>
-            """, unsafe_allow_html=True)
+            clientes_salvos.sort(key=lambda c: c["protocolo"])
 
-            if st.button(f"❌ Excluir protocolo {cliente['protocolo']}", key=f"excluir_{idx}"):
-                confirmacao = st.radio(
-                    f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?",
-                    ["Cancelar", "Confirmar"],
-                    key=f"confirmar_{idx}"
-                )
-                if confirmacao == "Confirmar":
-                    clientes_salvos.pop(idx)
-                    with open(caminho_arquivo, "w", encoding="utf-8") as f:
-                        json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
-                    st.success("✅ Atendimento excluído com sucesso!")
-                    st.experimental_rerun()
+            for idx, cliente in enumerate(clientes_salvos):
+                with st.container():
+                    st.markdown(f"""
+                        <div style='
+                            background-color: #d495a2;
+                            padding:15px;
+                            border-left:5px solid #cc4c73;
+                            border-radius:8px;
+                            font-size:15px;
+                            margin-bottom:10px;
+                        '>
+                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                            <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                            <strong>🎀 Técnica:</strong> {cliente['tipo']}{" — "}{cliente['valor']}<br>
+                            <strong>📅 Data:</strong> {cliente['data']}<br>
+                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+                        </div>
+                    """, unsafe_allow_html=True)
 
+                    if st.button(f"❌ Excluir protocolo {cliente['protocolo']}", key=f"excluir_{idx}"):
+                        confirmacao = st.radio(
+                            f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?",
+                            ["Cancelar", "Confirmar"],
+                            key=f"confirmar_{idx}"
+                        )
+                        if confirmacao == "Confirmar":
+                            clientes_salvos.pop(idx)
+                            with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                                json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
+                            st.success("✅ Atendimento excluído com sucesso!")
+                            st.experimental_rerun()
+        else:
+            st.info("📂 Nenhum atendimento registrado ainda.")
 
-            # Horários ocupados
-            st.markdown("### 📅 Horários ocupados")
-            if st.session_state.historico_ocupados:
-                agenda = {}
-                for data, hora in st.session_state.historico_ocupados:
-                    d_str = data.strftime('%d/%m/%Y')
-                    agenda.setdefault(d_str, []).append(hora)
-                for dia, horas in agenda.items():
-                    st.markdown(f"**📅 {dia}**: {' | '.join(sorted(horas))}")
-            else:
-                st.info("📂 Nenhum horário bloqueado ainda.")
+        # 📅 Horários ocupados
+        st.markdown("### 📅 Horários ocupados")
+        if st.session_state.historico_ocupados:
+            agenda = {}
+            for data, hora in st.session_state.historico_ocupados:
+                dia_str = data.strftime('%d/%m/%Y')
+                agenda.setdefault(dia_str, []).append(hora)
+
+            for dia, horas in agenda.items():
+                st.markdown(f"**📅 {dia}**: {' | '.join(sorted(horas))}")
+        else:
+            st.info("📂 Nenhum horário bloqueado ainda.")
+
 
             # Bloqueio e desbloqueio
             with st.expander("🚫 Bloquear período"):
