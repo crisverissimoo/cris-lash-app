@@ -229,8 +229,8 @@ with col2:
                         st.success(f"✅ Bloqueio removido para {hora_desbloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')}.")
                 else:
                     st.info("📂 Nenhum horário bloqueado neste dia.")
-
-    if st.session_state.get("agendamento_confirmado"):
+                    
+if st.session_state.get("agendamento_confirmado"):
     cliente = st.session_state.historico_clientes[-1]
 
     st.markdown(f"""
@@ -241,6 +241,7 @@ with col2:
         <strong> Data:</strong> {cliente['data']} — 🕐 {cliente['horario']}<br>
         <strong> Observações:</strong> {cliente['mensagem'] or '—'}<br>
     """, unsafe_allow_html=True)
+
 
 
 # 🧠 Estados iniciais
