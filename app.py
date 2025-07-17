@@ -643,33 +643,27 @@ if st.session_state.get("agendamento_confirmado"):
     st.markdown("""
         <hr style='margin-top:40px; margin-bottom:20px;'>
 
-        <div style='text-align:center; background-color:#fff6f6; padding:20px; border-radius:12px;'>
-            <h3 style='color:#660000;'>✨ Atendimento agendado com sucesso!</h3>
-            <p style='font-size:16px;'>
+        <div style='text-align:center; background-color:#fff6f6; padding:20px; border-radius:12px; max-width:500px; margin:auto;'>
+            <h4 style='color:#660000; margin-bottom:10px;'>✨ Atendimento agendado com sucesso!</h4>
+
+            <p style='font-size:15px; color:#444; margin-bottom:8px;'>
+                Protocolo nº <strong>{protocolo}</strong><br>
+                Marcado para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
+            </p>
+
+            <p style='font-size:14px; color:#555; margin-bottom:18px;'>
                 Obrigada por confiar na <strong>Cris Lash</strong> 💖<br>
                 Cuide dos seus cílios com carinho — nos vemos em breve!
             </p>
-    """, unsafe_allow_html=True)
 
-    # Detalhes do protocolo com visual delicado
-    st.markdown(f"""
-        <p style='font-size:15px; color:#444;'>
-            Protocolo nº <strong>{protocolo}</strong><br>
-            Atendimento marcado para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
-        </p>
-    """, unsafe_allow_html=True)
-
-    # Imagem elegante
-    st.markdown("""
-        <img src="https://i.imgur.com/Hz9llqs.jpeg" style="width:220px; border-radius:8px; margin-top:20px;" alt="Cílios Lash Boutique">
-        <br><br>
-        <a href="/" target="_self">
-            <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px;">
-                🔁 Iniciar novo atendimento
-            </button>
-        </a>
+            <a href="/" target="_self">
+                <button style="background-color:#f8d1d0; color:#660000; padding:8px 18px; border:none; border-radius:8px; font-size:14px;">
+                    🔁 Iniciar novo atendimento
+                </button>
+            </a>
         </div>
     """, unsafe_allow_html=True)
+
 
 
 
