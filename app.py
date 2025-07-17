@@ -81,44 +81,47 @@ elif st.session_state.pagina_atual == "cliente":
                     """, unsafe_allow_html=True)
 
     # 📝 Cadastro Boutique + redirecionamento
-    elif escolha_cliente == "Fazer novo cadastro":
-        with st.form("form_cadastro"):
-            nome = st.text_input("🧍 Nome completo")
-            nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
-            telefone = st.text_input("📞 Telefone com DDD")
-            email = st.text_input("📧 Email (opcional)")
+   # 📝 Cadastro Boutique + redirecionamento
+elif escolha_cliente == "Fazer novo cadastro":
+    with st.form("form_cadastro"):
+        nome = st.text_input("🧍 Nome completo")
+        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
+        telefone = st.text_input("📞 Telefone com DDD")
+        email = st.text_input("📧 Email (opcional)")
 
-            idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-            menor = idade < 18
-            autorizada = True
+        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+        menor = idade < 18
 
-            st.info(f"📌 Idade: **{idade} anos**")
+        # ✨ Controle seguro de autorização
+        st.session_state.autorizada = True
+        st.info(f"📌 Idade: **{idade} anos**")
 
+        if menor:
+            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
+            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+            if autorizacao != "Sim":
+                st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
+                st.session_state.autorizada = False
+
+        confirmar = st.form_submit_button("✅ Confirmar cadastro")
+
+        if confirmar:
+            campos_ok = nome and telefone and nascimento and idade >= 0
             if menor:
-                responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
-                autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
-                if autorizacao != "Sim":
-                    st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
-                    autorizada = False
+                campos_ok = campos_ok and st.session_state.autorizada
 
-            confirmar = st.form_submit_button("✅ Confirmar cadastro")
+            if campos_ok:
+                st.session_state.nome_cliente = nome
+                st.session_state.nascimento = nascimento
+                st.session_state.telefone = telefone
+                st.session_state.email = email
+                st.session_state.idade_cliente = idade
+                st.session_state.cadastro_confirmado = True
+                st.success("✅ Cadastro finalizado com sucesso!")
+                st.experimental_rerun()
+            else:
+                st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
 
-            if confirmar:
-                campos_ok = nome and telefone and nascimento and idade >= 0
-                if menor:
-                    campos_ok = campos_ok and autorizada
-
-                if campos_ok:
-                    st.session_state.nome_cliente = nome
-                    st.session_state.nascimento = nascimento
-                    st.session_state.telefone = telefone
-                    st.session_state.email = email
-                    st.session_state.idade_cliente = idade
-                    st.session_state.cadastro_confirmado = True
-                    st.success("✅ Cadastro finalizado com sucesso!")
-                    st.experimental_rerun()
-                else:
-                    st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
 
     
 
@@ -126,7 +129,7 @@ elif st.session_state.pagina_atual == "cliente":
 
 
        # 4️⃣ Ficha Clínica — aparece se autorizada e cadastro confirmado
-if st.session_state.get("cadastro_confirmado") and autorizada:
+if st.session_state.get("cadastro_confirmado") and st.session_state.get("autorizada"):
     respostas = {}
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
@@ -151,7 +154,7 @@ if st.session_state.get("cadastro_confirmado") and autorizada:
                     "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
                 }
 
-                for chave, pergunta in perguntas.items():
+                 for chave, pergunta in perguntas.items():
                     col_p = st.columns([1, 4, 1])[1]
                     with col_p:
                         respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
