@@ -651,7 +651,7 @@ if st.session_state.get("agendamento_confirmado"):
             </p>
 
             <p style="font-size:14px; color:#660000; margin-bottom:16px;">
-                Obrigada por confiar na <strong>Cris Lash</strong> 💖<br>
+                💖 Obrigada por confiar na <em>Cris Lash</em><br>
                 Cuide dos seus cílios com carinho — nos vemos em breve!
             </p>
 
@@ -664,6 +664,7 @@ if st.session_state.get("agendamento_confirmado"):
         """,
         unsafe_allow_html=True
     )
+
 
 
 
