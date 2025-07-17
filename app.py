@@ -170,9 +170,8 @@ elif st.session_state.pagina_atual == "cliente":
                     else:
                         st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
 
-         # 4️⃣ Ficha Clínica — aparece se autorizada
-    if st.session_state.get("cadastro_confirmado") and autorizada:
-        if autorizada:
+       # 4️⃣ Ficha Clínica — aparece se autorizada e cadastro confirmado
+if st.session_state.get("cadastro_confirmado") and autorizada:
     respostas = {}
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
@@ -205,7 +204,7 @@ elif st.session_state.pagina_atual == "cliente":
                 col_btn = st.columns([1, 2, 1])[1]
                 with col_btn:
                     enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
-                    
+
                 if enviar:
                     if any(resposta is None for resposta in respostas.values()):
                         st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
@@ -265,6 +264,7 @@ elif st.session_state.pagina_atual == "cliente":
                                                    "Cliente apta para continuar — ficha validada correctamente."))
                             st.session_state.ficha_validada = True
                             st.session_state.cliente_apta = True
+
 
         # 🔓 Etapa 2 — Escolha de Efeito
  
