@@ -664,7 +664,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                     st.session_state.agendamento_confirmado = True
 
                     
-   with col2:
+  with col2:
     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
     cuidados_html = """
@@ -681,6 +681,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
     </div>
     """
     st.markdown(cuidados_html, unsafe_allow_html=True)
+
 
 
 
