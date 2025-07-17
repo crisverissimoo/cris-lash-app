@@ -603,6 +603,94 @@ if st.session_state.get("efeito_escolhido"):
                 ))
 
 
+from datetime import datetime, timedelta
+import os
+import json
+
+if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        with st.expander("📅 Agendamento do Atendimento", expanded=True):
+            data = st.date_input(
+                "📅 Escolha a data do atendimento",
+                min_value=datetime.today().date()
+            )
+
+            horarios_livres = [
+                h for h in gerar_horarios()
+                if esta_livre(data, h)
+            ]
+
+            if not horarios_livres:
+                st.warning("⛔ Nenhum horário disponível neste dia.")
+            else:
+                horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
+                fim = (
+                    datetime.strptime(horario, "%H:%M") + timedelta(hours=2)
+                ).strftime("%H:%M")
+
+                nome = st.session_state.get("nome_cliente", "—")
+                efeito = st.session_state.get("efeito_escolhido", "—")
+                tipo = st.session_state.get("tipo_aplicacao", "—")
+                valor = st.session_state.get("valor", "—")
+                mensagem = st.text_area(
+                    "📩 Mensagem adicional (opcional)",
+                    placeholder="Ex: alergia, dúvidas..."
+                )
+
+                st.markdown("💖 Confirme os dados do atendimento abaixo:")
+                st.markdown(f"- 🧍 Nome: **{nome}**")
+                st.markdown(f"- ✨ Efeito: **{efeito}**")
+                st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
+                st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
+                st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
+
+                if st.button("✅ Confirmar atendimento", key="confirmar_atendimento_unico"):
+                    protocolo = st.session_state.protocolo
+                    st.session_state.protocolo += 1
+
+                    cliente = {
+                        "protocolo": protocolo,
+                        "efeito": efeito,
+                        "tipo": tipo,
+                        "valor": valor,
+                        "data": data.strftime('%d/%m/%Y'),
+                        "horario": f"{horario} → {fim}",
+                        "mensagem": mensagem,
+                        "nome": nome
+                    }
+
+                    CAMINHO_ARQUIVO = "agenda.json"
+                    dados_existentes = []
+                    if os.path.exists(CAMINHO_ARQUIVO):
+                        with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
+                            dados_existentes = json.load(f)
+
+                    dados_existentes.append(cliente)
+                    with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
+                        json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
+
+                    st.session_state.historico_clientes.append(cliente)
+                    st.session_state.historico_ocupados.append((data, horario))
+                    st.session_state.agendamento_confirmado = True
+
+                    st.success("✅ Atendimento agendado e salvo com sucesso!")
+
+                    # Botão de WhatsApp
+                    numero_whatsapp = "34612345678"  # Seu número com código país
+                    mensagem_whatsapp = f"Olá, Cris! Sou {nome}, confirmando meu atendimento 💖\n\nProtocolo: {protocolo}\nTécnica: {tipo} — {efeito}\nDia: {data.strftime('%d/%m/%Y')} às {horario}"
+                    link_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensagem_whatsapp.replace(' ', '%20')}"
+
+                    st.markdown(f"[📲 Enviar confirmação via WhatsApp]({link_whatsapp})", unsafe_allow_html=True)
+
+                    # Cuidados pós-aplicação
+                    st.markdown("### 📌 Cuidados antes e depois da aplicação")
+                    st.markdown("- 🚫 Compareça sem maquiagem nos olhos")
+                    st.markdown("- 🧼 Lave o rosto com sabonete neutro antes do procedimento")
+                    st.markdown("- 🕐 Evite molhar os cílios por 24h após aplicação")
+                    st.markdown("- 🌙 Dormir de barriga para cima ajuda a preservar os fios")
+                    st.markdown("- 💧 Use apenas produtos oil-free na região dos olhos")
+
 
 
 
