@@ -640,39 +640,24 @@ if st.session_state.get("agendamento_confirmado"):
     data_atend = st.session_state.historico_clientes[-1]["data"]
     horario_atend = st.session_state.historico_clientes[-1]["horario"]
 
-    st.markdown(f"""
-        <div style='background-color:#f8d1d0; padding:22px; border-radius:12px; margin-top:30px;'>
-            <h4 style='color:#660000; text-align:center;'>✨ Atendimento confirmado com sucesso!</h4>
-
-            <p style='font-size:15px; color:#660000; text-align:center; margin-top:14px; margin-bottom:6px;'>
+    st.markdown(
+        f"""
+        <div style="background-color:#f8d1d0; padding:22px; border-radius:12px; margin-top:30px;">
+            <h4 style="color:#660000; text-align:center;">✨ Atendimento confirmado com sucesso!</h4>
+            <div style="text-align:center; color:#660000; font-size:15px; margin-top:14px;">
                 Protocolo nº <strong>{protocolo}</strong><br>
                 Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
-            </p>
-
-            <p style='font-size:14px; color:#660000; text-align:center; margin-bottom:18px;'>
+                <br><br>
                 Obrigada por confiar na <strong>Cris Lash</strong> 💖<br>
                 Cuide dos seus cílios com carinho — nos vemos em breve!
-            </p>
-
-            <div style='text-align:center;'>
+                <br><br>
                 <a href="/" target="_self">
-                    <button style="background-color:#fff6f6; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;'>
+                    <button style="background-color:#fff6f6; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
                         🔁 Iniciar novo atendimento
                     </button>
                 </a>
             </div>
         </div>
-    """, unsafe_allow_html=True)
-
-
-
-
-
-
-
-
-
-
-
-
-
+        """,
+        unsafe_allow_html=True
+    )
