@@ -88,7 +88,7 @@ elif st.session_state.pagina_atual == "cliente":
     escolha = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], key="opcao_cliente")
 
     # 🔐 Login Boutique
-    with st.form("form_login_cliente"):
+with st.form("form_login_cliente"):
     nome_login = st.text_input("🧍 Seu nome")
     tel_login = st.text_input("📱 Seu telefone com DDD")
     confirmar_login = st.form_submit_button("✅ Entrar")
@@ -110,6 +110,7 @@ elif st.session_state.pagina_atual == "cliente":
             st.experimental_rerun()
         else:
             st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
+
 
 
         # Painel pós-login
