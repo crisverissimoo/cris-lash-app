@@ -676,7 +676,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                    # 🌸 Botão boutique de WhatsApp com número real
+                    # 🌸 Botão boutique de WhatsApp com seu número real
                     numero_whatsapp = "34653841126"
                     mensagem_whatsapp = f"""
 Olá, Cris! Sou {nome}, confirmando meu atendimento 💖
@@ -709,8 +709,6 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
                             </ul>
                         </div>
                     """, unsafe_allow_html=True)
-
-
 
 
 
