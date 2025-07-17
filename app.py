@@ -101,14 +101,14 @@ elif st.session_state.pagina_atual == "cliente":
 
             atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
 
-            if atendimentos:
-        st.session_state.cliente_logada = True
-        st.session_state.nome_cliente = nome_login
-        st.session_state.telefone = tel_login
-        st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
-        st.experimental_rerun()  # 👈 força atualização imediata ")
-            else:
-                st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
+        if atendimentos:
+            st.session_state.cliente_logada = True
+            st.session_state.nome_cliente = nome_login
+            st.session_state.telefone = tel_login
+            st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
+            st.experimental_rerun()  # 👈 força atualização imediata
+        else:
+            st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
 
         # Painel pós-login
         if st.session_state.get("cliente_logada"):
