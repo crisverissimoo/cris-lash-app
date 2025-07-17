@@ -663,18 +663,23 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
                     """, unsafe_allow_html=True)
 
 
-st.markdown(f"""
-    <div class="painel-agradecimento">
-        ✨ Atendimento confirmado com sucesso!<br><br>
-        Protocolo nº <strong>{protocolo}</strong><br>
-        Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong><br><br>
-        💖 Obrigada por confiar na <em>Cris Lash</em><br>
-        Cuide dos seus cílios com carinho — nos vemos em breve! 💐<br><br>
-        <a href="/" target="_self">
-            <button>🔁 Iniciar novo atendimento</button>
-        </a>
-    </div>
-""", unsafe_allow_html=True)
+if st.session_state.get("agendamento_confirmado") and st.session_state.historico_clientes:
+    ultimo = st.session_state.historico_clientes[-1]
+    protocolo = ultimo.get("protocolo", "—")
+    data_atend = ultimo.get("data", "—")
+    horario_atend = ultimo.get("horario", "—")
 
+    st.markdown("""
+        <div class="painel-agradecimento">
+            ✨ Atendimento confirmado com sucesso!<br><br>
+            Protocolo nº <strong>{protocolo}</strong><br>
+            Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong><br><br>
+            💖 Obrigada por confiar na <em>Cris Lash</em><br>
+            Cuide dos seus cílios com carinho — nos vemos em breve! 💐<br><br>
+            <a href="/" target="_self">
+                <button>🔁 Iniciar novo atendimento</button>
+            </a>
+        </div>
+    """.format(protocolo=protocolo, data_atend=data_atend, horario_atend=horario_atend), unsafe_allow_html=True)
 
 
