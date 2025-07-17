@@ -53,8 +53,8 @@ with col2:
             <h3 style='color: #a7585c;'>{txt('Bem-vinda ao Cris Lash', 'Bienvenida a Cris Lash')}</h3>
             <p>{txt('Atendimento profissional com técnica em formação.',
                     'Atención profesional con técnica en formación.')}</p>
-            <p style='font-weight: bold;'>{txt('Promoção: 10€ por aplicação!',
-                                                '¡Promoción: 10€ por aplicación!')}</p>
+            <p style='font-weight: bold;'>{txt('Promoção: 25€ por aplicação!',
+                                                '¡Promoción: 25€ por aplicación!')}</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -555,22 +555,22 @@ if st.session_state.get("efeito_escolhido"):
                 "Egípcio 3D": {
                     "img": "https://i.imgur.com/TOPRWFQ.jpeg",
                     "desc": txt("Leque 3D artístico — acabamento definido e sofisticado.", "Abanico 3D artístico — acabado definido y sofisticado."),
-                    "valor": "10€"
+                    "valor": "25€"
                 },
                 "Volume Russo 4D": {
                     "img": "https://i.imgur.com/tBX2O8e.jpeg",
                     "desc": txt("4 fios por cílio — volume intenso e estruturado.", "4 fibras por pestaña — volumen intenso y estructurado."),
-                    "valor": "10€"
+                    "valor": "25€"
                 },
                 "Volume Brasileiro": {
                     "img": "https://i.imgur.com/11rw6Jv.jpeg",
                     "desc": txt("Formato Y — volumoso e natural.", "Formato Y — voluminoso y natural."),
-                    "valor": "10€"
+                    "valor": "25€"
                 },
                 "Fio a Fio": {
                     "img": "https://i.imgur.com/VzlySv4.jpeg",
                     "desc": txt("1 fio por cílio — efeito rímel natural.", "1 fibra por pestaña — efecto natural tipo máscara."),
-                    "valor": "10€"
+                    "valor": "25€"
                 }
             }
 
