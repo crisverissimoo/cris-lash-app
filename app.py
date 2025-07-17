@@ -620,90 +620,61 @@ if st.session_state.get("efeito_escolhido"):
 
 
 
-# 🗓️ Etapa final — Agendamento
-from datetime import datetime, timedelta
-import os
-import json
+if st.session_state.get("efeito_escolhido"):
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Técnica de aplicación"), expanded=True):
+            st.markdown("<h4 style='text-align:center;'>🎀 Técnica de Aplicação</h4>", unsafe_allow_html=True)
 
-if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
+            tipos = {
+                "Egípcio 3D": {
+                    "img": "https://i.imgur.com/TOPRWFQ.jpeg",
+                    "desc": txt("Leque 3D artístico — acabamento definido e sofisticado.", "Abanico 3D artístico — acabado definido y sofisticado."),
+                    "valor": "10€"
+                },
+                "Volume Russo 4D": {
+                    "img": "https://i.imgur.com/tBX2O8e.jpeg",
+                    "desc": txt("4 fios por cílio — volume intenso e estruturado.", "4 fibras por pestaña — volumen intenso y estructurado."),
+                    "valor": "10€"
+                },
+                "Volume Brasileiro": {
+                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
+                    "desc": txt("Formato Y — volumoso e natural.", "Formato Y — voluminoso y natural."),
+                    "valor": "10€"
+                },
+                "Fio a Fio": {
+                    "img": "https://i.imgur.com/VzlySv4.jpeg",
+                    "desc": txt("1 fio por cílio — efeito rímel natural.", "1 fibra por pestaña — efecto natural tipo máscara."),
+                    "valor": "10€"
+                }
+            }
 
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        with st.expander("📅 Agendamento do Atendimento", expanded=True):
+            for nome, tipo in tipos.items():
+                st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
 
-            data = st.date_input(
-                "📅 Escolha a data do atendimento",
-                min_value=datetime.today().date()
-            )
+                col_img, col_txt = st.columns([1.6, 1.4])
 
-            horarios_livres = [
-                h for h in gerar_horarios()
-                if esta_livre(data, h)
-            ]
+                with col_img:
+                    st.markdown(f"""
+                        <div style='text-align:center;'>
+                            <img src="{tipo['img']}" alt="{nome}" style="width: 100%; border-radius: 8px;">
+                        </div>
+                    """, unsafe_allow_html=True)
 
-            if not horarios_livres:
-                st.warning("⛔ Nenhum horário disponível neste dia.")
-            else:
-                horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
-                fim = (
-                    datetime.strptime(horario, "%H:%M") + timedelta(hours=2)
-                ).strftime("%H:%M")
+                with col_txt:
+                    st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+                    st.caption(tipo["desc"])
 
-                nome = st.session_state.get("nome_cliente", "—")
-                efeito = st.session_state.get("efeito_escolhido", "—")
-                tipo = st.session_state.get("tipo_aplicacao", "—")
-                valor = st.session_state.get("valor", "—")
-                mensagem = st.text_area(
-                    "📩 Mensagem adicional (opcional)",
-                    placeholder="Ex: alergia, dúvidas..."
-                )
+                    col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
+                    with col_b2:
+                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
+                            st.session_state.tipo_aplicacao = nome
+                            st.session_state.valor = tipo["valor"]
 
-                st.markdown("💖 Confirme os dados do atendimento abaixo:")
-                st.markdown(f"- 🧍 Nome: **{nome}**")
-                st.markdown(f"- ✨ Efeito: **{efeito}**")
-                st.markdown(f"- 🎀 Técnica: **{tipo}** — 💶 **{valor}**")
-                st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
-                st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
-
-
-                if st.button("✅ Confirmar atendimento", key="confirmar_atendimento_unico"):
-    protocolo = st.session_state.protocolo
-    st.session_state.protocolo += 1
-
-    cliente = {
-        "protocolo": protocolo,
-        "efeito": efeito,
-        "tipo": tipo,
-        "valor": valor,
-        "data": data.strftime('%d/%m/%Y'),
-        "horario": f"{horario} → {fim}",
-        "mensagem": mensagem,
-        "nome": nome
-    }
-
-    CAMINHO_ARQUIVO = "agenda.json"
-    dados_existentes = []
-    if os.path.exists(CAMINHO_ARQUIVO):
-        with open(CAMINHO_ARQUIVO, "r", encoding="utf-8") as f:
-            dados_existentes = json.load(f)
-
-    dados_existentes.append(cliente)
-    with open(CAMINHO_ARQUIVO, "w", encoding="utf-8") as f:
-        json.dump(dados_existentes, f, ensure_ascii=False, indent=2)
-
-    st.session_state.historico_clientes.append(cliente)
-    st.session_state.historico_ocupados.append((data, horario))
-    st.session_state.agendamento_confirmado = True
-
-  with col2:
-    st.success("✅ Atendimento agendado e salvo com sucesso!")
-
-    st.markdown("### 📌 Cuidados antes e depois da aplicação")
-    st.markdown("- 🚫 Compareça sem maquiagem nos olhos")
-    st.markdown("- 🧼 Lave o rosto com sabonete neutro antes do procedimento")
-    st.markdown("- 🕐 Evite molhar os cílios por 24h após aplicação")
-    st.markdown("- 🌙 Dormir de barriga para cima ajuda a preservar os fios")
-    st.markdown("- 💧 Use apenas produtos oil-free na região dos olhos")
-
-
+            if st.session_state.get("tipo_aplicacao"):
+                selecionado = st.session_state.tipo_aplicacao
+                st.success(txt(
+                    f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
+                    f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
+                ))
 
