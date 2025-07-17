@@ -657,12 +657,13 @@ if st.session_state.get("agendamento_confirmado"):
             </p>
 
             <a href="/" target="_self">
-                <button style="background-color:#f8d1d0; color:#660000; padding:8px 18px; border:none; border-radius:8px; font-size:14px;">
+                <button style="background-color:#f8d1d0; color:#660000; padding:8px 18px; border:none; border-radius:8px; font-size:14px;'>
                     🔁 Iniciar novo atendimento
                 </button>
             </a>
         </div>
     """, unsafe_allow_html=True)
+
 
 
 
