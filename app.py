@@ -640,7 +640,7 @@ if st.session_state.get("agendamento_confirmado"):
     data_atend = st.session_state.historico_clientes[-1]["data"]
     horario_atend = st.session_state.historico_clientes[-1]["horario"]
 
-    st.markdown("""
+    st.markdown(f"""
         <hr style='margin-top:40px; margin-bottom:20px;'>
 
         <div style='text-align:center; background-color:#fff6f6; padding:20px; border-radius:12px; max-width:500px; margin:auto;'>
@@ -663,7 +663,6 @@ if st.session_state.get("agendamento_confirmado"):
             </a>
         </div>
     """, unsafe_allow_html=True)
-
 
 
 
