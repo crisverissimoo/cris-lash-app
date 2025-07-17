@@ -632,6 +632,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
                 st.markdown(f"- 📅 Data: `{data.strftime('%d/%m/%Y')}` — 🕐 Horário: `{horario}` → `{fim}`")
                 st.markdown(f"- 💬 Mensagem: `{mensagem or '—'}`")
 
+
                 if st.button("✅ Confirmar atendimento", key="confirmar_atendimento_unico"):
     protocolo = st.session_state.protocolo
     st.session_state.protocolo += 1
@@ -678,4 +679,5 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
         </div>
         """
         st.markdown(cuidados_html, unsafe_allow_html=True)
+
 
