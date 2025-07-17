@@ -665,4 +665,3 @@ if st.session_state.get("agendamento_confirmado"):
         unsafe_allow_html=True
     )
 
-    )
