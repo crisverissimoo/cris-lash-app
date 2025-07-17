@@ -132,16 +132,21 @@ elif st.session_state.pagina_atual == "cliente":
             else:
                 st.info("📂 Você ainda não possui atendimentos registrados.")
 
-    # 📝 Novo Cadastro Boutique
-    # 📝 Cadastro Boutique da Cliente
+# 📝 Cadastro Boutique da Cliente
 nome = st.text_input("🧍 Nome completo")
 nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
 telefone = st.text_input("📞 Telefone com DDD")
 email = st.text_input("📧 Email (opcional)")
 
-idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-menor = idade < 18
-st.info(f"📌 Idade: **{idade} anos**")
+# ⚠️ Verifica se a data de nascimento é válida
+if nascimento > hoje:
+    st.warning("⚠️ Data de nascimento inválida — está no futuro.")
+    idade = -1
+else:
+    idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+
+menor = idade < 18 and idade >= 0
+st.info(f"📌 Idade: **{idade if idade >= 0 else '—'} anos**")
 
 autorizada = True
 if menor:
@@ -166,6 +171,7 @@ if st.button("✅ Confirmar cadastro"):
         st.success("✅ Cadastro finalizado com sucesso!")
     else:
         st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
+
 
 
        # 4️⃣ Ficha Clínica — aparece se autorizada e cadastro confirmado
