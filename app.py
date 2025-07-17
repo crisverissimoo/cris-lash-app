@@ -393,25 +393,7 @@ if st.session_state.get("efeito_escolhido") and not st.session_state.etapa_agend
 
 
 
-        
-
-
-
-
-
-
-
-
-
-
-
-
-        
-
-
-
-
-        
+             
 
         # 🎀 Painel Agendamento Boutique
         if st.session_state.get("cadastro_confirmado"):
