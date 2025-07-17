@@ -588,7 +588,7 @@ if st.session_state.get("efeito_escolhido"):
                 }
             }
 
-            for nome, tipo in tipos.items():
+          for nome, tipo in tipos.items():
     st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
 
     col_img, col_txt = st.columns([1.6, 1.4])
@@ -609,6 +609,14 @@ if st.session_state.get("efeito_escolhido"):
             if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
                 st.session_state.tipo_aplicacao = nome
                 st.session_state.valor = tipo["valor"]
+
+if st.session_state.get("tipo_aplicacao"):
+    selecionado = st.session_state.tipo_aplicacao
+    st.success(txt(
+        f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
+        f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
+    ))
+
 
 
                 
