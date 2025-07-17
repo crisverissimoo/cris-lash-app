@@ -72,64 +72,97 @@ elif st.session_state.pagina_atual == "cliente":
     st.markdown("""
         <div style='
             background-color: #fff6f6;
-            padding: 24px;
+            padding: 20px;
             border-radius: 12px;
-            border: 2px dashed #f3b1b6;
-            max-width: 500px;
+            max-width: 520px;
             margin: auto;
             text-align: center;
+            border: 2px dashed #f3b1b6;
             color: #660000;
         '>
-            <h4>🙋‍♀️ Painel da Cliente</h4>
-            <p style='font-size:14px;'>Preencha seus dados com carinho para iniciar o atendimento 💐</p>
+            <h4>🙋‍♀️ Área da Cliente</h4>
+            <p style='font-size:14px;'>Escolha como deseja continuar 💖</p>
         </div>
     """, unsafe_allow_html=True)
 
-    nome = st.text_input("🧍 Nome completo")
-    telefone = st.text_input("📱 Telefone com DDD")
-    maioridade = st.checkbox("✅ Confirmo que tenho mais de 18 anos")
+    escolha = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], key="opcao_cliente")
 
-    if nome and telefone and maioridade:
-        st.success("✨ Dados validados! Atendimento liberado.")
+    if escolha == "Já sou cliente":
+        st.markdown("### 🔐 Login leve")
+        nome_login = st.text_input("🧍 Seu nome")
+        tel_login = st.text_input("📱 Seu telefone (com DDD)")
 
-        protocolo = f"CL{st.session_state.protocolo:04}"
-        st.session_state.protocolo += 1
+        if nome_login and tel_login:
+            caminho = "agenda.json"
+            historico = []
+            if os.path.exists(caminho):
+                with open(caminho, "r", encoding="utf-8") as f:
+                    historico = json.load(f)
 
-        efeito = st.selectbox("✨ Efeito desejado", ["Clássico", "Volume", "Híbrido"])
-        tecnica = st.selectbox("🎀 Técnica", ["Fio a fio", "Volume russo", "Mega volume"])
-        valor = st.text_input("💲 Valor combinado")
-        data = st.date_input("📅 Data do atendimento")
-        horario = st.time_input("⏰ Horário do atendimento")
-        mensagem = st.text_area("💬 Alguma observação?", placeholder="Opcional...")
+            atendimentos = [c for c in historico if c["nome"] == nome_login and c["telefone"] == tel_login]
 
-        if st.button("📌 Finalizar agendamento"):
-            cliente = {
-                "protocolo": protocolo,
-                "nome": nome,
-                "efeito": efeito,
-                "tipo": tecnica,
-                "valor": valor,
-                "data": str(data),
-                "horario": str(horario),
-                "mensagem": mensagem
-            }
-            caminho_arquivo = "agenda.json"
-            clientes = []
-            if os.path.exists(caminho_arquivo):
-                with open(caminho_arquivo, "r", encoding="utf-8") as f:
-                    clientes = json.load(f)
+            if atendimentos:
+                st.success("✨ Atendimento localizado com sucesso!")
+                for idx, cliente in enumerate(atendimentos):
+                    with st.expander(f"📌 Atendimento {idx + 1} — protocolo {cliente['protocolo']}"):
+                        st.markdown(f"""
+                            <strong>🎀 Técnica:</strong> {cliente['tipo']}{" — "}{cliente['valor']}<br>
+                            <strong>📅 Data:</strong> {cliente['data']}<br>
+                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+                        """, unsafe_allow_html=True)
+            else:
+                st.warning("🙈 Nenhum atendimento encontrado com esses dados.")
 
-            clientes.append(cliente)
-            with open(caminho_arquivo, "w", encoding="utf-8") as f:
-                json.dump(clientes, f, ensure_ascii=False, indent=2)
+    else:  # Novo cadastro
+        st.markdown("### 📝 Novo Cadastro da Cliente")
+        nome = st.text_input("🧍 Nome completo")
+        telefone = st.text_input("📱 Telefone com DDD")
+        maioridade = st.checkbox("✅ Confirmo que tenho mais de 18 anos")
 
-            st.success(f"""
-                💖 Atendimento agendado com sucesso!
-                <br>🔢 Protocolo: <code>{protocolo}</code>
-                <br>Obrigada por confiar na Cris Lash ✨
-            """, unsafe_allow_html=True)
-    else:
-        st.warning("⛔ Preencha todos os campos e confirme maioridade.")
+        if nome and telefone and maioridade:
+            st.success("✨ Dados validados! Atendimento liberado.")
+
+            protocolo = f"CL{st.session_state.protocolo:04}"
+            st.session_state.protocolo += 1
+
+            efeito = st.selectbox("✨ Efeito desejado", ["Clássico", "Volume", "Híbrido"], key="efeito_novo")
+            tecnica = st.selectbox("🎀 Técnica", ["Fio a fio", "Volume russo", "Mega volume"], key="tecnica_novo")
+            valor = st.text_input("💲 Valor combinado", key="valor_novo")
+            data = st.date_input("📅 Data do atendimento")
+            horario = st.time_input("⏰ Horário do atendimento")
+            mensagem = st.text_area("💬 Observação (opcional)", key="msg_novo")
+
+            if st.button("📌 Finalizar agendamento", key="finaliza_novo"):
+                cliente = {
+                    "protocolo": protocolo,
+                    "nome": nome,
+                    "telefone": telefone,
+                    "efeito": efeito,
+                    "tipo": tecnica,
+                    "valor": valor,
+                    "data": str(data),
+                    "horario": str(horario),
+                    "mensagem": mensagem
+                }
+
+                caminho = "agenda.json"
+                lista = []
+                if os.path.exists(caminho):
+                    with open(caminho, "r", encoding="utf-8") as f:
+                        lista = json.load(f)
+                lista.append(cliente)
+                with open(caminho, "w", encoding="utf-8") as f:
+                    json.dump(lista, f, ensure_ascii=False, indent=2)
+
+                st.success(f"""
+                    💖 Atendimento agendado com sucesso!
+                    <br>🔢 Protocolo: <code>{protocolo}</code>
+                    <br>Obrigada por confiar na Cris Lash 👑
+                """, unsafe_allow_html=True)
+        else:
+            st.warning("⛔ Preencha todos os dados e confirme maioridade.")
+
 
 
 # 👑 Página Administrativa
