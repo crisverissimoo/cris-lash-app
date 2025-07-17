@@ -641,21 +641,31 @@ if st.session_state.get("agendamento_confirmado"):
     horario_atend = st.session_state.historico_clientes[-1]["horario"]
 
     with st.container():
-        st.markdown("### ✨ Atendimento confirmado com sucesso!", help="Painel de agradecimento")
+        cols = st.columns([1, 6, 1])  # Margens laterais pra centralizar
+        with cols[1]:
+            st.markdown(
+                f"""
+                <div style="background-color:#f8d1d0; padding:20px; border-radius:12px;">
+                    <h4 style="color:#660000; text-align:center;">✨ Atendimento confirmado com sucesso!</h4>
+                    <p style="color:#660000; font-size:15px; text-align:center;">
+                        Protocolo nº <strong>{protocolo}</strong><br>
+                        Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
+                    </p>
+                    <p style="color:#660000; font-size:14px; text-align:center;">
+                        💖 Obrigada por confiar na <em>Cris Lash</em><br>
+                        Cuide dos seus cílios com carinho — nos vemos em breve!
+                    </p>
+                    <div style="text-align:center; margin-top:16px;">
+                        <a href="/" target="_self">
+                            <button style="background-color:#fff6f6; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
+                                🔁 Iniciar novo atendimento
+                            </button>
+                        </a>
+                    </div>
+                </div>
+                """,
+                unsafe_allow_html=True
+            )
 
-        st.markdown(f"""
-        **Protocolo nº:** {protocolo}  
-        **Data:** {data_atend}  
-        **Horário:** {horario_atend}
-        """)
-
-        st.markdown("""
-        💖 Obrigada por confiar na *Cris Lash*  
-        Cuide dos seus cílios com carinho — nos vemos em breve! 🌸
-        """)
-
-        st.markdown("---")
-
-        st.button("🔁 Iniciar novo atendimento", help="Reiniciar fluxo", use_container_width=True)
 
 
