@@ -676,27 +676,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                    # Botão de WhatsApp
-                    numero_whatsapp = "34612345678"  # Seu número com código país
-                    mensagem_whatsapp = f"Olá, Cris! Sou {nome}, confirmando meu atendimento 💖\n\nProtocolo: {protocolo}\nTécnica: {tipo} — {efeito}\nDia: {data.strftime('%d/%m/%Y')} às {horario}"
-                    link_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensagem_whatsapp.replace(' ', '%20')}"
-
-                    st.markdown(f"[📲 Enviar confirmação via WhatsApp]({link_whatsapp})", unsafe_allow_html=True)
-
-                    st.markdown("""
-    <div style='background-color:#f8d1d0; padding:20px; border-radius:12px;'>
-        <h4 style='color:#660000;'>📌 Cuidados antes e depois da aplicação</h4>
-        <ul style='line-height:1.8; font-size:16px; color:#333333;'>
-            <li>🚫 Compareça sem maquiagem nos olhos</li>
-            <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-            <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-            <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-            <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-        </ul>
-    </div>
-""", unsafe_allow_html=True)
-
-# Link boutique de confirmação via WhatsApp
+                    # Link boutique de confirmação via WhatsApp
 numero_whatsapp = "34653841126"
 mensagem_whatsapp = f"""
 Olá, Cris! Sou {nome}, confirmando meu atendimento 💖
@@ -715,6 +695,20 @@ st.markdown(f"""
         </button>
     </a>
 """, unsafe_allow_html=True)
+
+                    st.markdown("""
+    <div style='background-color:#f8d1d0; padding:20px; border-radius:12px;'>
+        <h4 style='color:#660000;'>📌 Cuidados antes e depois da aplicação</h4>
+        <ul style='line-height:1.8; font-size:16px; color:#333333;'>
+            <li>🚫 Compareça sem maquiagem nos olhos</li>
+            <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+            <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+            <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+            <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+        </ul>
+    </div>
+""", unsafe_allow_html=True)
+
 
 
 
