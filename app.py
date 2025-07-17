@@ -642,26 +642,29 @@ if st.session_state.get("agendamento_confirmado"):
 
     st.markdown(
         f"""
-        <div style="background-color:#f8d1d0; padding:22px; border-radius:12px; margin-top:30px; text-align:center;">
-            <h4 style="color:#660000;">✨ Atendimento confirmado com sucesso!</h4>
+        <div style="background-color:#f8d1d0; padding:22px; border-radius:12px; width:100%; display:flex; justify-content:center;">
+            <div style="max-width:480px; text-align:center;">
+                <h4 style="color:#660000; margin-bottom:10px;">✨ Atendimento confirmado com sucesso!</h4>
 
-            <p style="font-size:15px; color:#660000;">
-                Protocolo nº <strong>{protocolo}</strong><br>
-                Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
-            </p>
+                <p style="font-size:15px; color:#660000; margin-bottom:8px;">
+                    Protocolo nº <strong>{protocolo}</strong><br>
+                    Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
+                </p>
 
-            <p style="font-size:14px; color:#660000;">
-                Obrigada por confiar na <strong>Cris Lash</strong> 💖<br>
-                Cuide dos seus cílios com carinho — nos vemos em breve!
-            </p>
+                <p style="font-size:14px; color:#660000; margin-bottom:16px;">
+                    Obrigada por confiar na <strong>Cris Lash</strong> 💖<br>
+                    Cuide dos seus cílios com carinho — nos vemos em breve!
+                </p>
 
-            <a href="/" target="_self" style="text-decoration:none;">
-                <button style="background-color:#fff6f6; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
-                    🔁 Iniciar novo atendimento
-                </button>
-            </a>
+                <a href="/" target="_self" style="text-decoration:none;">
+                    <button style="background-color:#fff6f6; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
+                        🔁 Iniciar novo atendimento
+                    </button>
+                </a>
+            </div>
         </div>
         """,
         unsafe_allow_html=True
     )
+
 
