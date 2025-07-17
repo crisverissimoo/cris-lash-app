@@ -17,6 +17,34 @@ if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 if "idioma" not in st.session_state:
     st.session_state.idioma = "Português"
+    
+# 🌸 Estilo boutique para painéis delicados
+st.markdown("""
+    <style>
+    .painel-agradecimento {
+        background-color: #f8d1d0;
+        padding: 20px 24px;
+        border-radius: 12px;
+        max-width: 420px;
+        margin: auto;
+        margin-top: 30px;
+        text-align: center;
+        color: #660000;
+        font-family: sans-serif;
+    }
+    .painel-agradecimento button {
+        background-color: #fff6f6;
+        color: #660000;
+        padding: 8px 20px;
+        border: none;
+        border-radius: 6px;
+        font-size: 14px;
+        font-weight: bold;
+        cursor: pointer;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
 
 # 🪞 Configuração de página
 st.set_page_config("Consultoria Cris Lash", layout="wide")
