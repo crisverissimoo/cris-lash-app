@@ -1,10 +1,10 @@
 import streamlit as st
-from datetime import datetime, timedelta
+from datetime import datetime
 import os
 import json
 import pytz
 
-# 🧠 Inicialização de estados
+# 🧠 Estados iniciais
 for k, v in {
     "pagina_atual": "home",
     "historico_clientes": [],
@@ -20,30 +20,21 @@ for k, v in {
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 
-# 🌸 Estilo boutique global
-st.set_page_config("Consultoria Cris Lash", layout="wide")
+# 🌐 Estilo e título
+st.set_page_config("Consultoria Cris Lash", layout="centered")
 st.markdown("""
     <style>
-    .painel-agradecimento {
-        background-color: #f8d1d0;
-        padding: 20px 24px;
+    .box {
+        background-color: #fff6f6;
+        padding: 24px;
         border-radius: 12px;
-        max-width: 420px;
+        border: 2px dashed #f3b1b6;
+        color: #660000;
+        font-family: sans-serif;
+        max-width: 500px;
         margin: auto;
         margin-top: 30px;
         text-align: center;
-        color: #660000;
-        font-family: sans-serif;
-    }
-    .painel-agradecimento button {
-        background-color: #fff6f6;
-        color: #660000;
-        padding: 8px 20px;
-        border: none;
-        border-radius: 6px;
-        font-size: 14px;
-        font-weight: bold;
-        cursor: pointer;
     }
     </style>
 """, unsafe_allow_html=True)
@@ -52,57 +43,36 @@ st.markdown("""
 def txt(pt, es):
     return pt if st.session_state.idioma == "Português" else es
 
-# 🌐 Idioma central
+# 🌍 Idioma e data
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
+    st.markdown(f"<h3 style='text-align:center;'>💎 {txt('Sistema Cris Lash','Sistema Cris Lash')}</h3>", unsafe_allow_html=True)
+    st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
-# 🎯 Página: HOME — escolha da entrada
+# 🏠 Tela inicial
 if st.session_state.pagina_atual == "home":
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
-        st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
+    st.markdown("""
+        <div class='box'>
+            <h4>✨ Bem-vinda à Cris Lash 💖</h4>
+            <p>Sua beleza merece cuidado e carinho.<br>Selecione abaixo como deseja continuar 💐</p>
+        </div>
+    """, unsafe_allow_html=True)
 
-        st.markdown("""
-            <div style='
-                background-color: #f8d1d0;
-                padding: 26px;
-                border-radius: 12px;
-                max-width: 500px;
-                margin: auto;
-                text-align: center;
-                color: #660000;
-            '>
-                <h4>✨ Bem-vinda à Cris Lash 💖</h4>
-                <p style='font-size:14px;'>Sua beleza merece cuidado e carinho.<br>Selecione abaixo como deseja continuar 💐</p>
-            </div>
-        """, unsafe_allow_html=True)
+    colA, colB = st.columns(2)
+    with colA:
+        if st.button("🙋‍♀️ Sou Cliente"):
+            st.session_state.pagina_atual = "cliente"
+    with colB:
+        if st.button("🗂 Área Administrativa"):
+            st.session_state.pagina_atual = "adm"
 
-        colA, colB = st.columns(2)
-        with colA:
-            if st.button("🙋‍♀️ Sou Cliente"):
-                st.session_state.pagina_atual = "cliente"
-        with colB:
-            if st.button("🗂 Área Administrativa"):
-                st.session_state.pagina_atual = "adm"
-
-# 🙋‍♀️ Página: CLIENTE
+# 🙋‍♀️ Página Cliente
 elif st.session_state.pagina_atual == "cliente":
     st.markdown("""
-        <div style='
-            background-color: #fff6f6;
-            padding: 24px;
-            border-radius: 12px;
-            max-width: 500px;
-            margin: auto;
-            margin-top: 30px;
-            text-align: center;
-            color: #660000;
-            border: 2px dashed #f3b1b6;
-        '>
-            <h4>🙋‍♀️ Bem-vinda, cliente 💖</h4>
-            <p style='font-size:14px;'>Antes de continuar, preencha seus dados com carinho 💐</p>
+        <div class='box'>
+            <h4>🙋‍♀️ Painel da Cliente</h4>
+            <p>Preencha seus dados para iniciar o atendimento 💐</p>
         </div>
     """, unsafe_allow_html=True)
 
@@ -112,61 +82,41 @@ elif st.session_state.pagina_atual == "cliente":
 
     if nome and telefone and maioridade:
         st.success("✨ Dados validados! Atendimento liberado.")
-        # Aqui pode vir o painel da cliente, protocolo, agendamento etc.
     else:
-        st.warning("⛔ Preencha todos os campos e confirme que tem +18.")
+        st.warning("⛔ Preencha todos os campos e confirme +18.")
 
-# 👑 Página: ADMINISTRATIVA
+# 👑 Página Administrativa
 elif st.session_state.pagina_atual == "adm":
-    st.markdown("## 🔐 Área profissional")
-    codigo_digitado = st.text_input("🔐 Código de acesso", type="password")
+    st.markdown("<h4>🔐 Área Administrativa</h4>", unsafe_allow_html=True)
+    codigo = st.text_input("🔑 Código de acesso", type="password")
     if st.button("🔓 Entrar"):
-        if codigo_digitado.strip().lower() == "rainha":
+        if codigo.strip().lower() == "rainha":
             st.session_state.acesso_admin = True
-            st.success("💎 Acesso profissional liberado!")
+            st.success("💎 Acesso liberado!")
         else:
-            st.error("❌ Código inválido — tente novamente.")
+            st.error("❌ Código inválido.")
 
     if st.session_state.acesso_admin:
         st.markdown("""
-            <div style='
-                background-color: #fff6f6;
-                padding: 26px;
-                border-radius: 12px;
-                max-width: 600px;
-                margin: auto;
-                margin-top: 40px;
-                text-align: center;
-                border: 2px solid #f3b1b6;
-                box-shadow: 0 0 6px #f3b1b6;
-                color: #660000;
-            '>
-                <h4>🗂 Painel Administrativo</h4>
-                <p style='font-size:14px;'>Gerencie agendamentos, horários ocupados e histórico de clientes com carinho 💖</p>
+            <div class='box'>
+                <h4>👑 Painel Administrativo</h4>
+                <p>Gerencie atendimentos com carinho 💖</p>
             </div>
         """, unsafe_allow_html=True)
 
-        # 📋 Atendimentos por protocolo
         caminho_arquivo = "agenda.json"
         clientes_salvos = []
         if os.path.exists(caminho_arquivo):
             with open(caminho_arquivo, "r", encoding="utf-8") as f:
                 clientes_salvos = json.load(f)
 
-        st.markdown("### 📋 Atendimentos em ordem de protocolo")
+        st.markdown("### 📋 Lista de atendimentos")
         if clientes_salvos:
             clientes_salvos.sort(key=lambda c: c["protocolo"])
             for idx, cliente in enumerate(clientes_salvos):
                 with st.container():
                     st.markdown(f"""
-                        <div style='
-                            background-color: #d495a2;
-                            padding:15px;
-                            border-left:5px solid #cc4c73;
-                            border-radius:8px;
-                            font-size:15px;
-                            margin-bottom:10px;
-                        '>
+                        <div style='background-color:#d495a2; padding:15px; border-radius:8px;'>
                             <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
                             <strong>🧍 Nome:</strong> {cliente['nome']}<br>
                             <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
@@ -177,20 +127,17 @@ elif st.session_state.pagina_atual == "adm":
                         </div>
                     """, unsafe_allow_html=True)
 
-                    if st.button(f"❌ Excluir protocolo {cliente['protocolo']}", key=f"excluir_{idx}"):
-                        confirmacao = st.radio(
-                            f"⚠️ Tem certeza que deseja excluir o protocolo {cliente['protocolo']}?",
-                            ["Cancelar", "Confirmar"],
-                            key=f"confirmar_{idx}"
-                        )
-                        if confirmacao == "Confirmar":
+                    if st.button(f"❌ Excluir {cliente['protocolo']}", key=f"excluir_{idx}"):
+                        confirmar = st.radio(f"⚠️ Confirmar exclusão de {cliente['protocolo']}?", ["Cancelar", "Confirmar"], key=f"confirmar_{idx}")
+                        if confirmar == "Confirmar":
                             clientes_salvos.pop(idx)
                             with open(caminho_arquivo, "w", encoding="utf-8") as f:
                                 json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
-                            st.success("✅ Atendimento excluído com sucesso!")
+                            st.success("✅ Atendimento excluído!")
                             st.experimental_rerun()
         else:
-            st.info("📂 Nenhum atendimento registrado ainda.")
+            st.info("📂 Nenhum atendimento registrado.")
+
 
         # 📅 Horários ocupados
         st.markdown("### 📅 Horários ocupados")
