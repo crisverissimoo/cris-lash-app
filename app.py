@@ -87,11 +87,12 @@ elif st.session_state.pagina_atual == "cliente":
 
     escolha = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], key="opcao_cliente")
 
+    # 🔐 Login Boutique
     if escolha == "Já sou cliente":
         nome_login = st.text_input("🧍 Seu nome")
-        tel_login = st.text_input("📱 Seu telefone")
+        tel_login = st.text_input("📱 Seu telefone com DDD")
 
-        if nome_login and tel_login:
+        if st.button("✅ Entrar"):
             caminho = "agenda.json"
             historico = []
             if os.path.exists(caminho):
@@ -101,20 +102,38 @@ elif st.session_state.pagina_atual == "cliente":
             atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
 
             if atendimentos:
-                st.success("✨ Atendimento localizado com sucesso!")
+                st.session_state.cliente_logada = True
+                st.session_state.nome_cliente = nome_login
+                st.session_state.telefone = tel_login
+                st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
+            else:
+                st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
+
+        # Painel pós-login
+        if st.session_state.get("cliente_logada"):
+            st.markdown(f"### 💼 Histórico de {st.session_state.nome_cliente}")
+            caminho = "agenda.json"
+            historico = []
+            if os.path.exists(caminho):
+                with open(caminho, "r", encoding="utf-8") as f:
+                    historico = json.load(f)
+
+            atendimentos = [c for c in historico if c.get("nome") == st.session_state.nome_cliente and c.get("telefone") == st.session_state.telefone]
+
+            if atendimentos:
                 for idx, cliente in enumerate(atendimentos):
                     with st.expander(f"📌 Atendimento {idx + 1} — protocolo {cliente['protocolo']}"):
                         st.markdown(f"""
-                            <strong>🎀 Técnica:</strong> {cliente['tipo']}{" — "}{cliente['valor']}<br>
+                            <strong>🎀 Técnica:</strong> {cliente['tipo']} — {cliente['valor']}<br>
                             <strong>📅 Data:</strong> {cliente['data']}<br>
                             <strong>⏰ Horário:</strong> {cliente['horario']}<br>
                             <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
                         """, unsafe_allow_html=True)
             else:
-                st.warning("🙈 Nenhum atendimento encontrado com esses dados.")
+                st.info("📂 Você ainda não possui atendimentos registrados.")
 
+    # 📝 Novo Cadastro Boutique
     elif escolha == "Fazer novo cadastro":
-        # 🗂️ Cadastro da Cliente
         col1, col2, col3 = st.columns([1, 2, 1])
         with col2:
             with st.expander("🗂️ Cadastro da Cliente", expanded=True):
@@ -151,7 +170,7 @@ elif st.session_state.pagina_atual == "cliente":
                     else:
                         st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
 
-        # 🎀 Painel de Agendamento
+        # 🎀 Painel Agendamento Boutique
         if st.session_state.get("cadastro_confirmado"):
             st.markdown("""
                 <div style='
@@ -210,6 +229,7 @@ elif st.session_state.pagina_atual == "cliente":
                     <br>🔢 Protocolo: <code>{protocolo}</code>
                     <br>Obrigada por confiar na Cris Lash 👑
                 """, unsafe_allow_html=True)
+
 
 
 
