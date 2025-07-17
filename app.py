@@ -2,12 +2,13 @@ import streamlit as st
 from datetime import datetime, timedelta
 import os
 import json
+import pytz  # Corrige o erro do timezone
 
-# Função de tradução (PT ↔ ES)
+# 🗣️ Função de tradução (PT ↔ ES)
 def txt(pt, es):
-    return pt if st.session_state.get("idioma") != "es" else es
+    return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
-# Inicialização de estados
+# 🧠 Inicialização de estados
 if "historico_clientes" not in st.session_state:
     st.session_state.historico_clientes = []
 if "historico_ocupados" not in st.session_state:
@@ -15,23 +16,20 @@ if "historico_ocupados" not in st.session_state:
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 if "idioma" not in st.session_state:
-    st.session_state.idioma = "pt"  # pode trocar para "es"
-
+    st.session_state.idioma = "Português"
 
 # 🪞 Configuração de página
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 
-# 🌍 Data atual
+# 🌍 Data atual no fuso de Madrid
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 
-# 🌐 Idioma
+# 🌐 Seletor de idioma centralizado
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-def txt(pt, es):
-    return pt if st.session_state.get("idioma", "Português") == "Português" else es
 
 # 🎀 Cabeçalho
 col1, col2, col3 = st.columns([1, 2, 1])
