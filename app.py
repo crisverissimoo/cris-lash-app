@@ -641,10 +641,10 @@ if st.session_state.get("agendamento_confirmado"):
     horario_atend = st.session_state.historico_clientes[-1]["horario"]
 
     st.markdown(f"""
-        <div style='background-color:#fff6f6; padding:20px; border-radius:12px; max-width:480px; margin:auto; text-align:center;'>
-            <h4 style='color:#660000;'>✨ Atendimento confirmado!</h4>
+        <div style='background-color:#fff6f6; padding:18px; border-radius:12px; max-width:480px; margin:auto; text-align:center;'>
+            <h4 style='color:#660000; margin-bottom:10px;'>✨ Atendimento confirmado!</h4>
 
-            <p style='font-size:15px; color:#660000; margin-top:10px; margin-bottom:8px;'>
+            <p style='font-size:15px; color:#660000; margin-bottom:8px;'>
                 Protocolo nº <strong>{protocolo}</strong><br>
                 Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
             </p>
@@ -661,6 +661,7 @@ if st.session_state.get("agendamento_confirmado"):
             </a>
         </div>
     """, unsafe_allow_html=True)
+
 
 
 
