@@ -65,6 +65,32 @@ with col2:
     st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
+# Tela de boas-vindas com dois botões: cliente e administrativo
+
+st.markdown("""
+<div style="background-color:#f8d1d0; padding:26px; border-radius:12px; max-width:500px; margin:auto; text-align:center; color:#660000;">
+    <h4 style="margin-bottom:14px;">✨ Bem-vinda à Cris Lash 💖</h4>
+    <p style="font-size:14px;">
+        Sua beleza merece cuidado e carinho.  
+        Selecione abaixo como deseja continuar 💐
+    </p><br>
+
+    <div style="display:flex; justify-content:center; gap:20px;">
+        <a href="/cliente" target="_self">
+            <button style="background-color:#fff6f6; color:#660000; padding:10px 18px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
+                🙋‍♀️ Sou Cliente
+            </button>
+        </a>
+        <a href="/adm" target="_self">
+            <button style="background-color:#fff6f6; color:#660000; padding:10px 18px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
+                🗂 Área Administrativa
+            </button>
+        </a>
+    </div>
+</div>
+""", unsafe_allow_html=True)
+
+
 # 💖 Boas-vindas
 col1, col2, col3 = st.columns([0.5, 3, 0.5])
 with col2:
