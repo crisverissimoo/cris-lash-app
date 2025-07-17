@@ -46,7 +46,7 @@ with col2:
             background-color: #e8d1cb;
             padding: 20px;
             border-radius: 10px;
-            border: 2px solid #c08081;
+            border: 2px solid #e8d1cb;
             margin-top: 10px;
             margin-bottom: 20px;
         '>
