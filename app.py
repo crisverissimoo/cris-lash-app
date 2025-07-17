@@ -50,11 +50,11 @@ with col2:
     st.markdown(f"<h3 style='text-align:center;'>💎 {txt('Sistema Cris Lash','Sistema Cris Lash')}</h3>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
-# 🎀 Inicializa controle da entrada, se ainda não existir
+# 🔐 Inicializa controle de entrada
 if "entrada_escolhida" not in st.session_state:
     st.session_state.entrada_escolhida = None
 
-# 🧵 Etapa 1 — Tela inicial boutique
+# 🎀 Tela inicial boutique
 if st.session_state.entrada_escolhida is None:
     st.markdown("""
         <div style='
@@ -74,13 +74,14 @@ if st.session_state.entrada_escolhida is None:
 
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
-        st.markdown("### 👇 Selecione sua área:")
-        if st.button("🙋‍♀️ Sou Cliente"):
+        escolha = st.radio("👉 Escolha uma opção:", ["Sou Cliente", "Área Administrativa"], index=None, key="radio_entrada")
+        if escolha == "Sou Cliente":
             st.session_state.entrada_escolhida = "cliente"
             st.experimental_rerun()
-        if st.button("👩‍💼 Área Administrativa"):
+        elif escolha == "Área Administrativa":
             st.session_state.entrada_escolhida = "admin"
             st.experimental_rerun()
+
 
 
 # 🙋‍♀️ Página Cliente
