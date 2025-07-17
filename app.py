@@ -208,7 +208,6 @@ with st.expander("👑 Área profissional", expanded=True):
                     st.experimental_rerun()
 
 
-
             # Horários ocupados
             st.markdown("### 📅 Horários ocupados")
             if st.session_state.historico_ocupados:
