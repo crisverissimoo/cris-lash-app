@@ -687,3 +687,4 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
 
 
+
