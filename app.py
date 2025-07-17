@@ -588,38 +588,18 @@ if st.session_state.get("efeito_escolhido"):
                 }
             }
 
-          for nome, tipo in tipos.items():
-    st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
+            for nome, tipo in tipos.items():
+                st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
 
-    col_img, col_txt = st.columns([1.6, 1.4])
+                col_img, col_txt = st.columns([1.6, 1.4])
 
-    with col_img:
-        st.markdown(f"""
-            <div style='text-align:center;'>
-                <img src="{tipo['img']}" alt="{nome}" style="width: 100%; border-radius: 8px;">
-            </div>
-        """, unsafe_allow_html=True)
+                with col_img:
+                    st.markdown(f"""
+                        <div style='text-align:center;'>
+                            <img src="{tipo['img']}" alt="{nome}" style="width: 100%; border-radius: 8px;">
+                        </div>
+                    """, unsafe_allow_html=True)
 
-    with col_txt:
-        st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-        st.caption(tipo["desc"])
-
-        col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
-        with col_b2:
-            if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}"):
-                st.session_state.tipo_aplicacao = nome
-                st.session_state.valor = tipo["valor"]
-
-if st.session_state.get("tipo_aplicacao"):
-    selecionado = st.session_state.tipo_aplicacao
-    st.success(txt(
-        f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
-        f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
-    ))
-
-
-
-                
                 with col_txt:
                     st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
                     st.caption(tipo["desc"])
@@ -636,6 +616,7 @@ if st.session_state.get("tipo_aplicacao"):
                     f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
                     f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
                 ))
+
 
 
 
