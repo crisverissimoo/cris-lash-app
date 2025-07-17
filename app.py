@@ -230,25 +230,17 @@ with col2:
                 else:
                     st.info("📂 Nenhum horário bloqueado neste dia.")
 
-            # Gerenciar atendimentos
-            st.markdown(f"""
-<div style='
-    background-color: #f4e3e5;
-    padding:15px;
-    border-left:4px solid #b4637d;
-    border-radius:8px;
-    font-size:15px;
-    margin-bottom:10px;
-'>
-    <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
-    <strong>🧍 Nome:</strong> {cliente['nome']}<br>
-    <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
-    <strong>🎀 Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
-    <strong>📅 Data:</strong> {cliente['data']}<br>
-    <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-    <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-</div>
-""", unsafe_allow_html=True)
+      if st.session_state.get("agendamento_confirmado"):
+    cliente = st.session_state.historico_clientes[-1]  # Pega o último atendimento
+
+    st.markdown(f"""
+        <strong> Protocolo:</strong> {cliente['protocolo']}<br>
+        <strong> Nome:</strong> {cliente['nome']}<br>
+        <strong> Efeito:</strong> {cliente['efeito']}<br>
+        <strong> Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+        <strong> Data:</strong> {cliente['data']} — 🕐 {cliente['horario']}<br>
+        <strong> Observações:</strong> {cliente['mensagem'] or '—'}<br>
+    """, unsafe_allow_html=True)
 
 
 
