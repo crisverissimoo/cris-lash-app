@@ -231,7 +231,7 @@ with col2:
                     st.info("📂 Nenhum horário bloqueado neste dia.")
 
     if st.session_state.get("agendamento_confirmado"):
-    cliente = st.session_state.historico_clientes[-1]  # Último atendimento salvo
+    cliente = st.session_state.historico_clientes[-1]
 
     st.markdown(f"""
         <strong> Protocolo:</strong> {cliente['protocolo']}<br>
