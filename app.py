@@ -254,15 +254,6 @@ for key in ["historico_ocupados", "historico_clientes", "protocolo"]:
 
 
 # 🗂️ Cadastro da Cliente
-from datetime import datetime
-
-hoje = datetime.today().date()
-
-# 🔐 Inicializa controle único
-if "cadastro_confirmado" not in st.session_state:
-    st.session_state.cadastro_confirmado = False
-
-# 🗂️ Cadastro da Cliente
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     with st.expander(txt("🗂️ Cadastro da Cliente", "🗂️ Registro de Cliente"), expanded=True):
