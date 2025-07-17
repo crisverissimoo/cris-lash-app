@@ -665,20 +665,20 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-    # 📌 Cuidados pós aplicação — alinhado dentro do botão
     cuidados_html = """\
-<div style="border: 2px dashed #e09b8e; background-color: #c08081;
-border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
-  <h5>📌 Cuidados antes e depois da aplicação</h5>
-  <ul>
-    <li>🚫 Compareça sem maquiagem nos olhos</li>
-    <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
-    <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
-    <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
-    <li>💧 Use apenas produtos oil-free na região dos olhos</li>
-  </ul>
-</div>
-"""
-st.markdown(cuidados_html, unsafe_allow_html=True)
+    <div style="border: 2px dashed #e09b8e; background-color: #c08081;
+    border-radius: 10px; padding: 20px; margin-top: 20px; color: white;">
+      <h5>📌 Cuidados antes e depois da aplicação</h5>
+      <ul>
+        <li>🚫 Compareça sem maquiagem nos olhos</li>
+        <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+        <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+        <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+        <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+      </ul>
+    </div>
+    """
+    st.markdown(cuidados_html, unsafe_allow_html=True)
+
 
 
