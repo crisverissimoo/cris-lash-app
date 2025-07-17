@@ -642,24 +642,26 @@ if st.session_state.get("agendamento_confirmado"):
 
     st.markdown(
         f"""
-        <div style="background-color:#f8d1d0; padding:22px; border-radius:12px; max-width:500px; margin:auto; text-align:center;">
-            <h4 style="color:#660000; margin-bottom:10px;">✨ Atendimento confirmado com sucesso!</h4>
+        <div style="background-color:#f8d1d0; padding:20px 24px; border-radius:12px; max-width:500px; margin:auto; margin-top:30px;">
+            <h4 style="color:#660000; text-align:center; margin-bottom:12px;">✨ Atendimento confirmado com sucesso!</h4>
 
-            <p style="font-size:15px; color:#660000; margin-bottom:8px;">
+            <p style="color:#660000; font-size:15px; text-align:center; margin-bottom:8px;">
                 Protocolo nº <strong>{protocolo}</strong><br>
                 Para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
             </p>
 
-            <p style="font-size:14px; color:#660000; margin-bottom:16px;">
+            <p style="color:#660000; font-size:14px; text-align:center; margin-bottom:16px;">
                 💖 Obrigada por confiar na <em>Cris Lash</em><br>
                 Cuide dos seus cílios com carinho — nos vemos em breve!
             </p>
 
-            <a href="/" target="_self" style="text-decoration:none;">
-                <button style="background-color:#fff6f6; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
-                    🔁 Iniciar novo atendimento
-                </button>
-            </a>
+            <div style="text-align:center;">
+                <a href="/" target="_self" style="text-decoration:none;">
+                    <button style="background-color:#fff6f6; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
+                        🔁 Iniciar novo atendimento
+                    </button>
+                </a>
+            </div>
         </div>
         """,
         unsafe_allow_html=True
