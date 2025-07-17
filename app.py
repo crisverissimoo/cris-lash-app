@@ -71,6 +71,17 @@ if "historico_ocupados" not in st.session_state:
     st.session_state.historico_ocupados = []
 if "historico_clientes" not in st.session_state:
     st.session_state.historico_clientes = []
+    
+col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+with col_centro:
+    with st.expander("🗂️ Cadastro da Cliente", expanded=True):
+        st.markdown("#### 🧍 Digite seu nome completo")
+        nome = st.text_input("🧍 Nome da cliente", key="nome_input")
+
+        if nome:
+            st.session_state.nome_cliente = nome
+            st.success(f"✅ Nome salvo: **{nome}**")
+
 
 # 🎯 Horários
 def gerar_horarios():
