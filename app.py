@@ -636,6 +636,10 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
 
 
 if st.session_state.get("agendamento_confirmado"):
+    protocolo = st.session_state.historico_clientes[-1]["protocolo"]
+    data_atend = st.session_state.historico_clientes[-1]["data"]
+    horario_atend = st.session_state.historico_clientes[-1]["horario"]
+
     st.markdown("""
         <hr style='margin-top:40px; margin-bottom:20px;'>
 
@@ -645,16 +649,25 @@ if st.session_state.get("agendamento_confirmado"):
                 Obrigada por confiar na <strong>Cris Lash</strong> 💖<br>
                 Cuide dos seus cílios com carinho — nos vemos em breve!
             </p>
+    """, unsafe_allow_html=True)
 
-            <img src="https://i.imgur.com/Hz9llqs.jpeg" style="width:220px; border-radius:8px; margin-top:20px;" alt="Cílios Lash Boutique">
+    # Detalhes do protocolo com visual delicado
+    st.markdown(f"""
+        <p style='font-size:15px; color:#444;'>
+            Protocolo nº <strong>{protocolo}</strong><br>
+            Atendimento marcado para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
+        </p>
+    """, unsafe_allow_html=True)
 
-            <br><br>
-
-            <a href="/" target="_self">
-                <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px;">
-                    🔁 Iniciar novo atendimento
-                </button>
-            </a>
+    # Imagem elegante
+    st.markdown("""
+        <img src="https://i.imgur.com/Hz9llqs.jpeg" style="width:220px; border-radius:8px; margin-top:20px;" alt="Cílios Lash Boutique">
+        <br><br>
+        <a href="/" target="_self">
+            <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px;">
+                🔁 Iniciar novo atendimento
+            </button>
+        </a>
         </div>
     """, unsafe_allow_html=True)
 
