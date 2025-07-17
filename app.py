@@ -88,27 +88,29 @@ elif st.session_state.pagina_atual == "cliente":
     escolha = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], key="opcao_cliente")
 
     # 🔐 Login Boutique
-    if escolha == "Já sou cliente":
-        nome_login = st.text_input("🧍 Seu nome")
-        tel_login = st.text_input("📱 Seu telefone com DDD")
+    with st.form("form_login_cliente"):
+    nome_login = st.text_input("🧍 Seu nome")
+    tel_login = st.text_input("📱 Seu telefone com DDD")
+    confirmar_login = st.form_submit_button("✅ Entrar")
 
-        if st.button("✅ Entrar"):
-            caminho = "agenda.json"
-            historico = []
-            if os.path.exists(caminho):
-                with open(caminho, "r", encoding="utf-8") as f:
-                    historico = json.load(f)
+    if confirmar_login and nome_login and tel_login:
+        caminho = "agenda.json"
+        historico = []
+        if os.path.exists(caminho):
+            with open(caminho, "r", encoding="utf-8") as f:
+                historico = json.load(f)
 
-            atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
+        atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
 
         if atendimentos:
             st.session_state.cliente_logada = True
             st.session_state.nome_cliente = nome_login
             st.session_state.telefone = tel_login
             st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
-            st.experimental_rerun()  # 👈 força atualização imediata
+            st.experimental_rerun()
         else:
             st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
+
 
         # Painel pós-login
         if st.session_state.get("cliente_logada"):
