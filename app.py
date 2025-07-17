@@ -292,63 +292,6 @@ with col2:
 
 
 
-# só segue adiante se cadastro_completo estiver marcado como True
-
-if st.session_state.get("cadastro_confirmado"):
-
-    col_apl1, col_apl2, col_apl3 = st.columns([1, 2, 1])
-    with col_apl2:
-        with st.expander(txt("🎀 Aplicação + Técnica", "🎀 Aplicación + Técnica"), expanded=True):
-
-            efeito = st.selectbox(txt("✨ Efeito desejado", "✨ Efecto deseado"),
-                                  ["Clássico", "Híbrido", "Volume Russo"], key="efeito_escolhido")
-
-            tipo = st.radio(txt("Tipo de aplicação", "Tipo de aplicación"),
-                            ["Nova aplicação", "Manutenção"], key="tipo_aplicacao")
-
-            precos = {"Clássico": 28, "Híbrido": 32, "Volume Russo": 37}
-            valor = precos.get(efeito, 30)
-            if tipo == "Manutenção":
-                valor = valor - 8
-            st.session_state.valor = valor
-
-            st.success(f"{txt('💶 Valor final:', '💶 Precio final:')} **{valor} €**")
-
-            horario = st.time_input(txt("⏰ Horário desejado", "⏰ Horario deseado"), key="horario_aplicacao")
-            confirmar = st.checkbox(txt("Confirmar atendimento para esse horário",
-                                        "Confirmar cita para esta hora"), key="confirma_agendamento")
-
-            if confirmar:
-                st.session_state.agendamento_confirmado = True
-
-                protocolo = st.session_state.protocolo
-                st.session_state.protocolo += 1
-
-                cliente = {
-                    "Protocolo": protocolo,
-                    "Nome": nome,
-                    "Idade": idade,
-                    "Telefone": telefone,
-                    "Email": email,
-                    "Efeito": efeito,
-                    "Tipo": tipo,
-                    "Valor": valor,
-                    "Horário": str(horario.strftime('%H:%M'))
-                }
-                st.session_state.historico_clientes.append(cliente)
-                st.session_state.historico_ocupados.append(str(horario))
-
-                st.success(txt("📝 Atendimento registrado no histórico.",
-                               "📝 Atención registrada en el historial."))
-
-                texto = txt(
-                    f"Olá {nome}! 🌸 Sua aplicação {efeito} ({tipo}) está confirmada para {horario.strftime('%H:%M')} na Cris Lash. Valor: {valor}€.",
-                    f"Hola {nome}! 🌸 Tu aplicación {efeito} ({tipo}) está confirmada para las {horario.strftime('%H:%M')} en Cris Lash. Precio: {valor}€."
-                )
-
-                link = f"https://wa.me/?text={texto.replace(' ', '%20')}"
-                st.markdown(f"[📲 {txt('Enviar no WhatsApp', 'Enviar por WhatsApp')}]({link})", unsafe_allow_html=True)
-
 
 
 
