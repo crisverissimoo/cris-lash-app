@@ -635,6 +635,22 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
                     """, unsafe_allow_html=True)
 
 
+st.markdown("""
+    <hr style='margin-top:40px; margin-bottom:20px;'>
+    <div style='text-align:center; background-color:#fff6f6; padding:20px; border-radius:12px;'>
+        <h3 style='color:#660000;'>✨ Atendimento agendado com sucesso!</h3>
+        <p style='font-size:16px;'>Obrigada por confiar na Cris Lash 💖<br>
+        Cuide dos seus cílios com carinho — nos vemos em breve!</p>
+        <img src="https://i.imgur.com/FfwZ96P.png" style="width:200px; margin-top:20px;">
+        <br><br>
+        <a href="/" target="_self">
+            <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px;">
+                🔁 Iniciar novo atendimento
+            </button>
+        </a>
+    </div>
+""", unsafe_allow_html=True)
+
 
 
 
