@@ -50,22 +50,38 @@ with col2:
     st.markdown(f"<h3 style='text-align:center;'>💎 {txt('Sistema Cris Lash','Sistema Cris Lash')}</h3>", unsafe_allow_html=True)
     st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
-# 🏠 Tela inicial
-if st.session_state.pagina_atual == "home":
+# 🎀 Inicializa controle da entrada, se ainda não existir
+if "entrada_escolhida" not in st.session_state:
+    st.session_state.entrada_escolhida = None
+
+# 🧵 Etapa 1 — Tela inicial boutique
+if st.session_state.entrada_escolhida is None:
     st.markdown("""
-        <div class='box'>
-            <h4>✨ Bem-vinda à Cris Lash 💖</h4>
-            <p>Sua beleza merece cuidado e carinho.<br>Selecione abaixo como deseja continuar 💐</p>
+        <div style='
+            background-color: #fff6f6;
+            padding: 28px;
+            border-radius: 16px;
+            max-width: 600px;
+            margin: auto;
+            text-align: center;
+            border: 2px dashed #f3b1b6;
+            color: #660000;
+        '>
+            <h2>💖 Bem-vinda à Cris Lash</h2>
+            <p style='font-size:16px;'>Escolha como deseja acessar sua área personalizada</p>
         </div>
     """, unsafe_allow_html=True)
 
-    colA, colB = st.columns(2)
-    with colA:
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown("### 👇 Selecione sua área:")
         if st.button("🙋‍♀️ Sou Cliente"):
-            st.session_state.pagina_atual = "cliente"
-    with colB:
-        if st.button("🗂 Área Administrativa"):
-            st.session_state.pagina_atual = "adm"
+            st.session_state.entrada_escolhida = "cliente"
+            st.experimental_rerun()
+        if st.button("👩‍💼 Área Administrativa"):
+            st.session_state.entrada_escolhida = "admin"
+            st.experimental_rerun()
+
 
 # 🙋‍♀️ Página Cliente
 elif st.session_state.pagina_atual == "cliente":
