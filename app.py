@@ -4,10 +4,6 @@ import os
 import json
 import pytz
 
-# 🗣️ Função de tradução
-def txt(pt, es):
-    return pt if st.session_state.get("idioma", "Português") == "Português" else es
-
 # 🧠 Estados iniciais
 if "historico_clientes" not in st.session_state:
     st.session_state.historico_clientes = []
@@ -19,8 +15,11 @@ if "idioma" not in st.session_state:
     st.session_state.idioma = "Português"
 if "acesso_admin" not in st.session_state:
     st.session_state.acesso_admin = False
+if "pagina_atual" not in st.session_state:
+    st.session_state.pagina_atual = "home"
 
-# 🌸 Estilo boutique global
+# 🎨 Estilo boutique global
+st.set_page_config("Consultoria Cris Lash", layout="wide")
 st.markdown("""
     <style>
     .painel-agradecimento {
@@ -47,92 +46,81 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 🪞 Configuração de página
-st.set_page_config("Consultoria Cris Lash", layout="wide")
-
 # 🌍 Data atual
 fuso = pytz.timezone("Europe/Madrid")
 hoje = datetime.now(fuso).date()
 
-# 🌐 Idioma
+# 🌐 Idioma central
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-# 🎀 Cabeçalho
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
-    st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
+def txt(pt, es):
+    return pt if st.session_state.get("idioma") == "Português" else es
 
-# 🚪 Tela de entrada com escolha
-st.markdown("""
-<div style="background-color:#f8d1d0; padding:26px; border-radius:12px; max-width:500px; margin:auto; text-align:center; color:#660000;">
-    <h4 style="margin-bottom:14px;">✨ Bem-vinda à Cris Lash 💖</h4>
-    <p style="font-size:14px;">
-        Sua beleza merece cuidado e carinho.  
-        Selecione abaixo como deseja continuar 💐
-    </p><br>
-    <div style="display:flex; justify-content:center; gap:20px;">
-        <a href="/cliente" target="_self">
-            <button style="background-color:#fff6f6; color:#660000; padding:10px 18px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
-                🙋‍♀️ Sou Cliente
-            </button>
-        </a>
-        <a href="/adm" target="_self">
-            <button style="background-color:#fff6f6; color:#660000; padding:10px 18px; border:none; border-radius:6px; font-size:14px; font-weight:bold; cursor:pointer;">
-                🗂 Área Administrativa
-            </button>
-        </a>
-    </div>
-</div>
-""", unsafe_allow_html=True)
+# 🏠 Página HOME — escolha entre cliente/admin
+if st.session_state.pagina_atual == "home":
+    col1, col2, col3 = st.columns([1, 2, 1])
+    with col2:
+        st.markdown(f"<h2 style='text-align:center;'>💎 {txt('Sistema de Atendimento — Cris Lash','Sistema de Atención — Cris Lash')}</h2>", unsafe_allow_html=True)
+        st.markdown(f"<p style='text-align:center;'>📅 {txt('Hoje é','Hoy es')} <code>{hoje.strftime('%d/%m/%Y')}</code></p>", unsafe_allow_html=True)
 
-# 💖 Boas-vindas
-col1, col2, col3 = st.columns([0.5, 3, 0.5])
-with col2:
-    st.markdown(f"""
+        st.markdown("""
+            <div style='
+                background-color: #f8d1d0;
+                padding: 26px;
+                border-radius: 12px;
+                max-width: 500px;
+                margin: auto;
+                text-align: center;
+                color: #660000;
+            '>
+                <h4>✨ Bem-vinda à Cris Lash 💖</h4>
+                <p style='font-size:14px;'>Sua beleza merece cuidado e carinho.<br>Selecione abaixo como deseja continuar 💐</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        colA, colB = st.columns(2)
+        with colA:
+            if st.button("🙋‍♀️ Sou Cliente"):
+                st.session_state.pagina_atual = "cliente"
+        with colB:
+            if st.button("🗂 Área Administrativa"):
+                st.session_state.pagina_atual = "adm"
+
+# 👩‍🦰 Página CLIENTE
+elif st.session_state.pagina_atual == "cliente":
+    st.markdown("""
         <div style='
+            background-color: #fff6f6;
+            padding: 24px;
+            border-radius: 12px;
+            max-width: 500px;
+            margin: auto;
+            margin-top: 30px;
             text-align: center;
-            background-color: #e8d1cb;
-            padding: 20px;
-            border-radius: 10px;
-            border: 2px solid #a7585c;
-            margin-top: 10px;
-            margin-bottom: 20px;
+            color: #660000;
+            border: 2px dashed #f3b1b6;
         '>
-            <h3 style='color: #a7585c;'>{txt('Bem-vinda ao Cris Lash', 'Bienvenida a Cris Lash')}</h3>
-            <p>{txt('Atendimento profissional com técnica em formação.',
-                    'Atención profesional con técnica en formación.')}</p>
-            <p style='font-weight: bold;'>{txt('Promoção: 25€ por aplicação!',
-                                                '¡Promoción: 25€ por aplicación!')}</p>
+            <h4>🙋‍♀️ Bem-vinda, cliente 💖</h4>
+            <p style='font-size:14px;'>Antes de continuar, preencha seus dados com carinho 💐</p>
         </div>
     """, unsafe_allow_html=True)
 
-# 🎯 Funções de horários
-def gerar_horarios():
-    base = datetime.strptime("08:00", "%H:%M")
-    return [(base + timedelta(minutes=30 * i)).strftime("%H:%M") for i in range(21)]
+    nome = st.text_input("🧍 Nome completo")
+    telefone = st.text_input("📱 Telefone com DDD")
+    maioridade = st.checkbox("✅ Confirmo que tenho mais de 18 anos")
 
-def esta_livre(data, horario):
-    inicio = datetime.strptime(horario, "%H:%M")
-    fim = inicio + timedelta(hours=2)
-    for ag_data, ag_hora in st.session_state.historico_ocupados:
-        ag_inicio = datetime.strptime(ag_hora, "%H:%M")
-        ag_fim = ag_inicio + timedelta(hours=2)
-        if data == ag_data and (
-            (inicio >= ag_inicio and inicio < ag_fim) or
-            (fim > ag_inicio and fim <= ag_fim) or
-            (inicio <= ag_inicio and fim >= ag_fim)
-        ):
-            return False
-    return True
+    if nome and telefone and maioridade:
+        st.success("✨ Dados validados! Você pode continuar o atendimento.")
+        # Aqui pode seguir com agendamento, protocolo etc.
+    else:
+        st.warning("⛔ Preencha todos os campos e confirme que tem +18.")
 
-# 🔐 Painel administrativo com código "rainha"
-with st.expander("👑 Área profissional", expanded=True):
-    st.markdown("### 🔐 Acesso restrito")
-    st.write("Digite o código secreto para liberar o painel de administração.")
-    
+# 🗂 Página ADMIN
+elif st.session_state.pagina_atual == "adm":
+    st.markdown("## 👑 Área profissional")
+    st.markdown("Digite o código secreto para liberar o painel de administração.")
     codigo_digitado = st.text_input("🔐 Código de acesso", type="password")
     if st.button("🔓 Entrar"):
         if codigo_digitado.strip().lower() == "rainha":
@@ -141,7 +129,6 @@ with st.expander("👑 Área profissional", expanded=True):
         else:
             st.error("❌ Código inválido — tente novamente.")
 
-    # 👑 Painel visual boutique
     if st.session_state.acesso_admin:
         st.markdown("""
             <div style='
@@ -157,14 +144,11 @@ with st.expander("👑 Área profissional", expanded=True):
                 color: #660000;
             '>
                 <h4>🗂 Painel Administrativo</h4>
-                <p style='font-size:14px;'>
-                    Gerencie agendamentos, horários ocupados e histórico de clientes com carinho 💖
-                </p>
-                <hr style='border: none; height: 1px; background-color: #f3b1b6; margin: 20px 0;'>
+                <p style='font-size:14px;'>Gerencie agendamentos, horários ocupados e histórico de clientes com carinho 💖</p>
             </div>
         """, unsafe_allow_html=True)
 
-        # 📋 Atendimentos por protocolo
+        # 🔍 Listagem de atendimentos
         st.markdown("### 📋 Atendimentos em ordem de protocolo")
         caminho_arquivo = "agenda.json"
         clientes_salvos = []
@@ -174,7 +158,6 @@ with st.expander("👑 Área profissional", expanded=True):
 
         if clientes_salvos:
             clientes_salvos.sort(key=lambda c: c["protocolo"])
-
             for idx, cliente in enumerate(clientes_salvos):
                 with st.container():
                     st.markdown(f"""
@@ -208,6 +191,8 @@ with st.expander("👑 Área profissional", expanded=True):
                                 json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
                             st.success("✅ Atendimento excluído com sucesso!")
                             st.experimental_rerun()
+        else:
+            st.info("📂
         else:
             st.info("📂 Nenhum atendimento registrado ainda.")
 
