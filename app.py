@@ -4,21 +4,23 @@ import os
 import json
 import pytz
 
-# 🧠 Estados iniciais
-if "historico_clientes" not in st.session_state:
-    st.session_state.historico_clientes = []
-if "historico_ocupados" not in st.session_state:
-    st.session_state.historico_ocupados = []
-if "protocolo" not in st.session_state:
-    st.session_state.protocolo = 1
-if "idioma" not in st.session_state:
-    st.session_state.idioma = "Português"
-if "acesso_admin" not in st.session_state:
-    st.session_state.acesso_admin = False
-if "pagina_atual" not in st.session_state:
-    st.session_state.pagina_atual = "home"
+# 🧠 Inicialização de estados
+for k, v in {
+    "pagina_atual": "home",
+    "historico_clientes": [],
+    "historico_ocupados": [],
+    "protocolo": 1,
+    "idioma": "Português",
+    "acesso_admin": False
+}.items():
+    if k not in st.session_state:
+        st.session_state[k] = v
 
-# 🎨 Estilo boutique global
+# 🌍 Data atual
+fuso = pytz.timezone("Europe/Madrid")
+hoje = datetime.now(fuso).date()
+
+# 🌸 Estilo boutique global
 st.set_page_config("Consultoria Cris Lash", layout="wide")
 st.markdown("""
     <style>
@@ -46,19 +48,16 @@ st.markdown("""
     </style>
 """, unsafe_allow_html=True)
 
-# 🌍 Data atual
-fuso = pytz.timezone("Europe/Madrid")
-hoje = datetime.now(fuso).date()
+# 🗣️ Função de tradução
+def txt(pt, es):
+    return pt if st.session_state.idioma == "Português" else es
 
-# 🌐 Idioma central
+# 🌐 Idioma centralizado
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-def txt(pt, es):
-    return pt if st.session_state.get("idioma") == "Português" else es
-
-# 🏠 Página HOME — escolha entre cliente/admin
+# 🎯 Página: HOME — seleção
 if st.session_state.pagina_atual == "home":
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -88,7 +87,7 @@ if st.session_state.pagina_atual == "home":
             if st.button("🗂 Área Administrativa"):
                 st.session_state.pagina_atual = "adm"
 
-# 👩‍🦰 Página CLIENTE
+# 🙋‍♀️ Página: CLIENTE
 elif st.session_state.pagina_atual == "cliente":
     st.markdown("""
         <div style='
@@ -112,15 +111,14 @@ elif st.session_state.pagina_atual == "cliente":
     maioridade = st.checkbox("✅ Confirmo que tenho mais de 18 anos")
 
     if nome and telefone and maioridade:
-        st.success("✨ Dados validados! Você pode continuar o atendimento.")
-        # Aqui pode seguir com agendamento, protocolo etc.
+        st.success("✨ Dados validados! Atendimento liberado.")
+        # Aqui pode vir painel de agendamento, protocolo etc.
     else:
         st.warning("⛔ Preencha todos os campos e confirme que tem +18.")
 
-# 🗂 Página ADMIN
+# 👑 Página: ADMIN
 elif st.session_state.pagina_atual == "adm":
-    st.markdown("## 👑 Área profissional")
-    st.markdown("Digite o código secreto para liberar o painel de administração.")
+    st.markdown("## 🔐 Área profissional")
     codigo_digitado = st.text_input("🔐 Código de acesso", type="password")
     if st.button("🔓 Entrar"):
         if codigo_digitado.strip().lower() == "rainha":
@@ -148,14 +146,13 @@ elif st.session_state.pagina_atual == "adm":
             </div>
         """, unsafe_allow_html=True)
 
-        # 🔍 Listagem de atendimentos
-        st.markdown("### 📋 Atendimentos em ordem de protocolo")
         caminho_arquivo = "agenda.json"
         clientes_salvos = []
         if os.path.exists(caminho_arquivo):
             with open(caminho_arquivo, "r", encoding="utf-8") as f:
                 clientes_salvos = json.load(f)
 
+        st.markdown("### 📋 Atendimentos em ordem de protocolo")
         if clientes_salvos:
             clientes_salvos.sort(key=lambda c: c["protocolo"])
             for idx, cliente in enumerate(clientes_salvos):
@@ -191,22 +188,20 @@ elif st.session_state.pagina_atual == "adm":
                                 json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
                             st.success("✅ Atendimento excluído com sucesso!")
                             st.experimental_rerun()
-      
         else:
             st.info("📂 Nenhum atendimento registrado ainda.")
 
-        # 📅 Horários ocupados
         st.markdown("### 📅 Horários ocupados")
         if st.session_state.historico_ocupados:
             agenda = {}
             for data, hora in st.session_state.historico_ocupados:
-                dia_str = data.strftime('%d/%m/%Y')
-                agenda.setdefault(dia_str, []).append(hora)
-
+                d_str = data.strftime('%d/%m/%Y')
+                agenda.setdefault(d_str, []).append(hora)
             for dia, horas in agenda.items():
                 st.markdown(f"**📅 {dia}**: {' | '.join(sorted(horas))}")
         else:
             st.info("📂 Nenhum horário bloqueado ainda.")
+
 
 
             # Bloqueio e desbloqueio
