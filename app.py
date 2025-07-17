@@ -640,23 +640,23 @@ if st.session_state.get("agendamento_confirmado"):
     data_atend = st.session_state.historico_clientes[-1]["data"]
     horario_atend = st.session_state.historico_clientes[-1]["horario"]
 
-    # Centralizar com colunas
-    cols = st.columns([1, 6, 1])
-    with cols[1]:
-        st.markdown("### ✨ Atendimento confirmado com sucesso!")
+    # Centralizar e simular fundo rosinha com cor tema clara
+    with st.container():
+        cols = st.columns([1, 5, 1])
+        with cols[1]:
+            st.markdown(
+                f"""
+                ### ✨ Atendimento confirmado com sucesso!
 
-        st.markdown(f"""
-        **Protocolo nº:** {protocolo}  
-        📅 **{data_atend}** — ⏰ **{horario_atend}**  
-        """)
+                **Protocolo nº:** {protocolo}  
+                📅 **{data_atend}** — ⏰ **{horario_atend}**
 
-        st.markdown("""
-        💖 Obrigada por confiar na *Cris Lash*  
-        Cuide dos seus cílios com carinho — nos vemos em breve! 💐
-        """)
+                💖 Obrigada por confiar na *Cris Lash*  
+                Cuide dos seus cílios com carinho — nos vemos em breve! 💐
+                """, help="Painel boutique"
+            )
 
-        st.divider()
-        st.button("🔁 Iniciar novo atendimento", use_container_width=True)
-
+            st.divider()
+            st.button("🔁 Iniciar novo atendimento", use_container_width=True)
 
 
