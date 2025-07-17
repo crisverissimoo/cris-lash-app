@@ -52,12 +52,12 @@ st.markdown("""
 def txt(pt, es):
     return pt if st.session_state.idioma == "Português" else es
 
-# 🌐 Idioma centralizado
+# 🌐 Idioma central
 col1, col2, col3 = st.columns([1, 2, 1])
 with col2:
     st.selectbox("🌐 Idioma / Language", ["Português", "Español"], key="idioma")
 
-# 🎯 Página: HOME — seleção
+# 🎯 Página: HOME — escolha da entrada
 if st.session_state.pagina_atual == "home":
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
@@ -112,11 +112,11 @@ elif st.session_state.pagina_atual == "cliente":
 
     if nome and telefone and maioridade:
         st.success("✨ Dados validados! Atendimento liberado.")
-        # Aqui pode vir painel de agendamento, protocolo etc.
+        # Aqui pode vir o painel da cliente, protocolo, agendamento etc.
     else:
         st.warning("⛔ Preencha todos os campos e confirme que tem +18.")
 
-# 👑 Página: ADMIN
+# 👑 Página: ADMINISTRATIVA
 elif st.session_state.pagina_atual == "adm":
     st.markdown("## 🔐 Área profissional")
     codigo_digitado = st.text_input("🔐 Código de acesso", type="password")
@@ -146,6 +146,7 @@ elif st.session_state.pagina_atual == "adm":
             </div>
         """, unsafe_allow_html=True)
 
+        # 📋 Atendimentos por protocolo
         caminho_arquivo = "agenda.json"
         clientes_salvos = []
         if os.path.exists(caminho_arquivo):
@@ -191,16 +192,13 @@ elif st.session_state.pagina_atual == "adm":
         else:
             st.info("📂 Nenhum atendimento registrado ainda.")
 
+        # 📅 Horários ocupados
         st.markdown("### 📅 Horários ocupados")
         if st.session_state.historico_ocupados:
             agenda = {}
             for data, hora in st.session_state.historico_ocupados:
-                d_str = data.strftime('%d/%m/%Y')
-                agenda.setdefault(d_str, []).append(hora)
-            for dia, horas in agenda.items():
-                st.markdown(f"**📅 {dia}**: {' | '.join(sorted(horas))}")
-        else:
-            st.info("📂 Nenhum horário bloqueado ainda.")
+                dia_str = data.strftime('%d/%m/%Y')
+
 
 
 
