@@ -213,7 +213,6 @@ with col2:
                 cliente = next((c for c in st.session_state.historico_clientes if c["nome"] == selecionada), None)
                 if cliente:
                     st.markdown(f"""
-                        <div style='
                             background-color: #f4e3e5;
                             padding:15px;
                             border-left:4px solid #b4637d;
