@@ -463,7 +463,12 @@ if st.session_state.ficha_validada:
 
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 
-if st.session_state.get("efeito_escolhido"):
+# Inicializa variável de controle se ainda não existe
+if "etapa_agendamento" not in st.session_state:
+    st.session_state.etapa_agendamento = False
+
+# Seleção da técnica
+if st.session_state.get("efeito_escolhido") and not st.session_state.etapa_agendamento:
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Técnica de aplicación"), expanded=True):
@@ -512,6 +517,7 @@ if st.session_state.get("efeito_escolhido"):
                         if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}_{i}"):
                             st.session_state.tipo_aplicacao = nome
                             st.session_state.valor = tipo["valor"]
+                            st.session_state.etapa_agendamento = True  # Marca que pode seguir
 
             if st.session_state.get("tipo_aplicacao"):
                 selecionado = st.session_state.tipo_aplicacao
@@ -520,41 +526,98 @@ if st.session_state.get("efeito_escolhido"):
                     f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
                 ))
 
-
+# Bloco de agendamento
 from datetime import datetime, timedelta
 import os
 import json
 
-if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao"):
+# Inicializa variável de controle se ainda não existe
+if "etapa_agendamento" not in st.session_state:
+    st.session_state.etapa_agendamento = False
+
+# Seleção da técnica
+if st.session_state.get("efeito_escolhido") and not st.session_state.etapa_agendamento:
+    col_esq, col_centro, col_dir = st.columns([1, 2, 1])
+    with col_centro:
+        with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Técnica de aplicación"), expanded=True):
+            st.markdown("<h4 style='text-align:center;'>🎀 Técnica de Aplicação</h4>", unsafe_allow_html=True)
+
+            tipos = {
+                "Egípcio 3D": {
+                    "img": "https://i.imgur.com/TOPRWFQ.jpeg",
+                    "desc": txt("Leque 3D artístico — acabamento definido e sofisticado.", "Abanico 3D artístico — acabado definido y sofisticado."),
+                    "valor": "25€"
+                },
+                "Volume Russo 4D": {
+                    "img": "https://i.imgur.com/tBX2O8e.jpeg",
+                    "desc": txt("4 fios por cílio — volume intenso e estruturado.", "4 fibras por pestaña — volumen intenso y estructurado."),
+                    "valor": "25€"
+                },
+                "Volume Brasileiro": {
+                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
+                    "desc": txt("Formato Y — volumoso e natural.", "Formato Y — voluminoso y natural."),
+                    "valor": "25€"
+                },
+                "Fio a Fio": {
+                    "img": "https://i.imgur.com/VzlySv4.jpeg",
+                    "desc": txt("1 fio por cílio — efeito rímel natural.", "1 fibra por pestaña — efecto natural tipo máscara."),
+                    "valor": "25€"
+                }
+            }
+
+            for i, (nome, tipo) in enumerate(tipos.items()):
+                st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
+
+                col_img, col_txt = st.columns([1.6, 1.4])
+                with col_img:
+                    st.markdown(f"""
+                        <div style='text-align:center;'>
+                            <img src="{tipo['img']}" alt="{nome}" style="width:220px; border-radius:8px;">
+                        </div>
+                    """, unsafe_allow_html=True)
+
+                with col_txt:
+                    st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
+                    st.caption(tipo["desc"])
+
+                    col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
+                    with col_b2:
+                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}_{i}"):
+                            st.session_state.tipo_aplicacao = nome
+                            st.session_state.valor = tipo["valor"]
+                            st.session_state.etapa_agendamento = True  # Marca que pode seguir
+
+            if st.session_state.get("tipo_aplicacao"):
+                selecionado = st.session_state.tipo_aplicacao
+                st.success(txt(
+                    f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
+                    f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
+                ))
+
+# Bloco de agendamento
+from datetime import datetime, timedelta
+import os
+import json
+
+if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplicacao") and st.session_state.etapa_agendamento:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         with st.expander("📅 Agendamento do Atendimento", expanded=True):
-            data = st.date_input(
-                "📅 Escolha a data do atendimento",
-                min_value=datetime.today().date()
-            )
+            data = st.date_input("📅 Escolha a data do atendimento", min_value=datetime.today().date())
 
-            horarios_livres = [
-                h for h in gerar_horarios()
-                if esta_livre(data, h)
-            ]
+            horarios_livres = [h for h in gerar_horarios() if esta_livre(data, h)]
 
             if not horarios_livres:
                 st.warning("⛔ Nenhum horário disponível neste dia.")
             else:
                 horario = st.selectbox("🕐 Escolha o horário", horarios_livres)
-                fim = (
-                    datetime.strptime(horario, "%H:%M") + timedelta(hours=2)
-                ).strftime("%H:%M")
+                fim = (datetime.strptime(horario, "%H:%M") + timedelta(hours=2)).strftime("%H:%M")
 
                 nome = st.session_state.get("nome_cliente", "—")
                 efeito = st.session_state.get("efeito_escolhido", "—")
                 tipo = st.session_state.get("tipo_aplicacao", "—")
                 valor = st.session_state.get("valor", "—")
-                mensagem = st.text_area(
-                    "📩 Mensagem adicional (opcional)",
-                    placeholder="Ex: alergia, dúvidas..."
-                )
+                mensagem = st.text_area("📩 Mensagem adicional (opcional)", placeholder="Ex: alergia, dúvidas...")
 
                 st.markdown("💖 Confirme os dados do atendimento abaixo:")
                 st.markdown(f"- 🧍 Nome: **{nome}**")
@@ -594,7 +657,7 @@ if st.session_state.get("efeito_escolhido") and st.session_state.get("tipo_aplic
 
                     st.success("✅ Atendimento agendado e salvo com sucesso!")
 
-                    # 🌸 Botão boutique de WhatsApp com seu número real
+                    # 🌸 Botão boutique de WhatsApp
                     numero_whatsapp = "34653841126"
                     mensagem_whatsapp = f"""
 Olá, Cris! Sou {nome}, confirmando meu atendimento 💖
@@ -614,7 +677,7 @@ Dia: {data.strftime('%d/%m/%Y')} às {horario}
                         </a>
                     """, unsafe_allow_html=True)
 
-                    # 💖 Cuidados visuais pós-atendimento
+                    # 💖 Cuidados pós-atendimento
                     st.markdown("""
                         <div style='background-color:#f8d1d0; padding:20px; border-radius:12px;'>
                             <h4 style='color:#660000;'>📌 Cuidados antes e depois da aplicação</h4>
