@@ -641,28 +641,29 @@ if st.session_state.get("agendamento_confirmado"):
     horario_atend = st.session_state.historico_clientes[-1]["horario"]
 
     st.markdown(f"""
-        <hr style='margin-top:40px; margin-bottom:20px;'>
+        <hr style='margin-top:30px; margin-bottom:20px;'>
 
-        <div style='text-align:center; background-color:#fff6f6; padding:20px; border-radius:12px; max-width:500px; margin:auto;'>
-            <h4 style='color:#660000; margin-bottom:10px;'>✨ Atendimento agendado com sucesso!</h4>
+        <div style='background-color:#fff6f6; padding:20px; border-radius:12px; max-width:480px; margin:auto; text-align:center;'>
+            <h4 style='color:#660000;'>✨ Atendimento agendado com sucesso!</h4>
 
-            <p style='font-size:15px; color:#444; margin-bottom:8px;'>
+            <p style='font-size:15px; color:#444; margin-top:10px; margin-bottom:10px;'>
                 Protocolo nº <strong>{protocolo}</strong><br>
                 Marcado para <strong>{data_atend}</strong> às <strong>{horario_atend}</strong>
             </p>
 
-            <p style='font-size:14px; color:#555; margin-bottom:18px;'>
+            <p style='font-size:14px; color:#555; margin-bottom:16px;'>
                 Obrigada por confiar na <strong>Cris Lash</strong> 💖<br>
                 Cuide dos seus cílios com carinho — nos vemos em breve!
             </p>
 
             <a href="/" target="_self">
-                <button style="background-color:#f8d1d0; color:#660000; padding:8px 18px; border:none; border-radius:8px; font-size:14px;'>
+                <button style="background-color:#f8d1d0; color:#660000; padding:8px 20px; border:none; border-radius:6px; font-size:14px; cursor:pointer;'>
                     🔁 Iniciar novo atendimento
                 </button>
             </a>
         </div>
     """, unsafe_allow_html=True)
+
 
 
 
