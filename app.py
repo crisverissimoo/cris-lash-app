@@ -113,64 +113,104 @@ elif st.session_state.pagina_atual == "cliente":
             else:
                 st.warning("🙈 Nenhum atendimento encontrado com esses dados.")
 
-    if st.session_state.get("cadastro_confirmado"):
-    st.markdown("""
-        <div style='
-            background-color: #f8d1d0;
-            padding: 24px;
-            border-radius: 12px;
-            max-width: 520px;
-            margin: auto;
-            margin-top: 20px;
-            text-align: center;
-            border: 2px solid #cc4c73;
-            color: #660000;
-        '>
-            <h4>📅 Agendamento Boutique</h4>
-            <p style='font-size:14px;'>Agora escolha os detalhes do seu atendimento 💖</p>
-        </div>
-    """, unsafe_allow_html=True)
+    elif escolha == "Fazer novo cadastro":
+        # 🗂️ Cadastro da Cliente
+        col1, col2, col3 = st.columns([1, 2, 1])
+        with col2:
+            with st.expander("🗂️ Cadastro da Cliente", expanded=True):
+                nome = st.text_input("🧍 Nome completo")
+                nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
+                telefone = st.text_input("📞 Telefone com DDD")
+                email = st.text_input("📧 Email (opcional)")
 
-    efeito = st.selectbox("✨ Efeito desejado", ["Clássico", "Volume", "Híbrido"], key="efeito_ag")
-    tecnica = st.selectbox("🎀 Técnica", ["Fio a fio", "Volume russo", "Mega volume"], key="tecnica_ag")
-    valor = st.text_input("💲 Valor combinado", key="valor_ag")
-    data = st.date_input("📅 Data do atendimento")
-    horario = st.time_input("⏰ Horário do atendimento")
-    mensagem = st.text_area("💬 Observação (opcional)", key="msg_ag")
+                idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+                menor = idade < 18
+                st.info(f"📌 Idade: **{idade} anos**")
 
-    protocolo = f"CL{st.session_state.protocolo:04}"
-    if st.button("📌 Finalizar agendamento"):
-        cliente = {
-            "protocolo": protocolo,
-            "nome": st.session_state.nome_cliente,
-            "telefone": st.session_state.telefone,
-            "nascimento": str(st.session_state.nascimento),
-            "email": st.session_state.email,
-            "idade": st.session_state.idade_cliente,
-            "efeito": efeito,
-            "tipo": tecnica,
-            "valor": valor,
-            "data": str(data),
-            "horario": str(horario),
-            "mensagem": mensagem
-        }
+                autorizada = True
+                if menor:
+                    responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
+                    autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+                    if autorizacao != "Sim":
+                        st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
+                        autorizada = False
 
-        caminho = "agenda.json"
-        lista = []
-        if os.path.exists(caminho):
-            with open(caminho, "r", encoding="utf-8") as f:
-                lista = json.load(f)
+                if st.button("✅ Confirmar cadastro"):
+                    campos_ok = nome and telefone and nascimento and idade >= 0
+                    if menor:
+                        campos_ok = campos_ok and autorizada
 
-        lista.append(cliente)
-        with open(caminho, "w", encoding="utf-8") as f:
-            json.dump(lista, f, ensure_ascii=False, indent=2)
+                    if campos_ok:
+                        st.session_state.nome_cliente = nome
+                        st.session_state.nascimento = nascimento
+                        st.session_state.telefone = telefone
+                        st.session_state.email = email
+                        st.session_state.idade_cliente = idade
+                        st.session_state.cadastro_confirmado = True
+                        st.success("✅ Cadastro finalizado com sucesso!")
+                    else:
+                        st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
 
-        st.session_state.protocolo += 1
-        st.success(f"""
-            💖 Atendimento agendado com sucesso!
-            <br>🔢 Protocolo: <code>{protocolo}</code>
-            <br>Obrigada por confiar na Cris Lash 👑
-        """, unsafe_allow_html=True)
+        # 🎀 Painel de Agendamento
+        if st.session_state.get("cadastro_confirmado"):
+            st.markdown("""
+                <div style='
+                    background-color: #f8d1d0;
+                    padding: 24px;
+                    border-radius: 12px;
+                    max-width: 520px;
+                    margin: auto;
+                    margin-top: 20px;
+                    text-align: center;
+                    border: 2px solid #cc4c73;
+                    color: #660000;
+                '>
+                    <h4>📅 Agendamento Boutique</h4>
+                    <p style='font-size:14px;'>Agora escolha os detalhes do seu atendimento 💖</p>
+                </div>
+            """, unsafe_allow_html=True)
+
+            efeito = st.selectbox("✨ Efeito desejado", ["Clássico", "Volume", "Híbrido"], key="efeito_ag")
+            tecnica = st.selectbox("🎀 Técnica", ["Fio a fio", "Volume russo", "Mega volume"], key="tecnica_ag")
+            valor = st.text_input("💲 Valor combinado", key="valor_ag")
+            data = st.date_input("📅 Data do atendimento")
+            horario = st.time_input("⏰ Horário do atendimento")
+            mensagem = st.text_area("💬 Observação (opcional)", key="msg_ag")
+
+            protocolo = f"CL{st.session_state.protocolo:04}"
+            if st.button("📌 Finalizar agendamento"):
+                cliente = {
+                    "protocolo": protocolo,
+                    "nome": st.session_state.nome_cliente,
+                    "telefone": st.session_state.telefone,
+                    "nascimento": str(st.session_state.nascimento),
+                    "email": st.session_state.email,
+                    "idade": st.session_state.idade_cliente,
+                    "efeito": efeito,
+                    "tipo": tecnica,
+                    "valor": valor,
+                    "data": str(data),
+                    "horario": str(horario),
+                    "mensagem": mensagem
+                }
+
+                caminho = "agenda.json"
+                lista = []
+                if os.path.exists(caminho):
+                    with open(caminho, "r", encoding="utf-8") as f:
+                        lista = json.load(f)
+
+                lista.append(cliente)
+                with open(caminho, "w", encoding="utf-8") as f:
+                    json.dump(lista, f, ensure_ascii=False, indent=2)
+
+                st.session_state.protocolo += 1
+                st.success(f"""
+                    💖 Atendimento agendado com sucesso!
+                    <br>🔢 Protocolo: <code>{protocolo}</code>
+                    <br>Obrigada por confiar na Cris Lash 👑
+                """, unsafe_allow_html=True)
+
 
 
     else:
