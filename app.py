@@ -252,14 +252,6 @@ for key in ["historico_ocupados", "historico_clientes", "protocolo"]:
     if key not in st.session_state:
         st.session_state[key] = [] if key != "protocolo" else 1
 
-# 🗂️ Cadastro da Cliente
-from datetime import datetime
-
-hoje = datetime.today().date()
-
-# 🔐 Inicializa a trava se não existir
-if "cadastro_completo" not in st.session_state:
-    st.session_state.cadastro_completo = False
 
 # 🗂️ Cadastro da Cliente
 from datetime import datetime
