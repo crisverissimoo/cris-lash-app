@@ -487,6 +487,206 @@ Dia: {data_formatada} às {horario}
 
 
 
+# 👩‍💼 Área Administrativa
+if st.session_state.pagina_atual == "admin":
+    st.markdown("## 👩‍💼 Painel Administrativo")
+
+    # Carrega agendamentos do JSON
+    caminho = "agenda.json"
+    lista_admin = []
+    if os.path.exists(caminho):
+        with open(caminho, "r", encoding="utf-8") as f:
+            lista_admin = json.load(f)
+
+    if lista_admin:
+        opcoes_admin = [f"{c['data']} — {c['horario']} — {c['nome']} — protocolo {c['protocolo']}" for c in lista_admin]
+        atendimento_admin = st.selectbox("📋 Selecione atendimento:", opcoes_admin, index=None, key="admin_escolha")
+
+        if atendimento_admin:
+            idx = opcoes_admin.index(atendimento_admin)
+            cliente = lista_admin[idx]
+
+            st.markdown(f"#### 📌 Detalhes de protocolo `{cliente['protocolo']}`")
+            st.write(cliente)
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                confirmar_cancelar = st.button("❌ Cancelar Atendimento")
+                if confirmar_cancelar:
+                    lista_admin.pop(idx)
+                    with open(caminho, "w", encoding="utf-8") as f:
+                        json.dump(lista_admin, f, ensure_ascii=False, indent=2)
+                    st.success("✅ Atendimento cancelado com sucesso!")
+
+            with col2:
+                import urllib.parse
+                fone = cliente["telefone"].replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+                mensagem = f"""
+✨ Atendimento confirmado na Cris Lash 👑
+📌 Protocolo: {cliente['protocolo']}
+📅 Data: {cliente['data']} às {cliente['horario']}
+🎀 Técnica: {cliente.get('tipo', cliente.get('valor', ''))}
+💬 Obs.: {cliente.get('mensagem', '—')}
+"""
+                link = f"https://wa.me/55{fone}?text={urllib.parse.quote(mensagem)}"
+                st.markdown(f"[📤 Enviar via WhatsApp]({link})", unsafe_allow_html=True)
+    else:
+        st.warning("📭 Nenhum atendimento registrado ainda.")
+
+
+
+
+
+
+elif st.session_state.pagina_atual == "adm":
+    st.markdown("<h4>🔐 Área Administrativa</h4>", unsafe_allow_html=True)
+    codigo = st.text_input("🔑 Código de acesso", type="password")
+    if st.button("🔓 Entrar"):
+        if codigo.strip().lower() == "rainha":
+            st.session_state.acesso_admin = True
+            st.success("💎 Acesso liberado!")
+        else:
+            st.error("❌ Código inválido.")
+
+    if st.session_state.acesso_admin:
+        st.markdown("""
+            <div class='box'>
+                <h4>👑 Painel Administrativo</h4>
+                <p>Gerencie atendimentos com carinho 💖</p>
+            </div>
+        """, unsafe_allow_html=True)
+
+        caminho_arquivo = "agenda.json"
+        clientes_salvos = []
+        if os.path.exists(caminho_arquivo):
+            with open(caminho_arquivo, "r", encoding="utf-8") as f:
+                clientes_salvos = json.load(f)
+
+        st.markdown("### 📋 Lista de atendimentos")
+        if clientes_salvos:
+            clientes_salvos.sort(key=lambda c: c["protocolo"])
+            for idx, cliente in enumerate(clientes_salvos):
+                with st.container():
+                    st.markdown(f"""
+                        <div style='background-color:#d495a2; padding:15px; border-radius:8px;'>
+                            <strong>🔢 Protocolo:</strong> {cliente['protocolo']}<br>
+                            <strong>🧍 Nome:</strong> {cliente['nome']}<br>
+                            <strong>✨ Efeito:</strong> {cliente['efeito']}<br>
+                            <strong>🎀 Técnica:</strong> {cliente['tipo']}{" — "}{cliente['valor']}<br>
+                            <strong>📅 Data:</strong> {cliente['data']}<br>
+                            <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                            <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+                        </div>
+                    """, unsafe_allow_html=True)
+
+                    if st.button(f"❌ Excluir {cliente['protocolo']}", key=f"excluir_{idx}"):
+                        confirmar = st.radio(f"⚠️ Confirmar exclusão de {cliente['protocolo']}?", ["Cancelar", "Confirmar"], key=f"confirmar_{idx}")
+                        if confirmar == "Confirmar":
+                            clientes_salvos.pop(idx)
+                            with open(caminho_arquivo, "w", encoding="utf-8") as f:
+                                json.dump(clientes_salvos, f, ensure_ascii=False, indent=2)
+                            st.success("✅ Atendimento excluído!")
+                            st.experimental_rerun()
+        else:
+            st.info("📂 Nenhum atendimento registrado.")
+
+
+        # 📅 Horários ocupados
+        st.markdown("### 📅 Horários ocupados")
+        if st.session_state.historico_ocupados:
+            agenda = {}
+            for data, hora in st.session_state.historico_ocupados:
+                dia_str = data.strftime('%d/%m/%Y')
+
+
+
+
+            # Bloqueio e desbloqueio
+            with st.expander("🚫 Bloquear período"):
+                hoje = datetime.today().date()
+                dia_bloqueio = st.date_input("📅 Data para bloquear/desbloquear", value=hoje, key="bloqueio_data")
+
+                tipo_bloqueio = st.radio("Qual período deseja bloquear?", ["⏰ Horário único", "🌅 Manhã completa", "🌇 Tarde completa"], key="tipo_bloqueio")
+
+                if tipo_bloqueio == "⏰ Horário único":
+                    hora_bloqueio = st.selectbox("⏰ Horário", gerar_horarios(), key="bloqueio_hora")
+                    if st.button("🚫 Confirmar bloqueio de horário", key="confirmar_horario_unico"):
+                        if esta_livre(dia_bloqueio, hora_bloqueio):
+                            st.session_state.historico_ocupados.append((dia_bloqueio, hora_bloqueio))
+                            st.success(f"✅ Horário {hora_bloqueio} bloqueado em {dia_bloqueio.strftime('%d/%m/%Y')}.")
+                        else:
+                            st.warning("⚠️ Esse horário já está ocupado.")
+
+                elif tipo_bloqueio == "🌅 Manhã completa":
+                    if st.button("🚫 Confirmar bloqueio da manhã", key="confirmar_manha"):
+                        manha = ["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00", "11:30"]
+                        bloqueados = [h for h in manha if esta_livre(dia_bloqueio, h)]
+                        for h in bloqueados:
+                            st.session_state.historico_ocupados.append((dia_bloqueio, h))
+                        if bloqueados:
+                            st.success(f"✅ Manhã bloqueada ({', '.join(bloqueados)}) em {dia_bloqueio.strftime('%d/%m/%Y')}.")
+                        else:
+                            st.warning("⚠️ Todos os horários da manhã já estavam ocupados.")
+
+                elif tipo_bloqueio == "🌇 Tarde completa":
+                    if st.button("🚫 Confirmar bloqueio da tarde", key="confirmar_tarde"):
+                        tarde = ["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]
+                        bloqueados = [h for h in tarde if esta_livre(dia_bloqueio, h)]
+                        for h in bloqueados:
+                            st.session_state.historico_ocupados.append((dia_bloqueio, h))
+                        if bloqueados:
+                            st.success(f"✅ Tarde bloqueada ({', '.join(bloqueados)}) em {dia_bloqueio.strftime('%d/%m/%Y')}.")
+                        else:
+                            st.warning("⚠️ Todos os horários da tarde já estavam ocupados.")
+
+                # Desbloqueio manual
+                st.markdown("### 🔓 Desbloquear horário manual")
+                bloqueios_atuais = [(d, h) for (d, h) in st.session_state.historico_ocupados if d == dia_bloqueio]
+                if bloqueios_atuais:
+                    hora_desbloqueio = st.selectbox("⏰ Selecione um horário bloqueado para remover", [h for _, h in bloqueios_atuais], key="desbloqueio_hora")
+                    if st.button("🔓 Confirmar remoção de bloqueio", key="remover_bloqueio"):
+                        st.session_state.historico_ocupados = [(d, h) for (d, h) in st.session_state.historico_ocupados if not (d == dia_bloqueio and h == hora_desbloqueio)]
+                        st.success(f"✅ Bloqueio removido para {hora_desbloqueio} em {dia_bloqueio.strftime('%d/%m/%Y')}.")
+                else:
+                    st.info("📂 Nenhum horário bloqueado neste dia.")
+                    
+if st.session_state.get("agendamento_confirmado"):
+    cliente = st.session_state.historico_clientes[-1]
+
+    st.markdown(f"""
+        <strong> Protocolo:</strong> {cliente['protocolo']}<br>
+        <strong> Nome:</strong> {cliente['nome']}<br>
+        <strong> Efeito:</strong> {cliente['efeito']}<br>
+        <strong> Técnica:</strong> {cliente['tipo']} — 💶 {cliente['valor']}<br>
+        <strong> Data:</strong> {cliente['data']} — 🕐 {cliente['horario']}<br>
+        <strong> Observações:</strong> {cliente['mensagem'] or '—'}<br>
+    """, unsafe_allow_html=True)
+
+
+
+# 🧠 Estados iniciais
+for key in ["ficha_validada", "cliente_apta", "efeito_escolhido", "tipo_aplicacao", "valor", "agendamento_confirmado", "cadastro_completo"]:
+    if key not in st.session_state:
+        st.session_state[key] = None
+for key in ["historico_ocupados", "historico_clientes", "protocolo"]:
+    if key not in st.session_state:
+        st.session_state[key] = [] if key != "protocolo" else 1
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
