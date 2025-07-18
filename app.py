@@ -289,65 +289,48 @@ if st.session_state.get("etapa_agendamento"):
 
 
                 
-        # 5️⃣ Agendamento boutique — aparece se ficha validada
-if st.session_state.get("ficha_validada"):
-    st.markdown("""
-        <div style='
-            background-color: #f8d1d0;
-            padding: 24px;
-            border-radius: 12px;
-            max-width: 520px;
-            margin: auto;
-            margin-top: 20px;
-            text-align: center;
-            border: 2px solid #cc4c73;
-            color: #660000;
-        '>
-            <h4>📅 Agendamento Boutique</h4>
-            <p style='font-size:14px;'>Agora escolha os detalhes do seu atendimento 💖</p>
-        </div>
-    """, unsafe_allow_html=True)
+       # 🔁 Reprogramação — aparece após login e histórico carregado
+if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("historico_cliente"), list):
+    st.markdown("### 🔁 Reprogramar Atendimento")
 
-    efeito = st.selectbox("✨ Efeito desejado", ["Clássico", "Volume", "Híbrido"], key="efeito_ag")
-    tecnica = st.selectbox("🎀 Técnica", ["Fio a fio", "Volume russo", "Mega volume"], key="tecnica_ag")
-    valor = st.text_input("💲 Valor combinado", key="valor_ag")
-    data = st.date_input("📅 Data do atendimento")
-    horario = st.time_input("⏰ Horário do atendimento")
-    mensagem = st.text_area("💬 Observação (opcional)", key="msg_ag")
+    opcoes = [f"{c['data']} - {c['horario']} — protocolo {c['protocolo']}" for c in st.session_state["historico_cliente"]]
+    escolha = st.selectbox("📌 Selecione atendimento a reprogramar:", opcoes, index=None, key="atendimento_reprogramar")
 
-    protocolo = f"CL{st.session_state.protocolo:04}"
-    if st.button("📌 Finalizar agendamento"):
-        cliente = {
-            "protocolo": protocolo,
-            "nome": st.session_state.nome_cliente,
-            "telefone": st.session_state.telefone,
-            "nascimento": str(st.session_state.nascimento),
-            "email": st.session_state.email,
-            "idade": st.session_state.idade_cliente,
-            "efeito": efeito,
-            "tipo": tecnica,
-            "valor": valor,
-            "data": str(data),
-            "horario": str(horario),
-            "mensagem": mensagem
-        }
+    if escolha:
+        idx = opcoes.index(escolha)
+        atendimento_original = st.session_state["historico_cliente"][idx]
 
-        caminho = "agenda.json"
-        lista = []
-        if os.path.exists(caminho):
-            with open(caminho, "r", encoding="utf-8") as f:
-                lista = json.load(f)
+        st.info(f"🔧 Reprogramando atendimento de protocolo `{atendimento_original['protocolo']}`")
 
-        lista.append(cliente)
-        with open(caminho, "w", encoding="utf-8") as f:
-            json.dump(lista, f, ensure_ascii=False, indent=2)
+        nova_data = st.date_input("📅 Nova data", value=datetime.strptime(atendimento_original["data"], "%Y-%m-%d").date())
+        novo_horario = st.selectbox("⏰ Novo horário", ["09:00", "11:00", "13:00", "15:00", "17:00"], index=None)
+        nova_mensagem = st.text_area("💬 Nova observação", value=atendimento_original.get("mensagem", ""))
 
-        st.session_state.protocolo += 1
-        st.success(f"""
-            💖 Atendimento agendado com sucesso!
-            <br>🔢 Protocolo: <code>{protocolo}</code>
-            <br>Obrigada por confiar na Cris Lash 👑
-        """, unsafe_allow_html=True)
+        confirmar_reagendamento = st.button("✅ Confirmar reprogramação")
+
+        if confirmar_reagendamento and nova_data and novo_horario:
+            caminho = "agenda.json"
+            lista = []
+            if os.path.exists(caminho):
+                with open(caminho, "r", encoding="utf-8") as f:
+                    lista = json.load(f)
+
+            for c in lista:
+                if c["protocolo"] == atendimento_original["protocolo"]:
+                    c["data"] = str(nova_data)
+                    c["horario"] = novo_horario
+                    c["mensagem"] = nova_mensagem
+                    break
+
+            with open(caminho, "w", encoding="utf-8") as f:
+                json.dump(lista, f, ensure_ascii=False, indent=2)
+
+            st.success(f"✅ Atendimento atualizado com sucesso! Protocolo `{atendimento_original['protocolo']}`")
+
+            # Atualiza histórico boutique
+            atendimento_original["data"] = str(nova_data)
+            atendimento_original["horario"] = novo_horario
+            atendimento_original["mensagem"] = nova_mensagem
 
 
 # 1️⃣ Botão de reprogramação — aparece se cliente logada e apta
