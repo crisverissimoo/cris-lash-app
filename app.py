@@ -100,8 +100,14 @@ if st.session_state.pagina_atual == "cliente":
 
 
 
-# 4️⃣ Ficha Clínica — aparece se autorizada e cadastro confirmado
+# 🧾 Ficha Clínica — aparece se autorizada e cadastro confirmado
 if st.session_state.get("cadastro_confirmado") and st.session_state.get("autorizada"):
+    st.session_state.ficha_validada = st.session_state.get("ficha_validada", False)
+
+    bloqueios = ["glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"]
+    alertas = ["alergia", "irritacao", "gravida", "acido", "sensibilidade"]
+    informativos = ["colirio", "lentes", "extensao"]
+
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
@@ -140,10 +146,6 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                                                 "Debe responder todas las preguntas antes de continuar."))
                         st.session_state.ficha_validada = False
                     else:
-                        bloqueios = ["glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"]
-                        alertas = ["alergia", "irritacao", "gravida", "acido", "sensibilidade"]
-                        informativos = ["colirio", "lentes", "extensao"]
-
                         bloqueios_detectados = [f"- {perguntas[c]}" for c in bloqueios if respostas[c] == "Sim"]
                         alertas_detectados = [f"- {perguntas[c]}" for c in alertas if respostas[c] == "Sim"]
                         info_detectados = [f"- {perguntas[c]}" for c in informativos if respostas[c] == "Sim"]
@@ -152,7 +154,6 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                             st.error("❌ " + txt("Cliente não está apta para atendimento.", "Cliente no apta para atención") + "\n\n" + "\n".join(bloqueios_detectados))
                             st.session_state.ficha_validada = False
                             st.session_state.cliente_apta = False
-                            st.stop()
                         else:
                             if alertas_detectados:
                                 st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:",
@@ -166,8 +167,6 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                                                    "Cliente apta para continuar — ficha validada correctamente."))
                             st.session_state.ficha_validada = True
                             st.session_state.cliente_apta = True
-
-
 
         # 🔓 Etapa 2 — Escolha de Efeito
  
