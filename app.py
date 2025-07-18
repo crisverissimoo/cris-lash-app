@@ -168,64 +168,73 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                             st.session_state.ficha_validada = True
                             st.session_state.cliente_apta = True
 
-        # 🔓 Etapa 2 — Escolha de Efeito
- 
-if st.session_state.get("ficha_validada"):
+      # 🧾 Ficha Clínica — aparece se autorizada e cadastro confirmado
+if st.session_state.get("cadastro_confirmado") and st.session_state.get("autorizada"):
+    st.session_state.ficha_validada = st.session_state.get("ficha_validada", False)
+
+    bloqueios = ["glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"]
+    alertas = ["alergia", "irritacao", "gravida", "acido", "sensibilidade"]
+    informativos = ["colirio", "lentes", "extensao"]
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
-        with st.expander(txt("✨ Escolha o Efeito Lash", "✨ Elige el Efecto Lash"), expanded=True):
-            st.markdown("<h4 style='text-align:center;'>✨ Efeito Lash</h4>", unsafe_allow_html=True)
+        with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
+            with st.form("form_clinica"):
+                st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
-            efeitos = {
-                "Clássica": {
-                    "img": "https://i.imgur.com/Nqrwdcm.png",
-                    "desc": txt("Distribuição uniforme — efeito natural e delicado", "Distribución uniforme — efecto natural y delicado"),
-                    "tipo_olho": txt("Olhos amendoado ou simétricos", "Ojos almendrados o simétricos")
-                },
-                "Boneca": {
-                    "img": "https://i.imgur.com/vJUuvsl.png",
-                    "desc": txt("Centro mais intenso — abre e arredonda o olhar", "Centro más intenso — abre y redondea la mirada"),
-                    "tipo_olho": txt("Olhos pequenos, fechados ou orientais", "Ojos pequeños, cerrados u orientales")
-                },
-                "Gatinho": {
-                    "img": "https://i.imgur.com/zpBFK0e.png",
-                    "desc": txt("Alongado no canto externo — olhar sensual", "Alargado en la esquina — mirada sensual"),
-                    "tipo_olho": txt("Olhos caídos ou arredondados", "Ojos caídos o redondeados")
-                },
-                "Esquilo": {
-                    "img": "https://i.imgur.com/BY5eEsr.png",
-                    "desc": txt("Volume entre centro e canto — estilo marcante", "Volumen entre el centro y la esquina — estilo llamativo"),
-                    "tipo_olho": txt("Olhos puxados ou olhos grandes", "Ojos rasgados o grandes")
+                perguntas = {
+                    "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
+                    "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
+                    "conjuntivite": txt("Já teve conjuntivite nos últimos 30 dias?", "¿Tuvo conjuntivitis en los últimos 30 días?"),
+                    "cirurgia": txt("Fez cirurgia ocular recentemente?", "¿Ha tenido cirugía ocular reciente?"),
+                    "alergia": txt("Tem histórico de alergias nos olhos ou pálpebras?", "¿Tiene alergias en los ojos o párpados?"),
+                    "irritacao": txt("Está com olhos irritados ou lacrimejando frequentemente?", "¿Tiene ojos irritados o llorosos frecuentemente?"),
+                    "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o amamantando?"),
+                    "acido": txt("Está em tratamento dermatológico com ácido?", "¿Está en tratamiento con ácidos dermatológicos?"),
+                    "sensibilidade": txt("Tem sensibilidade a produtos químicos ou cosméticos?", "¿Tiene sensibilidad a productos químicos o cosméticos?"),
+                    "colirio": txt("Faz uso de colírios com frequência?", "¿Usa colirios con frecuencia?"),
+                    "lentes": txt("Usa lentes de contato?", "¿Usa lentes de contacto?"),
+                    "extensao": txt("Já fez extensão de cílios antes?", "¿Ya se hizo extensiones de pestañas?"),
+                    "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
                 }
-            }
 
-            for nome, efeito in efeitos.items():
-                st.markdown("<hr style='margin-top:40px; margin-bottom:30px;'>", unsafe_allow_html=True)
+                respostas = {}
+                for chave, pergunta in perguntas.items():
+                    col_p = st.columns([1, 4, 1])[1]
+                    with col_p:
+                        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-                col_img, col_txt = st.columns([1.8, 1.2])  # 📸 imagem com mais espaço
+                col_btn = st.columns([1, 2, 1])[1]
+                with col_btn:
+                    enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-                with col_img:
-                    st.image(efeito["img"], width=500)  # imagem destacada
+                if enviar:
+                    if any(r is None for r in respostas.values()):
+                        st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
+                                                "Debe responder todas las preguntas antes de continuar."))
+                        st.session_state.ficha_validada = False
+                    else:
+                        bloqueios_detectados = [f"- {perguntas[c]}" for c in bloqueios if respostas[c] == "Sim"]
+                        alertas_detectados = [f"- {perguntas[c]}" for c in alertas if respostas[c] == "Sim"]
+                        info_detectados = [f"- {perguntas[c]}" for c in informativos if respostas[c] == "Sim"]
 
-                with col_txt:
-                    st.markdown(f"<h5 style='text-align:center;'>🎀 {txt('Efeito','Efecto')} {nome}</h5>", unsafe_allow_html=True)
-                    st.caption(efeito["desc"])
-                    st.caption("👁️ " + txt("Indicado para:", "Indicado para:") + f" **{efeito['tipo_olho']}**")
-
-                    col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
-                    with col_b2:
-                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"btn_{nome}"):
-                            st.session_state.efeito_escolhido = nome
-
-            if st.session_state.get("efeito_escolhido"):
-                nome = st.session_state.efeito_escolhido
-                st.success("✅ " + txt(
-                    f"Efeito selecionado: {nome}",
-                    f"Efecto seleccionado: {nome}"
-                ))
-
-
+                        if bloqueios_detectados:
+                            st.error("❌ " + txt("Cliente não está apta para atendimento.", "Cliente no apta para atención") + "\n\n" + "\n".join(bloqueios_detectados))
+                            st.session_state.ficha_validada = False
+                            st.session_state.cliente_apta = False
+                        else:
+                            if alertas_detectados:
+                                st.warning("⚠️ " + txt("Condições que requerem avaliação profissional:",
+                                                       "Condiciones que requieren evaluación profesional:") + "\n\n" +
+                                           "\n".join(alertas_detectados))
+                            if info_detectados:
+                                st.info("📎 " + txt("Informações adicionais para registro:",
+                                                   "Información adicional para el registro:") + "\n\n" +
+                                        "\n".join(info_detectados))
+                            st.success("✅ " + txt("Cliente apta para continuar — ficha validada com sucesso.",
+                                                   "Cliente apta para continuar — ficha validada correctamente."))
+                            st.session_state.ficha_validada = True
+                            st.session_state.cliente_apta = True
 
 # 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
 
