@@ -154,10 +154,11 @@ with col_centro:
                 "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
             }
 
-                for chave, pergunta in perguntas.items():
-                    col_p = st.columns([1, 4, 1])[1]
-                    with col_p:
-                        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+              for chave, pergunta in perguntas.items():
+    col_p = st.columns([1, 4, 1])[1]
+    with col_p:
+        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+
 
                 col_btn = st.columns([1, 2, 1])[1]
                 with col_btn:
