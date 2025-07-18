@@ -411,6 +411,79 @@ Para dúvidas ou reagendamentos, fale conosco 🥰"""
         link = f"https://wa.me/?text={texto.replace(' ', '%20').replace('\n', '%0A')}"
         st.markdown(f"[📲 Enviar detalhes via WhatsApp]({link})", unsafe_allow_html=True)
 
+    # 🌸 Botão boutique de WhatsApp + Cuidados
+    if st.session_state.get("etapa_agendamento"):
+        numero_whatsapp = "34653841126"
+
+        nome = st.session_state.nome_cliente
+        protocolo = st.session_state.protocolo - 1  # já incrementado após agendar
+        tipo = st.session_state.tipo_aplicacao
+        efeito = st.session_state.efeito_escolhido
+        horario = horario
+        data_formatada = data.strftime('%d/%m/%Y')
+
+        mensagem_whatsapp = f"""
+Olá, Cris! Sou {nome}, confirmando meu atendimento 💖
+
+Protocolo: {protocolo}
+Técnica: {tipo} — {efeito}
+Dia: {data_formatada} às {horario}
+""".strip()
+
+        link_whatsapp = f"https://wa.me/{numero_whatsapp}?text={mensagem_whatsapp.replace(' ', '%20').replace('\\n', '%0A')}"
+
+        st.markdown(f"""
+            <a href="{link_whatsapp}" target="_blank">
+                <button style="background-color:#f8d1d0; color:#660000; padding:10px 20px; border:none; border-radius:8px; font-weight:bold; margin-top:10px; margin-bottom:20px;">
+                    📲 Enviar confirmação via WhatsApp
+                </button>
+            </a>
+        """, unsafe_allow_html=True)
+
+        # 💖 Cuidados pós-atendimento
+        st.markdown("""
+            <div style='background-color:#f8d1d0; padding:20px; border-radius:12px; margin-top:30px;'>
+                <h4 style='color:#660000;'>📌 Cuidados antes e depois da aplicação</h4>
+                <ul style='line-height:1.8; font-size:16px; color:#333333;'>
+                    <li>🚫 Compareça sem maquiagem nos olhos</li>
+                    <li>🧼 Lave o rosto com sabonete neutro antes do procedimento</li>
+                    <li>🕐 Evite molhar os cílios por 24h após aplicação</li>
+                    <li>🌙 Dormir de barriga para cima ajuda a preservar os fios</li>
+                    <li>💧 Use apenas produtos oil-free na região dos olhos</li>
+                </ul>
+            </div>
+        """, unsafe_allow_html=True)
+
+    # 🌟 Painel de agradecimento
+    if st.session_state.get("agendamento_confirmado") and st.session_state.historico_cliente:
+        ultimo = st.session_state.historico_cliente[-1]
+        protocolo = ultimo.get("protocolo", "—")
+        data_atend = ultimo.get("data", "—")
+        horario_atend = ultimo.get("horario", "—")
+
+        st.markdown(f"""
+            <div style="background-color:#e4f7f5; padding:25px; border-radius:14px; text-align:center; font-size:18px; margin-top:30px;">
+                ✨ Atendimento confirmado com sucesso!<br><br>
+                Protocolo nº <strong>{protocolo}</strong><br>
+                Para <strong>{data_atend}</strong às <strong>{horario_atend}</strong><br><br>
+                💖 Obrigada por confiar na <em>Cris Lash</em><br>
+                Cuide dos seus cílios com carinho — nos vemos em breve! 💐<br><br>
+                <a href="/" target="_self">
+                    <button style="padding:10px 25px; font-weight:bold; background-color:#d1e7e4; color:#004040; border:none; border-radius:10px;">
+                        🔁 Iniciar novo atendimento
+                    </button>
+                </a>
+            </div>
+        """, unsafe_allow_html=True)
+
+
+
+
+
+
+
+
+
 
 
 # 👩‍💼 Área Administrativa
