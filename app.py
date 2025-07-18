@@ -236,70 +236,57 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                             st.session_state.ficha_validada = True
                             st.session_state.cliente_apta = True
 
-# 🎯 Bloco 2 — Escolha do Tipo (liberado somente após escolher o efeito)
+# 🧵 Inicializa protocolo se necessário
+if "protocolo" not in st.session_state:
+    st.session_state.protocolo = 1
 
-# Inicializa variável de controle se ainda não existe
-if "etapa_agendamento" not in st.session_state:
-    st.session_state.etapa_agendamento = False
-
-# Seleção da técnica
-if st.session_state.get("efeito_escolhido") and not st.session_state.etapa_agendamento:
+# 🎯 Etapa 3 — Escolha de data, horário e mensagem (liberada após escolher técnica)
+if st.session_state.get("etapa_agendamento"):
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
-        with st.expander(txt("🎀 Tipo de Aplicação", "🎀 Técnica de aplicación"), expanded=True):
-            st.markdown("<h4 style='text-align:center;'>🎀 Técnica de Aplicação</h4>", unsafe_allow_html=True)
+        with st.expander(txt("📅 Agendar Atendimento", "📅 Reservar cita"), expanded=True):
+            st.markdown("<h4 style='text-align:center;'>📅 Agendar Atendimento</h4>", unsafe_allow_html=True)
 
-            tipos = {
-                "Egípcio 3D": {
-                    "img": "https://i.imgur.com/TOPRWFQ.jpeg",
-                    "desc": txt("Leque 3D artístico — acabamento definido e sofisticado.", "Abanico 3D artístico — acabado definido y sofisticado."),
-                    "valor": "25€"
-                },
-                "Volume Russo 4D": {
-                    "img": "https://i.imgur.com/tBX2O8e.jpeg",
-                    "desc": txt("4 fios por cílio — volume intenso e estruturado.", "4 fibras por pestaña — volumen intenso y estructurado."),
-                    "valor": "25€"
-                },
-                "Volume Brasileiro": {
-                    "img": "https://i.imgur.com/11rw6Jv.jpeg",
-                    "desc": txt("Formato Y — volumoso e natural.", "Formato Y — voluminoso y natural."),
-                    "valor": "25€"
-                },
-                "Fio a Fio": {
-                    "img": "https://i.imgur.com/VzlySv4.jpeg",
-                    "desc": txt("1 fio por cílio — efeito rímel natural.", "1 fibra por pestaña — efecto natural tipo máscara."),
-                    "valor": "25€"
+            data_agendada = st.date_input(txt("Escolha a data do atendimento", "Elige la fecha de atención"), min_value=hoje)
+            horarios_disponiveis = ["09:00", "11:00", "13:00", "15:00", "17:00"]
+            horario_agendado = st.selectbox(txt("⏰ Horário disponível", "⏰ Horario disponible"), horarios_disponiveis)
+
+            mensagem_cliente = st.text_area(txt("💬 Deseja deixar alguma observação?", "💬 ¿Desea dejar alguna observación?"))
+
+            confirmar_agendamento = st.button(txt("✅ Confirmar agendamento", "✅ Confirmar cita"))
+
+            if confirmar_agendamento and data_agendada and horario_agendado:
+                novo_atendimento = {
+                    "protocolo": f"{st.session_state.protocolo:05d}",
+                    "nome": st.session_state.nome_cliente,
+                    "telefone": st.session_state.telefone,
+                    "tipo": st.session_state.efeito_escolhido,
+                    "valor": st.session_state.tipo_aplicacao,
+                    "data": str(data_agendada),
+                    "horario": horario_agendado,
+                    "mensagem": mensagem_cliente,
                 }
-            }
 
-            for i, (nome, tipo) in enumerate(tipos.items()):
-                st.markdown("<hr style='margin-top:30px; margin-bottom:30px;'>", unsafe_allow_html=True)
+                caminho = "agenda.json"
+                historico = []
+                if os.path.exists(caminho):
+                    with open(caminho, "r", encoding="utf-8") as f:
+                        historico = json.load(f)
 
-                col_img, col_txt = st.columns([1.6, 1.4])
-                with col_img:
-                    st.markdown(f"""
-                        <div style='text-align:center;'>
-                            <img src="{tipo['img']}" alt="{nome}" style="width:220px; border-radius:8px;">
-                        </div>
-                    """, unsafe_allow_html=True)
+                historico.append(novo_atendimento)
 
-                with col_txt:
-                    st.markdown(f"<h5 style='text-align:center;'>{nome} — 💶 {tipo['valor']}</h5>", unsafe_allow_html=True)
-                    st.caption(tipo["desc"])
+                with open(caminho, "w", encoding="utf-8") as f:
+                    json.dump(historico, f, ensure_ascii=False, indent=2)
 
-                    col_b1, col_b2, col_b3 = st.columns([1, 2, 1])
-                    with col_b2:
-                        if st.button(txt(f"Selecionar {nome}", f"Seleccionar {nome}"), key=f"tipo_{nome}_{i}"):
-                            st.session_state.tipo_aplicacao = nome
-                            st.session_state.valor = tipo["valor"]
-                            st.session_state.etapa_agendamento = True  # Marca que pode seguir
-
-            if st.session_state.get("tipo_aplicacao"):
-                selecionado = st.session_state.tipo_aplicacao
+                st.session_state.protocolo += 1
                 st.success(txt(
-                    f"✅ Tipo selecionado: {selecionado} — 💶 {tipos[selecionado]['valor']}",
-                    f"✅ Técnica seleccionada: {selecionado} — 💶 {tipos[selecionado]['valor']}"
+                    f"✅ Atendimento agendado com sucesso! Protocolo {novo_atendimento['protocolo']}",
+                    f"✅ Cita confirmada correctamente. Protocolo {novo_atendimento['protocolo']}"
                 ))
+
+                # Limpa etapa para impedir reagendamento imediato
+                st.session_state.etapa_agendamento = False
+
 
                 
         # 5️⃣ Agendamento boutique — aparece se ficha validada
