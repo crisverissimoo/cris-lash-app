@@ -128,43 +128,43 @@ elif escolha_cliente == "Fazer novo cadastro":
 
 
 
-       # 4️⃣ Ficha Clínica — aparece se autorizada e cadastro confirmado
+python
+# 4️⃣ Ficha Clínica — aparece se autorizada e cadastro confirmado
 if st.session_state.get("cadastro_confirmado") and st.session_state.get("autorizada"):
     respostas = {}
 
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
-with col_centro:
-    with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
-        with st.form("form_clinica"):
-    st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+    with col_centro:
+        with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
+            with st.form("form_clinica"):
+                st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
-    perguntas = {
-        "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
-        "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
-        "conjuntivite": txt("Já teve conjuntivite nos últimos 30 dias?", "¿Tuvo conjuntivitis en los últimos 30 días?"),
-        "cirurgia": txt("Fez cirurgia ocular recentemente?", "¿Ha tenido cirugía ocular reciente?"),
-        "alergia": txt("Tem histórico de alergias nos olhos ou pálpebras?", "¿Tiene alergias en los ojos o párpados?"),
-        "irritacao": txt("Está com olhos irritados ou lacrimejando frequentemente?", "¿Tiene ojos irritados o llorosos frecuentemente?"),
-        "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o amamantando?"),
-        "acido": txt("Está em tratamento dermatológico com ácido?", "¿Está en tratamiento con ácidos dermatológicos?"),
-        "sensibilidade": txt("Tem sensibilidade a produtos químicos ou cosméticos?", "¿Tiene sensibilidad a productos químicos o cosméticos?"),
-        "colirio": txt("Faz uso de colírios com frequência?", "¿Usa colirios con frecuencia?"),
-        "lentes": txt("Usa lentes de contato?", "¿Usa lentes de contacto?"),
-        "extensao": txt("Já fez extensão de cílios antes?", "¿Ya se hizo extensiones de pestañas?"),
-        "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
-    }
+                perguntas = {
+                    "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
+                    "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
+                    "conjuntivite": txt("Já teve conjuntivite nos últimos 30 dias?", "¿Tuvo conjuntivitis en los últimos 30 días?"),
+                    "cirurgia": txt("Fez cirurgia ocular recentemente?", "¿Ha tenido cirugía ocular reciente?"),
+                    "alergia": txt("Tem histórico de alergias nos olhos ou pálpebras?", "¿Tiene alergias en los ojos o párpados?"),
+                    "irritacao": txt("Está com olhos irritados ou lacrimejando frequentemente?", "¿Tiene ojos irritados o llorosos frecuentemente?"),
+                    "gravida": txt("Está grávida ou amamentando?", "¿Está embarazada o amamantando?"),
+                    "acido": txt("Está em tratamento dermatológico com ácido?", "¿Está en tratamiento con ácidos dermatológicos?"),
+                    "sensibilidade": txt("Tem sensibilidade a produtos químicos ou cosméticos?", "¿Tiene sensibilidad a productos químicos o cosméticos?"),
+                    "colirio": txt("Faz uso de colírios com frequência?", "¿Usa colirios con frecuencia?"),
+                    "lentes": txt("Usa lentes de contato?", "¿Usa lentes de contacto?"),
+                    "extensao": txt("Já fez extensão de cílios antes?", "¿Ya se hizo extensiones de pestañas?"),
+                    "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
+                }
 
-    respostas = {}
-    for chave, pergunta in perguntas.items():
-        col_p = st.columns([1, 4, 1])[1]
-        with col_p:
-            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+                for chave, pergunta in perguntas.items():
+                    col_p = st.columns([1, 4, 1])[1]
+                    with col_p:
+                        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-    col_btn = st.columns([1, 2, 1])[1]
-    with col_btn:
-        enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
+                col_btn = st.columns([1, 2, 1])[1]
+                with col_btn:
+                    enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
-    if enviar:
+                if enviar:
         if any(resposta is None for resposta in respostas.values()):
             st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
                                     "Debe responder todas las preguntas antes de continuar."))
