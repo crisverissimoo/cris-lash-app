@@ -12,33 +12,6 @@ if "pagina_atual" not in st.session_state:
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
-# 🎀 Tela Inicial Boutique
-if st.session_state.pagina_atual is None:
-    st.markdown("""
-        <div style='
-            background-color: #fff6f6;
-            padding: 28px;
-            border-radius: 16px;
-            max-width: 600px;
-            margin: auto;
-            text-align: center;
-            border: 2px dashed #f3b1b6;
-            color: #660000;
-        '>
-            <h2>💖 Bem-vinda à Cris Lash</h2>
-            <p style='font-size:16px;'>Escolha como deseja acessar sua área personalizada</p>
-        </div>
-    """, unsafe_allow_html=True)
-
-    col1, col2, col3 = st.columns([1, 2, 1])
-    with col2:
-        escolha = st.radio("👑 Selecione sua área:", ["Sou Cliente", "Área Administrativa"], index=None, key="radio_entrada")
-        if escolha == "Sou Cliente":
-            st.session_state.pagina_atual = "cliente"
-            st.experimental_rerun()
-        elif escolha == "Área Administrativa":
-            st.session_state.pagina_atual = "admin"
-            st.experimental_rerun()
 
 
 
@@ -63,24 +36,24 @@ elif st.session_state.pagina_atual == "cliente":
                 atendimentos = [c for c in historico if c.get("nome") == nome_login and c.get("telefone") == tel_login]
 
                 if atendimentos:
-                    st.session_state.cliente_logada = True
-                    st.session_state.nome_cliente = nome_login
-                    st.session_state.telefone = tel_login
-                    st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
-                    st.experimental_rerun()
-                else:
-                    st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
+    st.session_state.cliente_logada = True
+    st.session_state.nome_cliente = nome_login
+    st.session_state.telefone = tel_login
+    st.session_state.historico_cliente = atendimentos  # salvar para uso pós-rerun
+    st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
+    st.experimental_rerun()
 
-        if st.session_state.get("cliente_logada"):
-            st.markdown(f"### 💼 Histórico de {st.session_state.nome_cliente}")
-            for idx, cliente in enumerate(atendimentos):
-                with st.expander(f"📌 Atendimento {idx + 1} — protocolo {cliente['protocolo']}"):
-                    st.markdown(f"""
-                        <strong>🎀 Técnica:</strong> {cliente['tipo']} — {cliente['valor']}<br>
-                        <strong>📅 Data:</strong> {cliente['data']}<br>
-                        <strong>⏰ Horário:</strong> {cliente['horario']}<br>
-                        <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
-                    """, unsafe_allow_html=True)
+        # Mostrar histórico após login
+if st.session_state.get("cliente_logada"):
+    st.markdown(f"### 💼 Histórico de {st.session_state.nome_cliente}")
+    for idx, cliente in enumerate(st.session_state.get("historico_cliente", [])):
+        with st.expander(f"📌 Atendimento {idx + 1} — protocolo {cliente['protocolo']}"):
+            st.markdown(f"""
+                <strong>🎀 Técnica:</strong> {cliente['tipo']} — {cliente['valor']}<br>
+                <strong>📅 Data:</strong> {cliente['data']}<br>
+                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+            """, unsafe_allow_html=True)
 
   
    # 📝 Cadastro Boutique + redirecionamento
