@@ -128,11 +128,8 @@ elif escolha_cliente == "Fazer novo cadastro":
 
 
 
-python
 # 4️⃣ Ficha Clínica — aparece se autorizada e cadastro confirmado
 if st.session_state.get("cadastro_confirmado") and st.session_state.get("autorizada"):
-    respostas = {}
-
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
@@ -155,6 +152,7 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                     "reacao": txt("Teve alguma reação alérgica em procedimentos anteriores?", "¿Tuvo alguna reacción alérgica en procedimientos anteriores?")
                 }
 
+                respostas = {}
                 for chave, pergunta in perguntas.items():
                     col_p = st.columns([1, 4, 1])[1]
                     with col_p:
@@ -165,73 +163,21 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                     enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
                 if enviar:
-        if any(resposta is None for resposta in respostas.values()):
-            st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
-                                    "Debe responder todas las preguntas antes de continuar."))
-            st.session_state.ficha_validada = False
-        else:
-            st.session_state.ficha_validada = True
-            st.success("✅ " + txt("Ficha validada com sucesso!", "Formulario validado correctamente."))
-
-              for chave, pergunta in perguntas.items():
-    col_p = st.columns([1, 4, 1])[1]
-    with col_p:
-        respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
-
-
-    respostas = {}
-    for chave, pergunta in perguntas.items():
-        col_p = st.columns([1, 4, 1])[1]
-        with col_p:
-            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
-
-    col_btn = st.columns([1, 2, 1])[1]
-    with col_btn:
-        enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
-
-                if enviar:
-                    if any(resposta is None for resposta in respostas.values()):
+                    if any(r is None for r in respostas.values()):
                         st.warning("⚠️ " + txt("Você precisa responder todas as perguntas antes de finalizar.",
                                                 "Debe responder todas las preguntas antes de continuar."))
                         st.session_state.ficha_validada = False
                     else:
-                        impeditivos = {
-                            "glaucoma": txt("Glaucoma ou condição ocular diagnosticada", "Glaucoma u otra condición ocular"),
-                            "infeccao": txt("Infecção ocular", "Infección ocular"),
-                            "conjuntivite": txt("Conjuntivite recente", "Conjuntivitis reciente"),
-                            "cirurgia": txt("Cirurgia ocular recente", "Cirugía ocular reciente"),
-                            "reacao": txt("Reação alérgica anterior", "Reacción alérgica anterior")
-                        }
-                        alerta = {
-                            "alergia": txt("Histórico de alergias", "Historial de alergias"),
-                            "irritacao": txt("Olhos irritados", "Ojos irritados"),
-                            "gravida": txt("Gestante ou lactante", "Embarazada o lactante"),
-                            "acido": txt("Tratamento com ácido", "Tratamiento con ácido"),
-                            "sensibilidade": txt("Sensibilidade a químicos", "Sensibilidad química")
-                        }
-                        informativos = {
-                            "colirio": txt("Uso frequente de colírios", "Uso frecuente de colirios"),
-                            "lentes": txt("Usa lentes de contato", "Usa lentes de contacto"),
-                            "extensao": txt("Já fez extensão antes", "Ya se hizo extensiones")
-                        }
+                        bloqueios = ["glaucoma", "infeccao", "conjuntivite", "cirurgia", "reacao"]
+                        alertas = ["alergia", "irritacao", "gravida", "acido", "sensibilidade"]
+                        informativos = ["colirio", "lentes", "extensao"]
 
-                        bloqueios_detectados = []
-                        alertas_detectados = []
-                        info_detectados = []
-
-                        for chave, resposta in respostas.items():
-                            if resposta == "Sim":
-                                if chave in impeditivos:
-                                    bloqueios_detectados.append(f"- {impeditivos[chave]}")
-                                elif chave in alerta:
-                                    alertas_detectados.append(f"- {alerta[chave]}")
-                                elif chave in informativos:
-                                    info_detectados.append(f"- {informativos[chave]}")
+                        bloqueios_detectados = [f"- {perguntas[c]}" for c in bloqueios if respostas[c] == "Sim"]
+                        alertas_detectados = [f"- {perguntas[c]}" for c in alertas if respostas[c] == "Sim"]
+                        info_detectados = [f"- {perguntas[c]}" for c in informativos if respostas[c] == "Sim"]
 
                         if bloqueios_detectados:
-                            st.error("❌ " + txt("Cliente não está apta para atendimento.",
-                                                "Cliente no apta para atención") + "\n\n" +
-                                     "\n".join(bloqueios_detectados))
+                            st.error("❌ " + txt("Cliente não está apta para atendimento.", "Cliente no apta para atención") + "\n\n" + "\n".join(bloqueios_detectados))
                             st.session_state.ficha_validada = False
                             st.session_state.cliente_apta = False
                             st.stop()
@@ -248,6 +194,7 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
                                                    "Cliente apta para continuar — ficha validada correctamente."))
                             st.session_state.ficha_validada = True
                             st.session_state.cliente_apta = True
+
 
 
         # 🔓 Etapa 2 — Escolha de Efeito
