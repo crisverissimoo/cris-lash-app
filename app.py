@@ -199,7 +199,8 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
 
         # 🔓 Etapa 2 — Escolha de Efeito
  
-if st.session_state.ficha_validada:
+if st.session_state.get("ficha_validada"):
+
     col_esq, col_centro, col_dir = st.columns([1, 2, 1])
     with col_centro:
         with st.expander(txt("✨ Escolha o Efeito Lash", "✨ Elige el Efecto Lash"), expanded=True):
