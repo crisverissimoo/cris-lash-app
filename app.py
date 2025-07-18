@@ -80,7 +80,7 @@ elif st.session_state.pagina_atual == "cliente":
                         <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
                     """, unsafe_allow_html=True)
 
-    # 📝 Cadastro Boutique + redirecionamento
+  
    # 📝 Cadastro Boutique + redirecionamento
 elif escolha_cliente == "Fazer novo cadastro":
     with st.form("form_cadastro"):
@@ -383,6 +383,65 @@ if st.session_state.get("ficha_validada"):
         """, unsafe_allow_html=True)
 
 
+# 1️⃣ Botão de reprogramação — aparece se cliente logada e apta
+if st.session_state.get("cliente_logada") and st.session_state.get("cliente_apta"):
+    st.markdown("### 🗓️ Seus atendimentos anteriores")
+    nome = st.session_state.nome_cliente
+    tel = st.session_state.telefone
+
+    caminho = "agenda.json"
+    historico = []
+    if os.path.exists(caminho):
+        with open(caminho, "r", encoding="utf-8") as f:
+            historico = json.load(f)
+
+    atendimentos = [c for c in historico if c.get("nome") == nome and c.get("telefone") == tel]
+
+    for idx, cliente in enumerate(atendimentos):
+        with st.expander(f"📌 Atendimento {idx+1} — protocolo {cliente['protocolo']}"):
+            st.markdown(f"""
+                <strong>🎀 Técnica:</strong> {cliente['tipo']} — {cliente['valor']}<br>
+                <strong>📅 Data:</strong> {cliente['data']}<br>
+                <strong>⏰ Horário:</strong> {cliente['horario']}<br>
+                <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
+            """, unsafe_allow_html=True)
+
+    # Botão para iniciar reprogramação
+    if st.button("🔁 Reprogramar atendimento"):
+        st.session_state.reprogramar = True
+        st.session_state.atendimento_reprogramado = atendimentos[-1]  # usa o último como base
+        st.experimental_rerun()
+
+# 2️⃣ Se cliente deseja reprogramar
+if st.session_state.get("reprogramar") and st.session_state.get("atendimento_reprogramado"):
+    atendimento = st.session_state.atendimento_reprogramado
+
+    with st.form("form_reprogramar"):
+        st.markdown("### 🔁 Reprogramar Atendimento")
+
+        novo_efeito = st.selectbox("✨ Escolha o novo efeito desejado", ["Volume Russo", "Fio a Fio", "Híbrido", "Leque 4D", "Colorido"])
+        nova_tecnica = st.selectbox("🎀 Técnica", ["Clássica", "Avançada", "Express"])
+        nova_data = st.date_input("📅 Nova data")
+        novo_horario = st.selectbox("⏰ Horário", ["09:00", "11:00", "13:00", "15:00", "17:00"])
+        nova_mensagem = st.text_area("💬 Mensagem ou observação (opcional)")
+
+        confirmar = st.form_submit_button("✅ Confirmar reprogramação")
+
+        if confirmar:
+            for cliente in historico:
+                if cliente["protocolo"] == atendimento["protocolo"]:
+                    cliente["tipo"] = novo_efeito
+                    cliente["valor"] = nova_tecnica
+                    cliente["data"] = str(nova_data)
+                    cliente["horario"] = novo_horario
+                    cliente["mensagem"] = nova_mensagem
+                    break
+
+            with open(caminho, "w", encoding="utf-8") as f:
+                json.dump(historico, f, indent=2, ensure_ascii=False)
+
+            st.success("✅ Atendimento reprogramado com sucesso!")
+            st.session_state.reprogramar = False
 
 
 
