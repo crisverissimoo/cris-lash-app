@@ -589,17 +589,7 @@ for key in ["historico_ocupados", "historico_clientes", "protocolo"]:
 
 
 
-# 🔁 Reprogramação de cliente
-col1, col2, col3 = st.columns([1, 2, 1])
-with col2:
-    with st.expander(txt("🔁 Reprogramar cliente", "🔁 Reprogramar cliente"), expanded=False):
-        if st.session_state.historico_clientes:
-            selecionada = st.selectbox("📍 Escolha cliente:", [c["nome"] for c in st.session_state.historico_clientes], key="cliente_reprograma")
-            novo_horario = st.time_input("⏰ Novo horário")
 
-            if st.button(txt("📅 Reprogramar aplicação", "📅 Reprogramar aplicación")):
-                st.success(txt(f"✅ {selecionada} reprogramada para {novo_horario.strftime('%H:%M')}",
-                               f"✅ {selecionada} reprogramada para las {novo_horario.strftime('%H:%M')}"))
 
 
 
