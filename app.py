@@ -12,11 +12,7 @@ if "pagina_atual" not in st.session_state:
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
-# 🧵 Inicializa controle da tela boutique
-if "pagina_atual" not in st.session_state:
-    st.session_state.pagina_atual = None
-
-# 🎀 Tela de boas-vindas
+# 🎀 Tela Inicial Boutique
 if st.session_state.pagina_atual is None:
     st.markdown("""
         <div style='
@@ -37,14 +33,13 @@ if st.session_state.pagina_atual is None:
     col1, col2, col3 = st.columns([1, 2, 1])
     with col2:
         escolha = st.radio("👑 Selecione sua área:", ["Sou Cliente", "Área Administrativa"], index=None, key="radio_entrada")
-
         if escolha == "Sou Cliente":
             st.session_state.pagina_atual = "cliente"
             st.experimental_rerun()
-
         elif escolha == "Área Administrativa":
             st.session_state.pagina_atual = "admin"
             st.experimental_rerun()
+
 
 
 # 🙋‍♀️ Área da Cliente
