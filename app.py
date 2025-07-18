@@ -3,20 +3,21 @@ import json, os
 from datetime import datetime
 hoje = datetime.now().date()
 
-def txt(pt, es):  # Utilitário para texto bilíngue
+def txt(pt, es):  # Utilitário bilíngue
     return pt if st.session_state.get("idioma") != "es" else es
 
-# 🌸 Inicializa controle da tela
-if "pagina_atual" not in st.session_state:
-    st.session_state.pagina_atual = None
-if "protocolo" not in st.session_state:
-    st.session_state.protocolo = 1
+# Inicializa variáveis do session_state com segurança boutique
+for chave in ["pagina_atual", "cliente_logada", "cadastro_confirmado", "ficha_validada", "cliente_apta", "protocolo", "autorizada", "efeito_escolhido", "tipo_aplicacao", "etapa_agendamento", "historico_cliente", "reprogramar", "atendimento_reprogramado"]:
+    if chave not in st.session_state:
+        st.session_state[chave] = None if chave != "protocolo" else 1
+
+
+
 
 # 🙋‍♀️ Área da Cliente
 if st.session_state.pagina_atual == "cliente":
     escolha_cliente = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], index=None, key="opcao_cliente")
 
-    # 🔐 Login Boutique com formulário
     if escolha_cliente == "Já sou cliente":
         with st.form("form_login_cliente"):
             nome_login = st.text_input("🧍 Seu nome")
@@ -80,6 +81,7 @@ if st.session_state.pagina_atual == "cliente":
                     st.experimental_rerun()
                 else:
                     st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
+
 
     # 🎀 Exibe histórico após login
     if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("historico_cliente"), list):
