@@ -136,9 +136,9 @@ if st.session_state.get("cadastro_confirmado") and st.session_state.get("autoriz
 with col_centro:
     with st.expander(txt("🧾 Ficha de Anamnese Clínica", "🧾 Historial de salud"), expanded=True):
         with st.form("form_clinica"):
-            st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
+    st.markdown("<h4 style='text-align:center;'>🧾 Ficha de Anamnese Clínica</h4>", unsafe_allow_html=True)
 
-            perguntas = {
+    perguntas = {
                 "glaucoma": txt("Possui glaucoma ou outra condição ocular diagnosticada?", "¿Tiene glaucoma u otra condición ocular diagnosticada?"),
                 "infeccao": txt("Tem blefarite, terçol ou outras infecções oculares?", "¿Tiene blefaritis, orzuelos u otras infecciones oculares?"),
                 "conjuntivite": txt("Já teve conjuntivite nos últimos 30 dias?", "¿Tuvo conjuntivitis en los últimos 30 días?"),
@@ -159,10 +159,17 @@ with col_centro:
     with col_p:
         respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
+}
 
-                col_btn = st.columns([1, 2, 1])[1]
-                with col_btn:
-                     enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
+    respostas = {}
+    for chave, pergunta in perguntas.items():
+        col_p = st.columns([1, 4, 1])[1]
+        with col_p:
+            respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
+
+    col_btn = st.columns([1, 2, 1])[1]
+    with col_btn:
+        enviar = st.form_submit_button(txt("📨 Finalizar ficha", "📨 Finalizar formulario"))
 
                 if enviar:
                     if any(resposta is None for resposta in respostas.values()):
