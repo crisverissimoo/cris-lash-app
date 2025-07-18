@@ -178,7 +178,6 @@ with col_centro:
     with col_p:
         respostas[chave] = st.radio(pergunta, ["Sim", "Não"], index=None, key=f"clinica_{chave}")
 
-}
 
     respostas = {}
     for chave, pergunta in perguntas.items():
