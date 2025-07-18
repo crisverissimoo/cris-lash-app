@@ -332,6 +332,68 @@ if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("h
             atendimento_original["horario"] = novo_horario
             atendimento_original["mensagem"] = nova_mensagem
 
+# ⚙️ Cancelar atendimento específico — após login e histórico carregado
+if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("historico_cliente"), list):
+    st.markdown("### 🔥 Cancelar Atendimento")
+    opcoes_cancelamento = [f"{c['data']} - {c['horario']} — protocolo {c['protocolo']}" for c in st.session_state["historico_cliente"]]
+    cancelar = st.selectbox("📌 Selecione atendimento para cancelar:", opcoes_cancelamento, index=None, key="cancelar_atendimento")
+
+    if cancelar:
+        idx = opcoes_cancelamento.index(cancelar)
+        atendimento = st.session_state["historico_cliente"][idx]
+
+        confirmar_cancelamento = st.button("❌ Confirmar cancelamento")
+
+        if confirmar_cancelamento:
+            caminho = "agenda.json"
+            lista = []
+            if os.path.exists(caminho):
+                with open(caminho, "r", encoding="utf-8") as f:
+                    lista = json.load(f)
+
+            lista = [c for c in lista if c["protocolo"] != atendimento["protocolo"]]
+
+            with open(caminho, "w", encoding="utf-8") as f:
+                json.dump(lista, f, ensure_ascii=False, indent=2)
+
+            st.success(f"❌ Atendimento cancelado com sucesso! Protocolo `{atendimento['protocolo']}`")
+
+            # Remove do histórico
+            st.session_state["historico_cliente"].pop(idx)
+
+# 📤 WhatsApp — botão que gera link com resumo boutique
+if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("historico_cliente"), list):
+    st.markdown("### 📤 Enviar Detalhes pelo WhatsApp")
+
+    atendimento_whats = st.selectbox("📌 Atendimento para enviar:", [
+        f"{c['data']} - {c['horario']} — protocolo {c['protocolo']}" for c in st.session_state["historico_cliente"]
+    ], index=None, key="whats_atendimento")
+
+    if atendimento_whats:
+        idx = [i for i, c in enumerate(st.session_state["historico_cliente"]) if f"{c['data']} - {c['horario']} — protocolo {c['protocolo']}" == atendimento_whats][0]
+        atendimento = st.session_state["historico_cliente"][idx]
+
+        fone = atendimento["telefone"].replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+        mensagem = f"""
+✨ Atendimento confirmado na Cris Lash 👑
+📌 Protocolo: {atendimento['protocolo']}
+📅 Data: {atendimento['data']} às {atendimento['horario']}
+🎀 Técnica: {atendimento.get('tipo', atendimento.get('valor', ''))}
+💬 Obs.: {atendimento.get('mensagem', '—')}
+"""
+
+        import urllib.parse
+        link = f"https://wa.me/55{fone}?text={urllib.parse.quote(mensagem)}"
+
+        st.markdown(f"[📤 Enviar via WhatsApp]({link})", unsafe_allow_html=True)
+
+
+
+
+
+
+
+
 
 # 1️⃣ Botão de reprogramação — aparece se cliente logada e apta
 if st.session_state.get("cliente_logada") and st.session_state.get("cliente_apta"):
