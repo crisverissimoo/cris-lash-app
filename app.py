@@ -395,9 +395,10 @@ if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("h
 
 
 
-# 1️⃣ Botão de reprogramação — aparece se cliente logada e apta
+# 🗓️ Atendimentos da cliente logada
 if st.session_state.get("cliente_logada") and st.session_state.get("cliente_apta"):
     st.markdown("### 🗓️ Seus atendimentos anteriores")
+
     nome = st.session_state.nome_cliente
     tel = st.session_state.telefone
 
@@ -409,6 +410,8 @@ if st.session_state.get("cliente_logada") and st.session_state.get("cliente_apta
 
     atendimentos = [c for c in historico if c.get("nome") == nome and c.get("telefone") == tel]
 
+    st.session_state.historico_cliente = atendimentos  # ✅ Armazenar pra uso pós-rerun
+
     for idx, cliente in enumerate(atendimentos):
         with st.expander(f"📌 Atendimento {idx+1} — protocolo {cliente['protocolo']}"):
             st.markdown(f"""
@@ -418,13 +421,12 @@ if st.session_state.get("cliente_logada") and st.session_state.get("cliente_apta
                 <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
             """, unsafe_allow_html=True)
 
-    # Botão para iniciar reprogramação
     if st.button("🔁 Reprogramar atendimento"):
         st.session_state.reprogramar = True
-        st.session_state.atendimento_reprogramado = atendimentos[-1]  # usa o último como base
+        st.session_state.atendimento_reprogramado = atendimentos[-1]
         st.experimental_rerun()
 
-# 2️⃣ Se cliente deseja reprogramar
+# 🔁 Reprograma após cliente escolher
 if st.session_state.get("reprogramar") and st.session_state.get("atendimento_reprogramado"):
     atendimento = st.session_state.atendimento_reprogramado
 
@@ -440,6 +442,12 @@ if st.session_state.get("reprogramar") and st.session_state.get("atendimento_rep
         confirmar = st.form_submit_button("✅ Confirmar reprogramação")
 
         if confirmar:
+            caminho = "agenda.json"
+            historico = []
+            if os.path.exists(caminho):
+                with open(caminho, "r", encoding="utf-8") as f:
+                    historico = json.load(f)
+
             for cliente in historico:
                 if cliente["protocolo"] == atendimento["protocolo"]:
                     cliente["tipo"] = novo_efeito
@@ -453,15 +461,63 @@ if st.session_state.get("reprogramar") and st.session_state.get("atendimento_rep
                 json.dump(historico, f, indent=2, ensure_ascii=False)
 
             st.success("✅ Atendimento reprogramado com sucesso!")
+
             st.session_state.reprogramar = False
+            st.session_state.atendimento_reprogramado = None
+
+
+# 👩‍💼 Área Administrativa
+if st.session_state.pagina_atual == "admin":
+    st.markdown("## 👩‍💼 Painel Administrativo")
+
+    # Carrega agendamentos do JSON
+    caminho = "agenda.json"
+    lista_admin = []
+    if os.path.exists(caminho):
+        with open(caminho, "r", encoding="utf-8") as f:
+            lista_admin = json.load(f)
+
+    if lista_admin:
+        opcoes_admin = [f"{c['data']} — {c['horario']} — {c['nome']} — protocolo {c['protocolo']}" for c in lista_admin]
+        atendimento_admin = st.selectbox("📋 Selecione atendimento:", opcoes_admin, index=None, key="admin_escolha")
+
+        if atendimento_admin:
+            idx = opcoes_admin.index(atendimento_admin)
+            cliente = lista_admin[idx]
+
+            st.markdown(f"#### 📌 Detalhes de protocolo `{cliente['protocolo']}`")
+            st.write(cliente)
+
+            col1, col2 = st.columns(2)
+
+            with col1:
+                confirmar_cancelar = st.button("❌ Cancelar Atendimento")
+                if confirmar_cancelar:
+                    lista_admin.pop(idx)
+                    with open(caminho, "w", encoding="utf-8") as f:
+                        json.dump(lista_admin, f, ensure_ascii=False, indent=2)
+                    st.success("✅ Atendimento cancelado com sucesso!")
+
+            with col2:
+                import urllib.parse
+                fone = cliente["telefone"].replace("(", "").replace(")", "").replace("-", "").replace(" ", "")
+                mensagem = f"""
+✨ Atendimento confirmado na Cris Lash 👑
+📌 Protocolo: {cliente['protocolo']}
+📅 Data: {cliente['data']} às {cliente['horario']}
+🎀 Técnica: {cliente.get('tipo', cliente.get('valor', ''))}
+💬 Obs.: {cliente.get('mensagem', '—')}
+"""
+                link = f"https://wa.me/55{fone}?text={urllib.parse.quote(mensagem)}"
+                st.markdown(f"[📤 Enviar via WhatsApp]({link})", unsafe_allow_html=True)
+    else:
+        st.warning("📭 Nenhum atendimento registrado ainda.")
 
 
 
 
 
 
-    
-# 👑 Página Administrativa
 elif st.session_state.pagina_atual == "adm":
     st.markdown("<h4>🔐 Área Administrativa</h4>", unsafe_allow_html=True)
     codigo = st.text_input("🔑 Código de acesso", type="password")
