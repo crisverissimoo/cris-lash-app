@@ -12,11 +12,8 @@ if "pagina_atual" not in st.session_state:
 if "protocolo" not in st.session_state:
     st.session_state.protocolo = 1
 
-
-
-
 # 🙋‍♀️ Área da Cliente
-elif st.session_state.pagina_atual == "cliente":
+if st.session_state.pagina_atual == "cliente":
     escolha_cliente = st.radio("🧭 Como deseja acessar?", ["Já sou cliente", "Fazer novo cadastro"], index=None, key="opcao_cliente")
 
     # 🔐 Login Boutique com formulário
@@ -39,13 +36,52 @@ elif st.session_state.pagina_atual == "cliente":
                     st.session_state.cliente_logada = True
                     st.session_state.nome_cliente = nome_login
                     st.session_state.telefone = tel_login
-                    st.session_state.historico_cliente = atendimentos  # ✅ salva para uso pós-rerun
+                    st.session_state.historico_cliente = atendimentos
                     st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
                     st.experimental_rerun()
                 else:
                     st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
 
-    # 🎀 Exibe histórico com segurança após login
+    elif escolha_cliente == "Fazer novo cadastro":
+        with st.form("form_cadastro"):
+            nome = st.text_input("🧍 Nome completo")
+            nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
+            telefone = st.text_input("📞 Telefone com DDD")
+            email = st.text_input("📧 Email (opcional)")
+
+            idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
+            menor = idade < 18
+
+            st.session_state.autorizada = True
+            st.info(f"📌 Idade: **{idade} anos**")
+
+            if menor:
+                responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
+                autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
+                if autorizacao != "Sim":
+                    st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
+                    st.session_state.autorizada = False
+
+            confirmar = st.form_submit_button("✅ Confirmar cadastro")
+
+            if confirmar:
+                campos_ok = nome and telefone and nascimento and idade >= 0
+                if menor:
+                    campos_ok = campos_ok and st.session_state.autorizada
+
+                if campos_ok:
+                    st.session_state.nome_cliente = nome
+                    st.session_state.nascimento = nascimento
+                    st.session_state.telefone = telefone
+                    st.session_state.email = email
+                    st.session_state.idade_cliente = idade
+                    st.session_state.cadastro_confirmado = True
+                    st.success("✅ Cadastro finalizado com sucesso!")
+                    st.experimental_rerun()
+                else:
+                    st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
+
+    # 🎀 Exibe histórico após login
     if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("historico_cliente"), list):
         st.markdown(f"### 💼 Histórico de {st.session_state.nome_cliente}")
         for idx, cliente in enumerate(st.session_state["historico_cliente"]):
@@ -57,48 +93,6 @@ elif st.session_state.pagina_atual == "cliente":
                     <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
                 """, unsafe_allow_html=True)
 
-
-  
-   # 📝 Cadastro Boutique + redirecionamento
-elif escolha_cliente == "Fazer novo cadastro":
-    with st.form("form_cadastro"):
-        nome = st.text_input("🧍 Nome completo")
-        nascimento = st.date_input("📅 Data de nascimento", min_value=datetime(1920, 1, 1).date(), max_value=hoje)
-        telefone = st.text_input("📞 Telefone com DDD")
-        email = st.text_input("📧 Email (opcional)")
-
-        idade = hoje.year - nascimento.year - ((hoje.month, hoje.day) < (nascimento.month, nascimento.day))
-        menor = idade < 18
-
-        # ✨ Controle seguro de autorização
-        st.session_state.autorizada = True
-        st.info(f"📌 Idade: **{idade} anos**")
-
-        if menor:
-            responsavel = st.text_input("👨‍👩‍👧 Nome do responsável")
-            autorizacao = st.radio("Autorização recebida?", ["Sim", "Não", "Pendente"], index=None)
-            if autorizacao != "Sim":
-                st.error("❌ Cliente menor sem autorização — atendimento bloqueado.")
-                st.session_state.autorizada = False
-
-        confirmar = st.form_submit_button("✅ Confirmar cadastro")
-
-        if confirmar:
-            campos_ok = nome and telefone and nascimento and idade >= 0
-            if menor:
-                campos_ok = campos_ok and st.session_state.autorizada
-
-            if campos_ok:
-                st.session_state.nome_cliente = nome
-                st.session_state.nascimento = nascimento
-                st.session_state.telefone = telefone
-                st.session_state.email = email
-                st.session_state.idade_cliente = idade
-                st.session_state.cadastro_confirmado = True
-                st.success("✅ Cadastro finalizado com sucesso!")
-                st.experimental_rerun()
-            else:
-                st.warning("⚠️ Preencha todos os dados corretamente para continuar.")
 
 
     
