@@ -39,17 +39,16 @@ elif st.session_state.pagina_atual == "cliente":
                     st.session_state.cliente_logada = True
                     st.session_state.nome_cliente = nome_login
                     st.session_state.telefone = tel_login
-                    st.session_state.historico_cliente = atendimentos  # ✅ Armazenado após login
+                    st.session_state.historico_cliente = atendimentos  # ✅ salva para uso pós-rerun
                     st.success("✨ Login confirmado com sucesso! Bem-vinda de volta 💖")
                     st.experimental_rerun()
                 else:
                     st.warning("🙈 Não encontramos seus dados. Verifique o nome e telefone.")
 
-    # 🎀 Exibe histórico após login
-    if st.session_state.get("cliente_logada"):
+    # 🎀 Exibe histórico com segurança após login
+    if st.session_state.get("cliente_logada") and isinstance(st.session_state.get("historico_cliente"), list):
         st.markdown(f"### 💼 Histórico de {st.session_state.nome_cliente}")
-
-        for idx, cliente in enumerate(st.session_state.get("historico_cliente", [])):
+        for idx, cliente in enumerate(st.session_state["historico_cliente"]):
             with st.expander(f"📌 Atendimento {idx + 1} — protocolo {cliente['protocolo']}"):
                 st.markdown(f"""
                     <strong>🎀 Técnica:</strong> {cliente['tipo']} — {cliente['valor']}<br>
@@ -57,6 +56,7 @@ elif st.session_state.pagina_atual == "cliente":
                     <strong>⏰ Horário:</strong> {cliente['horario']}<br>
                     <strong>💬 Mensagem:</strong> {cliente['mensagem'] or '—'}
                 """, unsafe_allow_html=True)
+
 
   
    # 📝 Cadastro Boutique + redirecionamento
